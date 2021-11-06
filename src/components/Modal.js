@@ -7,7 +7,7 @@ const Modal = ({ gameState, groups, startGame, timeLeft, resetGame }) => (
     <div className="modal-overlay" />
     <div className="modal-container">
       <div className="modal-header">
-        <div className="modal-title h4">Supermarket Game</div>
+        <div className="modal-title h4"></div>
       </div>
       <div className="modal-body">
         <div className="content h6">

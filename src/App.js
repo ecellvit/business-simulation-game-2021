@@ -1,17 +1,19 @@
 import React from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 
-import { Placeholders, Supermarket } from "./custom/data";
+import { PLACEHOLDERS, ITEMS } from "./custom/data";
 import { shuffle, getTimeLeft, move, GAME_STATE } from "./custom/utils";
 
 import Modal from "./components/Modal";
 import Dropzone from "./components/Dropzone";
 
-const GAME_DURATION = 1000 * 300; // 300 seconds
+const GAME_DURATION = 1000 * 300; // 3 secondszz
+
 const initialState = {
   // shuffling data
-  bench: shuffle(Supermarket),
-  [Placeholders]: [],
+  bench: shuffle(ITEMS),
+  [PLACEHOLDERS.one]: [],
+  [PLACEHOLDERS.two]: [],
   gameState: GAME_STATE.READY,
   timeLeft: 0,
 };
@@ -64,7 +66,7 @@ class App extends React.Component {
     if (!destination) {
       return;
     }
-
+    console.log("Sent");
     this.setState((state) => {
       console.log(destination);
       return move(state, source, destination);
@@ -91,13 +93,13 @@ class App extends React.Component {
           <DragDropContext onDragEnd={this.onDragEnd}>
             <div className="container">
               <Dropzone
-                id={Supermarket}
-                items={this.state[Placeholders]}
+                id={PLACEHOLDERS.one}
+                items={this.state[PLACEHOLDERS.one]}
                 isDropDisabled={isDropDisabled}
               />
               <Dropzone
-                id={Supermarket}
-                items={this.state[Placeholders]}
+                id={PLACEHOLDERS.two}
+                items={this.state[PLACEHOLDERS.two]}
                 isDropDisabled={isDropDisabled}
               />
               <Dropzone

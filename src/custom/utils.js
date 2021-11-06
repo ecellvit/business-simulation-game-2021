@@ -1,4 +1,4 @@
-import { Placeholders, Supermarket } from "./data";
+import { PLACEHOLDERS, ITEMS } from "./data";
 
 // the Knuth shuffle algorithm
 export function shuffle(array) {
@@ -22,13 +22,13 @@ export function shuffle(array) {
 }
 
 // method to handle points calculation based on sort order as well as grouping
-function calculateScore(groupedItems, placeholders) {
-  const correctOrder = Supermarket.filter(
-    (item) => item.name === placeholders
-  ).sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1));
+function calculateScore(groupedItems, PLACEHOLDERS) {
+  const correctOrder = ITEMS.filter((item) => item.name === PLACEHOLDERS).sort(
+    (a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1)
+  );
 
   return groupedItems.reduce((score, { name }, index) => {
-    const maxPoint = Supermarket.length;
+    const maxPoint = ITEMS.length;
     const itemsIndex = correctOrder.findIndex((item) => item.name === name);
     const penalty = itemsIndex >= 0 ? Math.abs(index - itemsIndex) : maxPoint;
     console.log({ name, points: maxPoint - penalty });
@@ -37,7 +37,7 @@ function calculateScore(groupedItems, placeholders) {
 }
 
 export function getTotalScore(groups, timeLeft) {
-  const gameScore = Object.values(Placeholders).reduce(
+  const gameScore = Object.values(PLACEHOLDERS).reduce(
     (sum, itemsName) => sum + calculateScore(groups[itemsName], itemsName),
     0
   );
