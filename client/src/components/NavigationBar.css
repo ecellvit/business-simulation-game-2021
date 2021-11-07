@@ -1,0 +1,57 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%; /*for root font-size ie 1rem = 10px*/
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Sora;
+  font-style: normal;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+.MenuOptions{
+  display: inline-block;
+  position: relative;
+  left: 60%;
+  bottom: 20px;
+  text-decoration: none;
+  list-style: none;
+}
+
+.title__menu {
+  font-size: 30px;
+  line-height: 52px;
+  color: #fff;
+  display: inline-block;
+  padding: 15px;
+  position: relative;
+  text-decoration: none;
+}
+
+.item1 {
+  position: absolute;
+  top: 3.5px;
+  left: 410px;
+}
+.item2 {
+  position: absolute;
+  top: 3.5px;
+  left: 200px;
+}
+.item3 {
+  position: absolute;
+  top: 3.5px;
+  left: 0px;
+}
+
+
+
