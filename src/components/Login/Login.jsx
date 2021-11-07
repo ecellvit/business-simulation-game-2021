@@ -7,7 +7,7 @@ function Login() {
   const [isLoggedIn, setisLoggedIn] = useState(false);
   const [showLoggedIn, setShowLoggedIn] = useState(true);
   const [showLoggedOut, setShowLoggedOut] = useState(false);
-  const [userId, setUserId] = useState();
+  const [resUserData, setresUserData] = useState();
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -81,7 +81,7 @@ function Login() {
       body: JSON.stringify(userData),
     })
       .then((response) => {
-        response.json();
+        return response.json();
       })
       .then((data) => {
         console.log(data);
@@ -99,7 +99,6 @@ function Login() {
   //     sendUserData();
   //   }
   // }, [sendUserData, userData,isLoggedIn]);
-  console.log(JSON.stringify(userData));
   return (
     <div
       style={{
@@ -110,7 +109,7 @@ function Login() {
     >
       {showLoggedIn ? (
         <GoogleLogin
-          clientId={process.env.GOOGLE_ID}
+          clientId="438764085343-k4antacid4gdorklqkhqrmnr2ak1ikq2.apps.googleusercontent.com"
           buttonText="Login"
           onSuccess={onLoginSuccess}
           onFailure={onLoginFailure}
@@ -119,7 +118,9 @@ function Login() {
       ) : null}
       {showLoggedOut ? (
         <GoogleLogout
-          clientId={process.env.GOOGLE_ID}
+          clientId={
+            "438764085343-k4antacid4gdorklqkhqrmnr2ak1ikq2.apps.googleusercontent.com"
+          }
           buttonText="Logout"
           onLogoutSuccess={onLogoutSuccess}
           onFailure={onLogoutFailure}
