@@ -19,13 +19,18 @@ body {
 }
 
 .MenuOptions{
+  display: inline-block;
+  position: relative;
+  left: 60%;
+  bottom: 20px;
+  text-decoration: none;
   list-style: none;
 }
 
 .title__menu {
   font-size: 30px;
   line-height: 52px;
-  color: #5b10a8;
+  color: #fff;
   display: inline-block;
   padding: 15px;
   position: relative;

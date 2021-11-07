@@ -2,14 +2,10 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { DragDropContext } from "react-beautiful-dnd";
-
-import { shuffle, getTimeLeft, move, GAME_STATE } from "./custom/utils";
-import Modal from "./components/Modal";
-import Dropzone from "./components/Dropzone";
 import DragDrop from "./components/DragDrop.jsx";
 import Login from "./components/Login/Login";
 import NavigationBar from "./components/NavigationBar";
+import MainPage from "./components/Mainpage/MainPage.jsx";
 
 function App() {
   return (
@@ -25,6 +21,9 @@ function App() {
               <DragDrop />
             </div>
           </DndProvider>
+        </Route>
+        <Route path="/Mainpage" exact>
+          <MainPage />
         </Route>
       </Switch>
     </div>
