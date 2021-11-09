@@ -1,4 +1,20 @@
-.placeholder__main--div{
+/* DragDrop */
+
+.dragdrop-main-container {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+
+}
+
+.placeholders-main-container {
+  border: 2px solid red;
+  max-width: 1200px;
+  width: 100%;
+  background-color: white;
+}
+
+.supermarket-main-container {
+  background-color: white;
+  max-width: 390px;
+  width: 100%;
 }

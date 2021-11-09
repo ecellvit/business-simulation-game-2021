@@ -7,12 +7,13 @@ import Login from "./components/Login/Login";
 import MainNavigation from "./components/MainNavigation.jsx";
 import AuthContext from "./store/auth-context.js";
 import DashBoard from "./components/Dashboard/DashBoard.jsx";
+import "./App.css";
 
 function App() {
   const authCtx = useContext(AuthContext);
 
   return (
-    <div>
+    <div className="main-container">
       <MainNavigation />
       <Switch>
         <Route path="/" exact>

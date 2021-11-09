@@ -30,11 +30,9 @@ const MainNavigation = () => {
               <Link to="/Dashboard">Dashboard</Link>
             </li>
           )}
-          {authCtx.isLoggedIn && (
-            <li>
-              <Link to="/Round1">Start Game</Link>
-            </li>
-          )}
+          <li>
+            <Link to="/Round1">Start Game</Link>
+          </li>
           {authCtx.isLoggedIn && (
             <li>
               <button onClick={logoutHandler}>Logout</button>

@@ -98,7 +98,7 @@ function Login() {
         ></GoogleLogout>
       ) : null} */}
       {isLoggedInGoogle ? (
-        <Link to="/Dashboard" onClick={sendUserData}>
+        <Link to="/Dashboard" onClick={sendUserData} style={{color:'white'}}>
           Continue
         </Link>
       ) : null}
