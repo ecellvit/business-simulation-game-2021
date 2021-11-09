@@ -6,10 +6,11 @@ import DragDrop from "./components/DragDrop.jsx";
 import Login from "./components/Login/Login";
 import NavigationBar from "./components/NavigationBar";
 import MainPage from "./components/Mainpage/MainPage.jsx";
+import "./App.css";
 
 function App() {
   return (
-    <div>
+    <div className="main-container">
       <NavigationBar />
       <Switch>
         <Route path="/" exact>

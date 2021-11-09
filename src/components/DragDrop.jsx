@@ -17,49 +17,37 @@ const DragDrop = () => {
 
   const [board, setBoard] = useState(Placeholders);
 
-  const updateBoard = (index, item) => {
-    const updatedArr = board.filter((data) => {
-      return data.id == index.id;
-    });
+  const updateBoard = (updatedBoard, item) => {
+    const copyArr = board;
+    const index = board.indexOf(updatedBoard);
 
-    updatedArr[0].droppedItem = item;
-
-    const addArr = board.filter((data) => {
-      return data.id != index.id;
-    });
-
-    setBoard(updatedArr.concat(addArr));
-    console.log(board);
+    setBoard(copyArr);
   };
-
-  // const markAsDone = (_id) => {
-  //   const task = taskList.filter((task, i) => task._id === _id);
-  //   task[0].status = "done";
-  //   setTaskList(taskList.filter((task, i) => task._id !== _id).concat(task[0]));
-  // };
 
   return (
     <CardContext.Provider value={{ updateBoard }}>
-      <div className="placeholder__main--div">
+      <div className="dragdrop-main-container">
         <h1>{seconds}</h1>
-        <div className="Supermarket">
+
+        <div className="placeholders-main-container">
+          {board.map((placeholder) => {
+            return (
+              <BoardBox
+                index={board.indexOf(placeholder)}
+                id={placeholder.id}
+                droppedItem={placeholder.droppedItem}
+                key={placeholder.id}
+              />
+            );
+          })}
+        </div>
+        <div className="supermarket-main-container">
           {Supermarket.map((item) => {
             return (
               <SupermarketDrag name={item.name} id={item.id} key={item.id} />
             );
           })}
         </div>
-
-        {board.map((placeholder) => {
-          return (
-            <BoardBox
-              index={board.indexOf(placeholder)}
-              id={placeholder.id}
-              droppedItem={placeholder.droppedItem}
-              key={placeholder.id}
-            />
-          );
-        })}
       </div>
     </CardContext.Provider>
   );
