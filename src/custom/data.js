@@ -1,4 +1,29 @@
-export const Placeholders = [];
+export const Placeholders = [
+  {
+    id: "one",
+    droppedItem: null,
+    position: {
+      top: null,
+      left: null,
+    },
+  },
+  {
+    id: "two",
+    droppedItem: null,
+    position: {
+      top: null,
+      left: null,
+    },
+  },
+  {
+    id: "three",
+    droppedItem: null,
+    position: {
+      top: null,
+      left: null,
+    },
+  },
+];
 
 export const Supermarket = [
   {
