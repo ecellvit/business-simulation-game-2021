@@ -2,32 +2,56 @@ import React, { useState } from "react";
 
 const AuthContext = React.createContext({
   id: "",
+  name: "",
+  emailid: "",
   isLoggedIn: false,
   login: (id) => {},
   logout: () => {},
 });
 
-function AuthContextProvider(props) {
-  const [token, setToken] = useState(null);
+export const AuthContextProvider = (props) => {
+  const initialId = localStorage.getItem("id");
+  const initialName = localStorage.getItem("name");
+  const initialEmail = localStorage.getItem("email");
 
-  const userIsLoggedIn = !!token;
-  const loginHandler = () => {
-    setToken(token);
+  const [id, setId] = useState(initialId);
+  const [userName, setUserName] = useState(initialName);
+  const [userEmailId, setUserEmailId] = useState(initialEmail);
+
+  const userIsLoggedIn = !!id;
+  //note to myself(palani)---> !!id means converting the truthy or falsy value to a true or false boolean value
+  //if id is not empty string this will return true else false
+
+  const loginHandler = (id, userName, userEmailId) => {
+    setId(id);
+    setUserName(userName);
+    setUserEmailId(userEmailId);
+    localStorage.setItem("id", id);
+    localStorage.setItem("name", userName);
+    localStorage.setItem("email", userEmailId);
   };
   const logoutHandler = () => {
-    setToken(null);
+    setId(null);
+    // localStorage.removeItem("id");
+    // localStorage.removeItem("name");
+    // localStorage.removeItem("email");
+    localStorage.clear();
   };
 
   const contextValue = {
-    token: token,
-    isLoggenIn: userIsLoggedIn,
+    id: id,
+    name: userName,
+    emailid: userEmailId,
+    isLoggedIn: userIsLoggedIn,
     login: loginHandler,
     logout: logoutHandler,
   };
 
   return (
-    <AuthContextProvider value={contextValue}>
-      {props.childen}
-    </AuthContextProvider>
+    <AuthContext.Provider value={contextValue}>
+      {props.children}
+    </AuthContext.Provider>
   );
-}
+};
+
+export default AuthContext;

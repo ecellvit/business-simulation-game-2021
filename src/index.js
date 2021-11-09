@@ -3,17 +3,17 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
-import { Auth0Provider } from "@auth0/auth0-react";
+import { AuthContextProvider } from "./store/auth-context";
+
 require("dotenv").config();
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Auth0Provider
-      domain="">
+    <AuthContextProvider>
+      <BrowserRouter>
         <App />
-      </Auth0Provider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </AuthContextProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

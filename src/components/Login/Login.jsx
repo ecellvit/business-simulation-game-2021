@@ -1,78 +1,51 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import GoogleLogin from "react-google-login";
 import { GoogleLogout } from "react-google-login";
 import { Link } from "react-router-dom";
+import AuthContext from "../../store/auth-context";
 
 function Login() {
-  const [isLoggedIn, setisLoggedIn] = useState(false);
+  const [isLoggedInGoogle, setisLoggedInGoogle] = useState(false);
   const [showLoggedIn, setShowLoggedIn] = useState(true);
   const [showLoggedOut, setShowLoggedOut] = useState(false);
-  const [resUserData, setresUserData] = useState();
   const [userData, setUserData] = useState({
     name: "",
     email: "",
     photoURL: "",
   });
 
+  const authCtx = useContext(AuthContext);
+
   const onLoginSuccess = (response) => {
-    setisLoggedIn(true);
+    setisLoggedInGoogle(true);
     setUserData({
       name: response.profileObj.name,
       email: response.profileObj.email,
       photoURL: response.profileObj.imageUrl,
     });
-    console.log(response);
     console.log("Login Sucess");
+    localStorage.setItem("isGoogleLogin", "yes");
     setShowLoggedIn(false);
-    setShowLoggedOut(true);
+    // setShowLoggedOut(true);
   };
+
   const onLoginFailure = (response) => {
-    setisLoggedIn(false);
+    setisLoggedInGoogle(false);
     console.log("Login Failure");
   };
+  
   const onLogoutSuccess = (response) => {
-    setisLoggedIn(false);
-    console.log(response);
-    console.log("Logout Sucess");
+    setisLoggedInGoogle(false);
     setShowLoggedIn(true);
     setShowLoggedOut(false);
+    authCtx.logout();
   };
+
   const onLogoutFailure = (response) => {
-    setisLoggedIn(true);
+    setisLoggedInGoogle(true);
     console.log(response);
     console.log("Logout Failure");
   };
-
-  // const sendUserData = useCallback(async function () {
-  //   const response = await fetch(
-  //     "http://127.0.0.1:2000/api/public/createUser",
-  //     {
-  //       method: "POST",
-  //       body: JSON.stringify(userData),
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         'Accept': 'application/json'
-  //       },
-  //     }
-  //   );
-  //   const data = await response.json();
-  //   console.log(data);
-  // }, [userData]);
-
-  // const sendUserData = async function () {
-  //   const response = await fetch(
-  //     "http://127.0.0.1:2000/api/public/createUser",
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-
-  //       },
-  //       body: JSON.stringify(userData),
-  //     }
-  //   );
-  //   const data = await response.json();
-  // };
 
   const sendUserData = function () {
     fetch("http://127.0.0.1:2000/api/public/createUser", {
@@ -84,21 +57,21 @@ function Login() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        console.log(data._id);
+        authCtx.login(data._id, userData.name, userData.email);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  // if(isLoggedIn && userData.name !==' '){
-  //   sendUserData();
-  // }
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     sendUserData();
-  //   }
-  // }, [sendUserData, userData,isLoggedIn]);
+  useEffect(() => {
+    if (authCtx.isLoggedIn === true) {
+      setShowLoggedOut(true);
+      setShowLoggedIn(false);
+    }
+  }, [authCtx.isLoggedIn]);
+
   return (
     <div
       style={{
@@ -107,27 +80,25 @@ function Login() {
         justifyContent: "center",
       }}
     >
-      {showLoggedIn ? (
+      {localStorage.getItem("isGoogleLogin") !== "yes" || showLoggedIn ? (
         <GoogleLogin
-          clientId="438764085343-k4antacid4gdorklqkhqrmnr2ak1ikq2.apps.googleusercontent.com"
+          clientId={`${process.env.REACT_APP_GOOGLE_ID}`}
           buttonText="Login"
           onSuccess={onLoginSuccess}
           onFailure={onLoginFailure}
           cookiePolicy={"single_host_origin"}
         />
       ) : null}
-      {showLoggedOut ? (
+      {/* {showLoggedOut ? (
         <GoogleLogout
-          clientId={
-            "438764085343-k4antacid4gdorklqkhqrmnr2ak1ikq2.apps.googleusercontent.com"
-          }
+          clientId={`${process.env.REACT_APP_GOOGLE_ID}`}
           buttonText="Logout"
           onLogoutSuccess={onLogoutSuccess}
           onFailure={onLogoutFailure}
         ></GoogleLogout>
-      ) : null}
-      {isLoggedIn ? (
-        <Link to="/Mainpage" onClick={sendUserData}>
+      ) : null} */}
+      {isLoggedInGoogle ? (
+        <Link to="/Dashboard" onClick={sendUserData}>
           Continue
         </Link>
       ) : null}
@@ -137,33 +108,33 @@ function Login() {
 
 export default Login;
 
-// const [movies, setMovies] = useState(["hey"]);
-
-// const movie = [{
-//   movieName: "krish",
-//   movieId: 102,
-// }];
-
-// async function fetchMoviesHandler() {
+// const sendUserData = useCallback(async function () {
 //   const response = await fetch(
-//     "https://react-http-learn-56b47-default-rtdb.firebaseio.com/movies.json"
-//   );
-//   const data = await response.json();
-//   console.log(data.results);
-//   setMovies(data.results);
-// }
-
-// async function addMovieHandler(movie) {
-//   const response = await fetch(
-//     "https://react-http-learn-56b47-default-rtdb.firebaseio.com/movies.json",
+//     "http://127.0.0.1:2000/api/public/createUser",
 //     {
-//       method: 'POST',
-//       body: JSON.stringify(movie),
+//       method: "POST",
+//       body: JSON.stringify(userData),
 //       headers: {
 //         "Content-Type": "application/json",
+//         'Accept': 'application/json'
 //       },
 //     }
 //   );
 //   const data = await response.json();
 //   console.log(data);
-// }
+// }, []);
+
+// const sendUserData = async function () {
+//   const response = await fetch(
+//     "http://127.0.0.1:2000/api/public/createUser",
+//     {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+
+//       },
+//       body: JSON.stringify(userData),
+//     }
+//   );
+//   const data = await response.json();
+// };

@@ -1,16 +1,19 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
+import React, { useContext } from "react";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import DragDrop from "./components/DragDrop.jsx";
 import Login from "./components/Login/Login";
-import NavigationBar from "./components/NavigationBar";
-import MainPage from "./components/Mainpage/MainPage.jsx";
+import MainNavigation from "./components/MainNavigation.jsx";
+import AuthContext from "./store/auth-context.js";
+import DashBoard from "./components/Dashboard/DashBoard.jsx";
 
 function App() {
+  const authCtx = useContext(AuthContext);
+
   return (
     <div>
-      <NavigationBar />
+      <MainNavigation />
       <Switch>
         <Route path="/" exact>
           <Login />
@@ -22,9 +25,14 @@ function App() {
             </div>
           </DndProvider>
         </Route>
-        <Route path="/Mainpage" exact>
-          <MainPage />
-        </Route>
+        {authCtx.isLoggedIn && (
+          <Route path="/Dashboard" exact>
+            <DashBoard />
+          </Route>
+        )}
+        {/* <Route path="*">
+          <Redirect to="/" />
+        </Route> */}
       </Switch>
     </div>
   );
