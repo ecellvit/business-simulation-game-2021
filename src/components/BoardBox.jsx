@@ -23,7 +23,7 @@ const BoardBox = (index, id, droppedItem) => {
   const addItemToBoard = (updatedBoard, id) => {
     const itemList = Supermarket.filter((item) => id === item.id);
     updateBoard(updatedBoard, itemList[0]);
-    setCurrentItems(itemList[0].name, itemList[0].idw);
+    setCurrentItems(itemList[0].name, itemList[0].id);
   };
 
   return (
