@@ -1,0 +1,64 @@
+.TeamList__main--div {
+
+}
+
+.createTeamForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: aliceblue;
+  color: black;
+  padding: 2%;
+}
+.TeamDisplay__main--div {
+
+}
+
+.TeamListAndForm {
+  display: flex;
+  justify-content: space-between;
+  margin: 2%;
+}
+
+.individual__team {
+  display: flex;
+  justify-content: flex-start;
+  margin: 20px;
+}
+
+input {
+  font: inherit;
+  background-color: #a197da;
+  color: white;
+  border-radius: 4px;
+  border: 1px solid white;
+  width: 100%;
+  text-align: left;
+  padding: 0.25rem;
+}
+label {
+  display: block;
+  color: black;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+button {
+  cursor: pointer;
+  font: inherit;
+  color: white;
+  background-color: #9f5ccc;
+  border: 1px solid #9f5ccc;
+  border-radius: 4px;
+  padding: 0.2rem 1.5rem;
+}
+button:hover {
+  background-color: #8b10dd;
+  border-color: #873abb;
+}
+
+.createTeamButton{
+  margin-top:40px;
+  position: relative;
+  left: 25%;
+  padding: 0.5rem 1.5rem;
+}
