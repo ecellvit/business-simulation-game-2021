@@ -1,9 +1,9 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useRef } from "react";
 import AuthContext from "../../store/auth-context";
 import "./DashBoard.css";
 
 function CreateTeamForm(props) {
-  const [teamName, setTeamName] = useState("");
+  // const [teamName, setTeamName] = useState("");
   const teamIdInputRef = useRef();
   const authCtx = useContext(AuthContext);
 

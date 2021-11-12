@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import GoogleLogin from "react-google-login";
-import { GoogleLogout } from "react-google-login";
+// import { GoogleLogout } from "react-google-login";
 import { Link } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 
@@ -34,18 +34,18 @@ function Login() {
     console.log("Login Failure");
   };
   
-  const onLogoutSuccess = (response) => {
-    setisLoggedInGoogle(false);
-    setShowLoggedIn(true);
-    setShowLoggedOut(false);
-    authCtx.logout();
-  };
+  // const onLogoutSuccess = (response) => {
+  //   setisLoggedInGoogle(false);
+  //   setShowLoggedIn(true);
+  //   setShowLoggedOut(false);
+  //   authCtx.logout();
+  // };
 
-  const onLogoutFailure = (response) => {
-    setisLoggedInGoogle(true);
-    console.log(response);
-    console.log("Logout Failure");
-  };
+  // const onLogoutFailure = (response) => {
+  //   setisLoggedInGoogle(true);
+  //   console.log(response);
+  //   console.log("Logout Failure");
+  // };
 
   const sendUserData = function () {
     fetch("http://127.0.0.1:2000/api/public/createUser", {

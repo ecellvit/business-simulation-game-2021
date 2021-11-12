@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import "./DashBoard.css";
-import AuthContext from "../../store/auth-context";
+
 import TeamJoin from "./TeamJoin";
 
 function Team(teamData) {
@@ -20,7 +20,6 @@ function Team(teamData) {
 function TeamList(props) {
   const [teamsData, setTeamsData] = useState([]);
 
-  const authCtx = useContext(AuthContext);
 
   useEffect(() => {
     fetch("http://127.0.0.1:2000/api/public/getAllTeams")
