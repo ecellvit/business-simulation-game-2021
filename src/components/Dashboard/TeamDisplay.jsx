@@ -31,6 +31,7 @@ function TeamDisplay() {
         setNumOfMembers(data.Members.length);
         console.log(data.Members.length);
         setShowTeamDetails(true);
+        authCtx.setTeam(data._id)
       });
   }, [showTeamDetails, authCtx.id]);
 

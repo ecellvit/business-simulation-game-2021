@@ -1,39 +1,60 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Placeholders, Supermarket } from "../custom/data";
 // import { useDrop } from "react-dnd";
 // import { useTime } from "react-timer-hook";
 import SupermarketDrag from "./SupermarketDrag";
 import "./DragDrop.css";
-
-// import BoardBox from "./BoardBox";
+import { io } from "socket.io-client";
 import BoardBox1 from "./BoardBox1";
+import AuthContext from "../store/auth-context";
 
 export const CardContext = React.createContext({
-  updateBoard: null,
-  board: null,
+  // updateBoard: null,
+  // board: null,
+  finalList: []
 });
 
+const socket = io("http://127.0.0.1:2000/");
+
 const DragDrop = () => {
-  // const { seconds, minutes, hours, ampm } = useTime({ format: "12-hour" });
+  const [finalList, setFinalList] = useState([]);
+  // const [board, setBoard] = useState(Placeholders);
+  const board = Placeholders;
+  const authCtx = useContext(AuthContext);
+  const [roomUsers, setRoomUsers] = useState([]);
+  const [roomData, setRoomData] = useState({
+    name: authCtx.name,
+    email: authCtx.emailid,
+    photoURL: "123",
+    teamID: "12345",
+  });
 
-  const [board, setBoard] = useState(Placeholders);
+  useEffect(() => {
+    socket.on("roomUsers", (data) => {
+      console.log(data);
+    });
+    socket.emit("joinRoom", roomData);
+  }, []);
 
-  const updateBoard = (updatedBoard, item) => {
-    const copyArr = board;
-    const index = board.indexOf(updatedBoard);
-
-    setBoard(copyArr);
+  const updateFinalPlaceHolder = (placeHolderID, itemList) => {
+    setFinalList((finalList) => [
+      ...finalList,
+      { id: placeHolderID, item: itemList },
+    ]);
   };
 
+  console.log("finalList",finalList);
   return (
-    <CardContext.Provider value={{ updateBoard }}>
+    <CardContext.Provider value={{}}>
       <div className="dragdrop-main-container">
-        {/* <h1>{seconds}</h1> */}
-
         <div className="placeholders-main-container">
           {board.map((placeholder) => {
             return (
               <BoardBox1
+                socket={socket}
+                roomData={roomData}
+                finalList={[...finalList]}
+                updateFinalPlaceHolder={updateFinalPlaceHolder}
                 index={board.indexOf(placeholder)}
                 id={placeholder.id}
                 droppedItem={placeholder.droppedItem}

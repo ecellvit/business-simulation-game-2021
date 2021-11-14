@@ -48,7 +48,7 @@ function Login() {
   // };
 
   const sendUserData = function () {
-    fetch("http://127.0.0.1:2000/api/public/createUser", {
+    fetch("https://futurepreneursbackend.herokuapp.com/api/public/createUser", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),
@@ -58,7 +58,7 @@ function Login() {
       })
       .then((data) => {
         console.log(data._id);
-        authCtx.login(data._id, userData.name, userData.email);
+        authCtx.login(data._id, userData.name, userData.email,userData.photoURL);
       })
       .catch((err) => {
         console.log(err);

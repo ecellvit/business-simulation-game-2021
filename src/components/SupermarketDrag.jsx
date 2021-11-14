@@ -4,7 +4,6 @@ import { useDrag } from "react-dnd";
 //item = our draggable values
 
 function SupermarketDrag(props) {
-
   const [{ isDragging }, drag] = useDrag({
     type: "div",
     item: {name:props.name, id: props.id },
