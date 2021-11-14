@@ -2,3 +2,8 @@
     width: 100vw;
     overflow: hidden;
 }
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+}

@@ -1,0 +1,117 @@
+/* Section1 */
+
+.section1-MainContainer {
+    color: #2D3A3A;
+    padding: 5vh 10vw;
+
+}
+
+.section1-head {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 4rem;
+}
+
+.section1-text {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+}
+
+.illusContainer {
+    height: 80vh;
+    width: auto;
+    z-index: -2;
+}
+
+.registerButton {
+    width: 190px;
+    height: 60px;
+    background: linear-gradient(180deg, rgba(76, 255, 116, 0.8) -69.23%, rgba(0, 223, 192, 0.8) 217.69%);
+    border-radius: 10px;
+
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: center;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.daysLeftDate1 {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1.2rem;
+    letter-spacing: 0.06em;
+
+    color: #6FE187;
+}
+
+.daysLeftDate2 {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1.2rem;
+    letter-spacing: 0.06em;
+
+    margin-left: 4px;
+}
+
+@media (max-width:900px) {
+
+    .illusContainer {
+        height: 40vh;
+    }
+
+}
+
+@media (max-width:1000px) {
+
+    .section1-MainContainer {
+        padding: 0 10px;
+    }
+
+}
+
+/* Section2 */
+
+
+.section2-head {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 3rem;
+
+    align-self: flex-start;
+}
+
+/* Timeline */
+
+.timelineContainer {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sectionHead {
+    text-align: center;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 4rem;
+
+    color: #2D3A3A;
+}
+
+.timelineImageContainer {
+    width: 80vw;
+}
