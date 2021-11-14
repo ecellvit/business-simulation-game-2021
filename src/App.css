@@ -1,3 +1,9 @@
 .main-container {
-    background-color: #1B2F38;
+    width: 100vw;
+    overflow: hidden;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
 }
