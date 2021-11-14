@@ -8,6 +8,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-li{
+li {
   list-style: none;
 }
+
+/* 
+--------------Font Families--------------
+font-family: 'Inter', sans-serif;
+font-family: 'Karla', sans-serif;
+font-family: 'Poppins', sans-serif; */
