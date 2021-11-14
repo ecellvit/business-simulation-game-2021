@@ -10,8 +10,8 @@ function CreateTeamForm(props) {
   const onSubmitHandler = (event) => {
     event.preventDefault();
     const teamNameValue = teamIdInputRef.current.value;
-
-    fetch("http://127.0.0.1:2000/api/public/createTeam", {
+    // http://127.0.0.1:2000/api/public/createTeam
+    fetch("https://futurepreneursbackend.herokuapp.com//api/public/createTeam", {
       method: "POST",
       body: JSON.stringify({ teamName: teamNameValue, creatorID: authCtx.id }),
       headers: {

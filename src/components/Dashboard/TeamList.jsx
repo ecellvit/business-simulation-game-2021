@@ -20,9 +20,9 @@ function Team(teamData) {
 function TeamList(props) {
   const [teamsData, setTeamsData] = useState([]);
 
-
+  // http://127.0.0.1:2000/api/public/getAllTeams
   useEffect(() => {
-    fetch("http://127.0.0.1:2000/api/public/getAllTeams")
+    fetch("https://futurepreneursbackend.herokuapp.com/api/public/getAllTeams")
       .then((response) => response.json())
       .then((data) => {
         setTeamsData(data);

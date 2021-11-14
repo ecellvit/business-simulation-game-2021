@@ -9,15 +9,18 @@ import BoardBox1 from "./BoardBox1";
 import AuthContext from "../store/auth-context";
 
 export const CardContext = React.createContext({
-  // updateBoard: null,
-  // board: null,
-  finalList: []
+  finalList: [],
 });
 
 const socket = io("http://127.0.0.1:2000/");
 
 const DragDrop = () => {
-  const [finalList, setFinalList] = useState([]);
+  const [finalList, setFinalList] = useState([
+    // { id: "zero", item: { id: "0", name: "none" } },
+    { id: "one", item: { id: "1", name: "" } },
+    { id: "two", item: { id: "2", name: "" } },
+    { id: "three", item: { id: "3", name: "" } },
+  ]);
   // const [board, setBoard] = useState(Placeholders);
   const board = Placeholders;
   const authCtx = useContext(AuthContext);
@@ -34,16 +37,36 @@ const DragDrop = () => {
       console.log(data);
     });
     socket.emit("joinRoom", roomData);
-  }, []);
+  }, [socket.on]);
 
   const updateFinalPlaceHolder = (placeHolderID, itemList) => {
-    setFinalList((finalList) => [
-      ...finalList,
-      { id: placeHolderID, item: itemList },
-    ]);
+    if (placeHolderID === "one") {
+      const newList = finalList.map((x) =>
+        x.id === "one" ? { ...x, item: itemList } : x
+      );
+      setFinalList(() => [...newList]);
+      socket.emit("update",newList);
+    } else if (placeHolderID === "two") {
+      const newList = finalList.map((x) =>
+        x.id === "two" ? { ...x, item: itemList } : x
+      );
+      setFinalList(() => [...newList]);
+      socket.emit("update",newList);
+    } else if (placeHolderID === "three") {
+      const newList = finalList.map((x) =>
+        x.id === "three" ? { ...x, item: itemList } : x
+      );
+      setFinalList(() => [...newList]);
+      socket.emit("update",newList);
+    }
+
+    console.log("finalList", finalList);
   };
 
-  console.log("finalList",finalList);
+  const emitUpdate = () => {
+   socket.emit("update", finalList);
+  };
+  // console.log("finalList", finalList);
   return (
     <CardContext.Provider value={{}}>
       <div className="dragdrop-main-container">
@@ -52,8 +75,9 @@ const DragDrop = () => {
             return (
               <BoardBox1
                 socket={socket}
+                emitUpdate={emitUpdate}
                 roomData={roomData}
-                finalList={[...finalList]}
+                finalList={finalList}
                 updateFinalPlaceHolder={updateFinalPlaceHolder}
                 index={board.indexOf(placeholder)}
                 id={placeholder.id}

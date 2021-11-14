@@ -14,9 +14,9 @@ function DashBoard() {
   // const updateList = () => {
   //   setUpdateTeamList(updateTeamList + 1);
   // };
-
+  // http://127.0.0.1:2000/api/public/hasTeam?userID=${authCtx.id}`
   const checkTeamHandler = () => {
-    fetch(`http://127.0.0.1:2000/api/public/hasTeam?userID=${authCtx.id}`)
+    fetch(`https://futurepreneursbackend.herokuapp.com/api/public/hasTeam?userID=${authCtx.id}`)
       .then((response) => response.json())
       .then((data) => {
         setHasTeam(data);
@@ -25,7 +25,7 @@ function DashBoard() {
   };
 
   return (
-    <div style={{ color: "white" }}>
+    <div style={{ color: "black" }}>
       <li>UserName: {authCtx.name}</li>
       <li>Email: {authCtx.emailid}</li>
 

@@ -11,31 +11,49 @@ const BoardBox1 = (props) => {
   const [board1, setBoard1] = useState([]);
   const [board2, setBoard2] = useState([]);
 
-  const [returnedItem, setReturnedItem] = useState({
-    item: { name: "", id: "" },
-    id: "",
-  });
+  const [returnedItem, setReturnedItem] = useState([
+    {
+      item: { name: "", id: "" },
+      id: "",
+    },
+    {
+      item: { name: "", id: "" },
+      id: "",
+    },
+    {
+      item: { name: "", id: "" },
+      id: "",
+    },
+  ]);
   const [currItem, setCurrItem] = useState({ name: "", id: "" });
 
   useEffect(() => {
     props.socket.on("change", (data) => {
+      // console.log("receivedDataId:", data[2].item);
+      console.log("receivedData:", data);
       setReturnedItem(data);
-      addReturnedItemToBoard(data);
+      // props.updateInitialPlaceHolder(data);
+      // addReturnedItemToBoard(data);
     });
-  }, [props.socket, props.finalList]);
+  }, [props.socket]);
 
-  const [{ isOver }, drop] = useDrop(() => ({
-    accept: "div",
-    drop: (item) => {
-      addItemToBoard(item.id);
-      setCurrItem(item);
-      props.socket.emit("update", { id: props.id, item: item });
-      // return { name: "akash" }; //whatever you return here can be caught in "end" method in useDrag using monitor.getDropResult()
-    },
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
+  const [{ isOver }, drop] = useDrop(
+    () => ({
+      accept: "div",
+      drop: (item) => {
+        setCurrItem(item);
+        props.emitUpdate();
+        addItemToBoard(item.id);
+        // props.socket.emit("update", { id: props.id, item: item });
+
+        // return { name: "akash" }; //whatever you return here can be caught in "end" method in useDrag using monitor.getDropResult()
+      },
+      collect: (monitor) => ({
+        isOver: !!monitor.isOver(),
+      }),
     }),
-  }));
+    [props.finalList]
+  );
 
   const addItemToBoard = (id) => {
     const itemList = Supermarket.filter(
@@ -43,15 +61,27 @@ const BoardBox1 = (props) => {
     );
     props.updateFinalPlaceHolder(props.id, itemList[0]);
     setBoard((board) => [itemList[0]]);
-    setBoard2((board2) => [itemList[0]]);
+    // setBoard2((board2) => [itemList[0]]);
   };
 
-  const addReturnedItemToBoard = (returnedItem) => {
-    const itemList = Supermarket.filter(
-      (itemInSupermarket) => returnedItem.item.id === itemInSupermarket.id
-    );
-    setBoard1((board1) => [itemList[0]]);
-  };
+  // const ItemToReturn = (props) => {
+  //   if (props.id === returnedItem[0].id) {
+  //     return (
+  //       <SupermarketDrag
+  //         name={returnedItem[0].item.name}
+  //         id={returnedItem[0].item.id}
+  //       />
+  //     );
+  //   } else if (props.id === returnedItem[1].id) {
+  //   } else if (props.id === returnedItem[2].id) {
+  //   }
+  // };
+  // const addReturnedItemToBoard = (returnedItem) => {
+  //   const itemList = Supermarket.filter(
+  //     (itemInSupermarket) => returnedItem.item.id === itemInSupermarket.id
+  //   );
+  //   setBoard1((board1) => [itemList[0]]);
+  // };
 
   return (
     <div
@@ -76,7 +106,7 @@ const BoardBox1 = (props) => {
       })}
       {/* returnedItem.id is placeholder's id that socket is sending back 
       after "update" and props.id is the actual placeholder box's id */}
-      {returnedItem.id === props.id
+      {/* {returnedItem.id === props.id
         ? board1.map((boardItem) => {
             return (
               <SupermarketDrag
@@ -86,7 +116,25 @@ const BoardBox1 = (props) => {
               />
             );
           })
-        : null}
+        : null} */}
+      {props.id === "one" ? (
+        <SupermarketDrag
+          name={returnedItem[0].item.name}
+          id={returnedItem[0].item.id}
+        />
+      ) : null}
+      {props.id === "two" ? (
+        <SupermarketDrag
+          name={returnedItem[1].item.name}
+          id={returnedItem[1].item.id}
+        />
+      ) : null}
+      {props.id === "three" ? (
+        <SupermarketDrag
+          name={returnedItem[2].item.name}
+          id={returnedItem[2].item.id}
+        />
+      ) : null}
     </div>
   );
 };
