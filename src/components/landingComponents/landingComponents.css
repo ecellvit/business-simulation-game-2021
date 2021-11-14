@@ -25,6 +25,7 @@
     height: 80vh;
     width: auto;
     z-index: -2;
+    padding-right: 10%;
 }
 
 .registerButton {
@@ -179,3 +180,37 @@
     }
 
 }
+
+.column {
+    position: relative;
+    display: inline-block;
+    float: centre;
+    width: 20.33%;
+}
+
+.Sapling {
+  padding-top: 7vh;
+  padding-bottom: 4vh;
+  text-align: center;
+  font-size: 3rem;
+}
+
+@media (max-width: 640px) {
+  .Sapling {
+    padding-top: 50px;
+  }
+}
+
+.center{
+    width: 10%;
+    height: 10%;
+}
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+
+
+/* foot */
