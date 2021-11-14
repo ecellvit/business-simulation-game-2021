@@ -95,11 +95,10 @@
 /* Timeline */
 
 .timelineContainer {
-    height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
+
 }
 
 .sectionHead {
@@ -110,8 +109,73 @@
     font-size: 4rem;
 
     color: #2D3A3A;
+    margin: 0 0 3rem 0;
 }
 
 .timelineImageContainer {
     width: 80vw;
+    margin: 2rem;
+}
+
+
+@media (max-width:1000px) {
+    .sectionHead {
+        margin: 2rem;
+    }
+
+    .timelineImageContainer {
+        margin: 0;
+    }
+
+}
+
+/* Section3 */
+
+.section3-MainContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem 10vw;
+    background: linear-gradient(0deg, rgba(149, 149, 149, 0.2), rgba(149, 149, 149, 0.2));
+}
+
+.section3-ItemsContainer {
+    color: #040F0F;
+}
+
+.section3-items {
+    max-width: 300px;
+}
+
+.section3-Item2 {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.section3-Item3 {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 0.95rem;
+    padding-right: 3rem;
+}
+
+
+@media (max-width:1000px) {
+    .section3-ItemsContainer {
+        padding-left: 3rem;
+        margin-left: 2rem;
+    }
+
+    .section3-Item3 {
+        font-size: 0.8rem;
+        padding-right: 5rem;
+    }
+
+    .section3-MainContainer {
+        padding: 3rem 10px;
+    }
+
 }

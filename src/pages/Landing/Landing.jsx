@@ -7,6 +7,7 @@ import {
   Section1,
   Section2,
   Timeline,
+  Section3,
 } from "../../components/landingComponents";
 
 export function Landing() {
@@ -16,6 +17,7 @@ export function Landing() {
       <Section1 />
       <Section2 />
       <Timeline />
+      <Section3 />
     </Box>
   );
 }
