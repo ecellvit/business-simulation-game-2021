@@ -1,7 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Placeholders, Supermarket } from "../custom/data";
-// import { useDrop } from "react-dnd";
-// import { useTime } from "react-timer-hook";
 import SupermarketDrag from "./SupermarketDrag";
 import "./DragDrop.css";
 import { io } from "socket.io-client";
@@ -16,12 +14,10 @@ const socket = io("http://127.0.0.1:2000/");
 
 const DragDrop = () => {
   const [finalList, setFinalList] = useState([
-    // { id: "zero", item: { id: "0", name: "none" } },
     { id: "one", item: { id: "1", name: "" } },
     { id: "two", item: { id: "2", name: "" } },
     { id: "three", item: { id: "3", name: "" } },
   ]);
-  // const [board, setBoard] = useState(Placeholders);
   const board = Placeholders;
   const authCtx = useContext(AuthContext);
   const [roomUsers, setRoomUsers] = useState([]);
@@ -45,28 +41,26 @@ const DragDrop = () => {
         x.id === "one" ? { ...x, item: itemList } : x
       );
       setFinalList(() => [...newList]);
-      socket.emit("update",newList);
+      socket.emit("update", newList);
     } else if (placeHolderID === "two") {
       const newList = finalList.map((x) =>
         x.id === "two" ? { ...x, item: itemList } : x
       );
       setFinalList(() => [...newList]);
-      socket.emit("update",newList);
+      socket.emit("update", newList);
     } else if (placeHolderID === "three") {
       const newList = finalList.map((x) =>
         x.id === "three" ? { ...x, item: itemList } : x
       );
       setFinalList(() => [...newList]);
-      socket.emit("update",newList);
+      socket.emit("update", newList);
     }
-
-    console.log("finalList", finalList);
   };
 
   const emitUpdate = () => {
-   socket.emit("update", finalList);
+    socket.emit("update", finalList);
   };
-  // console.log("finalList", finalList);
+  
   return (
     <CardContext.Provider value={{}}>
       <div className="dragdrop-main-container">
