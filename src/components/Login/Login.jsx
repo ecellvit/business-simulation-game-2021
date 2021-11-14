@@ -33,7 +33,8 @@ function Login() {
     setisLoggedInGoogle(false);
     console.log("Login Failure");
   };
-  
+
+  console.log(showLoggedOut);
   // const onLogoutSuccess = (response) => {
   //   setisLoggedInGoogle(false);
   //   setShowLoggedIn(true);
@@ -98,7 +99,7 @@ function Login() {
         ></GoogleLogout>
       ) : null} */}
       {isLoggedInGoogle ? (
-        <Link to="/Dashboard" onClick={sendUserData} style={{color:'white'}}>
+        <Link to="/Dashboard" onClick={sendUserData} style={{ color: "white" }}>
           Continue
         </Link>
       ) : null}

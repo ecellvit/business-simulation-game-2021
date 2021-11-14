@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDrag } from "react-dnd";
 
 //item = our draggable values
 
-function SupermarketDrag(props) {
+/* {Supermarket.filter((item) => item.id === props.id ).map((item) => (
+  <h1>{item.name}</h1>
+))} */
 
+function SupermarketDrag(props) {
   const [{ isDragging }, drag] = useDrag({
     type: "div",
-    item: {name:props.name, id: props.id },
+    item: { name: props.name, id: props.id },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -28,7 +31,3 @@ function SupermarketDrag(props) {
 }
 
 export default SupermarketDrag;
-
-{/* {Supermarket.filter((item) => item.id === props.id ).map((item) => (
-  <h1>{item.name}</h1>
-))} */}

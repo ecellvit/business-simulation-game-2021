@@ -4,7 +4,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import DragDrop from "./components/DragDrop.jsx";
 import Login from "./components/Login/Login";
-import MainNavigation from "./components/MainNavigation.jsx";
+// import MainNavigation from "./components/MainNavigation.jsx";
 import AuthContext from "./store/auth-context.js";
 import DashBoard from "./components/Dashboard/DashBoard.jsx";
 import "./App.css";

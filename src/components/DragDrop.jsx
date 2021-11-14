@@ -20,7 +20,7 @@ const DragDrop = () => {
 
   const updateBoard = (updatedBoard, item) => {
     const copyArr = board;
-    const index = board.indexOf(updatedBoard);
+    // const index = board.indexOf(updatedBoard);
 
     setBoard(copyArr);
   };
