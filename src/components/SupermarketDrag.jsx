@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDrag } from "react-dnd";
 
 function SupermarketDrag(props) {
   const [{ isDragging }, drag] = useDrag({
     type: "div",
-    item: {name:props.name, id: props.id },
+    item: { name: props.name, id: props.id },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),

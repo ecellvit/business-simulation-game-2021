@@ -33,7 +33,8 @@ function Login() {
     setisLoggedInGoogle(false);
     console.log("Login Failure");
   };
-  
+
+  console.log(showLoggedOut);
   // const onLogoutSuccess = (response) => {
   //   setisLoggedInGoogle(false);
   //   setShowLoggedIn(true);

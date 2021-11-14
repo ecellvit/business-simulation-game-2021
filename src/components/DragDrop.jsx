@@ -60,7 +60,7 @@ const DragDrop = () => {
   const emitUpdate = () => {
     socket.emit("update", finalList);
   };
-  
+
   return (
     <CardContext.Provider value={{}}>
       <div className="dragdrop-main-container">
