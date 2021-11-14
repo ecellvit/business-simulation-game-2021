@@ -45,7 +45,7 @@ export function Timeline() {
     <Box className="timelineContainer">
       <Box class="sectionHead">Timeline</Box>
       <Box class="timelineImageContainer">
-        <img src={TimelineImage} />
+        <img src={TimelineImage} alt={"Timeline"} />
       </Box>
     </Box>
   );

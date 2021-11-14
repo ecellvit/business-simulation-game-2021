@@ -9,7 +9,7 @@ import eventDate from "../../resources/images/eventDate.svg";
 function EventDate() {
   return (
     <>
-      <img src={eventDate} />
+      <img src={eventDate} alt={"December 4th"} />
     </>
   );
 }
@@ -97,7 +97,7 @@ export function Section1() {
         </Grid>
       </Grid>
       <Box class="illusContainer">
-        <img src={illus1} alt={"illustration"}></img>
+        <img src={illus1} alt={"illustration"} />
       </Box>
     </Box>
   );
