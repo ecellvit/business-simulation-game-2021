@@ -1,0 +1,19 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+li {
+  list-style: none;
+}
+
+/* 
+--------------Font Families--------------
+font-family: 'Inter', sans-serif;
+font-family: 'Karla', sans-serif;
+font-family: 'Poppins', sans-serif; */
