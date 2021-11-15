@@ -4,6 +4,7 @@ const AuthContext = React.createContext({
   id: "",
   name: "",
   emailid: "",
+  photoURL: "",
   isLoggedIn: false,
   login: (id) => {},
   logout: () => {},
@@ -28,11 +29,11 @@ export const AuthContextProvider = (props) => {
   //note to myself(palani)---> !!id means converting the truthy or falsy value to a true or false boolean value
   //if id is not empty string this will return true else false
 
-  const loginHandler = (id, userName, userEmailId,userPhotoURL) => {
+  const loginHandler = (id, userName, userEmailId, userPhotoURL) => {
     setId(id);
     setUserName(userName);
     setUserEmailId(userEmailId);
-    setUserEmailId(userPhotoURL);
+    setUserPhotoURL(userPhotoURL);
     localStorage.setItem("id", id);
     localStorage.setItem("name", userName);
     localStorage.setItem("email", userEmailId);
@@ -58,6 +59,7 @@ export const AuthContextProvider = (props) => {
     logout: logoutHandler,
     setTeam: teamHandler,
     teamID: userTeamId,
+    photoURL: userPhotoURL,
   };
 
   return (

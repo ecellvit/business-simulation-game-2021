@@ -57,7 +57,7 @@ const BoardBox1 = (props) => {
       ref={drop}
       style={{
         border: "2px solid black",
-        height: "100px",
+        height: "50px",
         width: "100px",
         margin: "100px",
       }}

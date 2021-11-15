@@ -3,7 +3,7 @@
 .dragdrop-main-container {
   display: flex;
   flex-direction: row;
-
+  height: 73vh;
 }
 
 .placeholders-main-container {
@@ -17,4 +17,21 @@
   background-color: white;
   max-width: 390px;
   width: 100%;
+}
+
+img{
+  border-radius: 100%;
+  margin: 10px;
+  display: inline;
+  height: 80px;
+}
+.roomUsersDiv{
+  margin-left: 100px;
+  margin-right: 100px;
+  margin-top: 5px;
+  background: rgb(153, 176, 226);
+  border-radius: 20px;
+}
+.roomUserDiv{
+  display: inline-block;
 }

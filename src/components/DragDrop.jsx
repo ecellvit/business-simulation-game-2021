@@ -20,17 +20,20 @@ const DragDrop = () => {
   ]);
   const board = Placeholders;
   const authCtx = useContext(AuthContext);
-  const [roomUsers, setRoomUsers] = useState([]);
+  const [roomUsers, setRoomUsers] = useState([
+    { id: "", username: "", room: "", email: "", photoURL: "" },
+  ]);
   const [roomData, setRoomData] = useState({
     name: authCtx.name,
     email: authCtx.emailid,
-    photoURL: "123",
-    teamID: "12345",
+    photoURL: authCtx.photoURL,
+    teamID: authCtx.teamID,
   });
 
   useEffect(() => {
     socket.on("roomUsers", (data) => {
-      console.log(data);
+      console.log(data.users);
+      setRoomUsers(data.users);
     });
     socket.emit("joinRoom", roomData);
   }, [socket.on]);
@@ -88,6 +91,46 @@ const DragDrop = () => {
             );
           })}
         </div>
+      </div>
+
+      <div className="roomUsersDiv">
+        {roomUsers[0] && (
+          <div className="roomUserDiv">
+            <img
+              src={roomUsers[0].photoURL}
+              alt="1st team member"
+              title={roomUsers[0].username}
+            ></img>
+          </div>
+        )}
+
+        {roomUsers[1] && (
+          <div className="roomUserDiv">
+            <img
+              src={roomUsers[1].photoURL}
+              alt="2nd team member"
+              title={roomUsers[1].username}
+            ></img>
+          </div>
+        )}
+        {roomUsers[2] && (
+          <div className="roomUserDiv">
+            <img
+              src={roomUsers[2].photoURL}
+              alt="3rd team member"
+              title={roomUsers[2].username}
+            ></img>
+          </div>
+        )}
+        {roomUsers[3] && (
+          <div className="roomUserDiv">
+            <img
+              src={roomUsers[3].photoURL}
+              alt="4th team member"
+              title={roomUsers[3].username}
+            ></img>
+          </div>
+        )}
       </div>
     </CardContext.Provider>
   );
