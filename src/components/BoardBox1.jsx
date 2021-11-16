@@ -43,6 +43,8 @@ const BoardBox1 = (props) => {
     [props.finalList]
   );
 
+  console.log(isOver);
+
   const addItemToBoard = (id) => {
     const itemList = Supermarket.filter(
       (itemInSupermarket) => id === itemInSupermarket.id

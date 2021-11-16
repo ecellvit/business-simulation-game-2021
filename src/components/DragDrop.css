@@ -19,19 +19,21 @@
   width: 100%;
 }
 
+/* 
 img{
   border-radius: 100%;
   margin: 10px;
   display: inline;
   height: 80px;
-}
-.roomUsersDiv{
+} */
+.roomUsersDiv {
   margin-left: 100px;
   margin-right: 100px;
   margin-top: 5px;
   background: rgb(153, 176, 226);
   border-radius: 20px;
 }
-.roomUserDiv{
+
+.roomUserDiv {
   display: inline-block;
 }

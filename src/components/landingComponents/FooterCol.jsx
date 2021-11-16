@@ -1,11 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import React from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 const ColStyle = styled.div`
   .heading {
     font-size: 1.2rem;
-    margin-top:3rem;
+    margin-top: 3rem;
     margin-bottom: 1rem;
   }
   li {
@@ -13,23 +13,23 @@ const ColStyle = styled.div`
   }
   a {
     font-size: 1rem;
-    color:black;
+    color: black;
     text-decoration: none;
   }
 `;
 
 export default function FooterCol({
-  heading = 'Col Heading',
+  heading = "Col Heading",
   links = [
     {
-      type: 'Link',
-      title: 'Home',
-      path: '/home',
+      type: "Link",
+      title: "Home",
+      path: "/home",
     },
     {
-      type: 'Link',
-      title: 'About',
-      path: '/about',
+      type: "Link",
+      title: "About",
+      path: "/about",
     },
   ],
 }) {
@@ -39,7 +39,7 @@ export default function FooterCol({
       <ul>
         {links.map((item, index) => (
           <li key={index}>
-            {item.type === 'Link' ? (
+            {item.type === "Link" ? (
               <Link to={item.path}>{item.title}</Link>
             ) : (
               <a href={item.path} target="_blank" rel="noreferrer">
