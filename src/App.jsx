@@ -5,14 +5,14 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import DragDrop from "./components/DragDrop.jsx";
 import Login from "./components/Login/Login";
 
-import MainNavigation from "./components/MainNavigation.jsx";
+// import MainNavigation from "./components/MainNavigation.jsx";
 import AuthContext from "./store/auth-context.js";
 import DashBoard from "./components/Dashboard/DashBoard.jsx";
 import "./App.css";
 
 /* Pages */
 import { Landing } from "./pages/Landing";
-import { Nav } from "./components/nav/Nav.jsx";
+// import { Nav } from "./components/nav/Nav.jsx";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -20,7 +20,7 @@ function App() {
   
   return (
     <div className="main-container">
-      <MainNavigation />
+      {/* <MainNavigation /> */}
       <Switch>
         <Route path="/" exact>
           <Landing />

@@ -7,7 +7,6 @@ import BoardBox1 from "./BoardBox1";
 import AuthContext from "../store/auth-context";
 import { Route, Switch, useLocation } from "react-router-dom";
 
-
 export const CardContext = React.createContext({
   finalList: [],
 });

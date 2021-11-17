@@ -1,6 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
+import { Box, Typography, Grid } from "@mui/material";
 
 import "./landingComponents.css";
 import illus1 from "../../resources/images/illus1.jpg";
@@ -46,7 +45,7 @@ export function Section1() {
         sx={{
           width: {
             xs: "100%",
-            sm: "60%",
+            sm: "50%",
             md: "50%",
           },
         }}
@@ -55,10 +54,12 @@ export function Section1() {
           FuturePreneurs
         </Grid>
         <Grid item className="section1-text">
-          Put Yourself In The Shoes Of A CEO And Conquer The Challenges Ahead Of
-          You. Take A Glance At What It’s Like To Be A Part Of A Startup And
-          Dive Into The World Of Business With Our Annual, Wildly Popular
-          GraVITas Event.
+          <Typography>
+            Put Yourself In The Shoes Of A CEO And Conquer The Challenges Ahead
+            Of You. Take A Glance At What It’s Like To Be A Part Of A Startup
+            And Dive Into The World Of Business With Our Annual, Wildly Popular
+            GraVITas Event.
+          </Typography>
         </Grid>
 
         <Grid
@@ -96,7 +97,16 @@ export function Section1() {
           </Grid>
         </Grid>
       </Grid>
-      <Box class="illusContainer">
+
+      <Box
+        class="illusContainer"
+        sx={{
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <img src={illus1} alt={"illustration"} />
       </Box>
     </Box>
