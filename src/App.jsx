@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { Route, Switch } from "react-router-dom";
+import React, { useContext,useEffect } from "react";
+import { Route, Switch, useLocation } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import DragDrop from "./components/DragDrop.jsx";
@@ -16,7 +16,8 @@ import { Nav } from "./components/nav/Nav.jsx";
 
 function App() {
   const authCtx = useContext(AuthContext);
-
+  // const {pathname} = useLocation();
+  
   return (
     <div className="main-container">
       <MainNavigation />

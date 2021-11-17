@@ -5,6 +5,8 @@ import "./DragDrop.css";
 import { io } from "socket.io-client";
 import BoardBox1 from "./BoardBox1";
 import AuthContext from "../store/auth-context";
+import { Route, Switch, useLocation } from "react-router-dom";
+
 
 export const CardContext = React.createContext({
   finalList: [],
@@ -12,14 +14,38 @@ export const CardContext = React.createContext({
 
 const socket = io("http://127.0.0.1:2000/");
 
-const DragDrop = () => {
-  const [finalList, setFinalList] = useState([
-    { id: "one", item: { id: "1", name: "" } },
-    { id: "two", item: { id: "2", name: "" } },
-    { id: "three", item: { id: "3", name: "" } },
+function DragDrop() {
+  // const {pathname} = useLocation();
+
+  const [canDrop, setCanDrop] = useState([
+    { isDroppable: "no", element: "Grains" },
+    { isDroppable: "yes", element: "" },
+    { isDroppable: "no", element: "Fruits" },
+    { isDroppable: "no", element: "" },
+    { isDroppable: "yes", element: "" },
+    { isDroppable: "no", element: "" },
   ]);
-  const board = Placeholders;
+  const [finalList, setFinalList] = useState([
+    { id: "one", item: { id: "1", name: "" }, canDrop: "" },
+    { id: "two", item: { id: "2", name: "" }, canDrop: "" },
+    { id: "three", item: { id: "3", name: "" }, canDrop: "" },
+    { id: "four", item: { id: "4", name: "" }, canDrop: "" },
+    { id: "five", item: { id: "5", name: "" }, canDrop: "" },
+    { id: "six", item: { id: "6", name: "" }, canDrop: "" },
+  ]);
+
+  const [filteredFinalList, setFilteredFinalList] = useState([]);
+
+  const board = Placeholders.map((placeholder, i) => {
+    return { ...placeholder, canDrop: canDrop[i].isDroppable };
+  });
+
   const authCtx = useContext(AuthContext);
+  // useEffect(() => {
+  //   socket.emit("disconnects");
+  //   console.log("disconnected")
+  // }, [pathname]);
+
   const [roomUsers, setRoomUsers] = useState([
     { id: "", username: "", room: "", email: "", photoURL: "" },
   ]);
@@ -31,12 +57,26 @@ const DragDrop = () => {
   });
 
   useEffect(() => {
+    setFinalList((finalList) =>
+      finalList.map((list, i) => {
+        return { ...list, canDrop: canDrop[i] };
+      })
+    );
     socket.on("roomUsers", (data) => {
       console.log(data.users);
       setRoomUsers(data.users);
     });
     socket.emit("joinRoom", roomData);
-  }, [socket.on]);
+  }, [roomData, canDrop]);
+
+  useEffect(() => {
+    setFilteredFinalList(finalList);
+    setFilteredFinalList((finalList) => {
+      return finalList.filter((list) => {
+        return list.canDrop.isDroppable === "yes";
+      });
+    });
+  }, [finalList]);
 
   const updateFinalPlaceHolder = (placeHolderID, itemList) => {
     if (placeHolderID === "one") {
@@ -57,12 +97,44 @@ const DragDrop = () => {
       );
       setFinalList(() => [...newList]);
       socket.emit("update", newList);
+    } else if (placeHolderID === "four") {
+      const newList = finalList.map((x) =>
+        x.id === "four" ? { ...x, item: itemList } : x
+      );
+      setFinalList(() => [...newList]);
+      socket.emit("update", newList);
+    } else if (placeHolderID === "five") {
+      const newList = finalList.map((x) =>
+        x.id === "five" ? { ...x, item: itemList } : x
+      );
+      setFinalList(() => [...newList]);
+      socket.emit("update", newList);
+    } else if (placeHolderID === "six") {
+      const newList = finalList.map((x) =>
+        x.id === "six" ? { ...x, item: itemList } : x
+      );
+      setFinalList(() => [...newList]);
+      socket.emit("update", newList);
     }
   };
 
-  const emitUpdate = () => {
-    socket.emit("update", finalList);
+  const deleteFinalPlaceHolder = (placeholderID) => {
+    const deletedFinalList = finalList.map((list) => {
+      if (list.id === placeholderID) {
+        list.item = { ...list.item, name: "" };
+      }
+      return list;
+    });
+    setFinalList(deletedFinalList);
+    socket.emit("update", deletedFinalList);
   };
+
+  console.log("finalList", finalList);
+  console.log("newfinalList", filteredFinalList);
+
+  // const emitUpdate = () => {
+  //   socket.emit("update", finalList);
+  // };
 
   return (
     <CardContext.Provider value={{}}>
@@ -72,7 +144,9 @@ const DragDrop = () => {
             return (
               <BoardBox1
                 socket={socket}
-                emitUpdate={emitUpdate}
+                // emitUpdate={emitUpdate}
+                deleteFinalPlaceHolder={deleteFinalPlaceHolder}
+                canDrop={placeholder.canDrop}
                 roomData={roomData}
                 finalList={finalList}
                 updateFinalPlaceHolder={updateFinalPlaceHolder}
@@ -134,6 +208,6 @@ const DragDrop = () => {
       </div>
     </CardContext.Provider>
   );
-};
+}
 
 export default DragDrop;
