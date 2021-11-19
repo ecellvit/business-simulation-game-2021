@@ -10,6 +10,7 @@ const AuthContext = React.createContext({
   logout: () => {},
   setTeam: (teamID) => {},
   teamID: "",
+  locationChange:false
 });
 
 export const AuthContextProvider = (props) => {
@@ -24,6 +25,7 @@ export const AuthContextProvider = (props) => {
   const [userEmailId, setUserEmailId] = useState(initialEmail);
   const [userPhotoURL, setUserPhotoURL] = useState(initialPhotoURL);
   const [userTeamId, setTeamEmailId] = useState(initialTeamID);
+  const [location, setLocation] = useState(false);
 
   const userIsLoggedIn = !!id;
   //note to myself(palani)---> !!id means converting the truthy or falsy value to a true or false boolean value
@@ -60,6 +62,7 @@ export const AuthContextProvider = (props) => {
     setTeam: teamHandler,
     teamID: userTeamId,
     photoURL: userPhotoURL,
+    locationChange: location,
   };
 
   return (

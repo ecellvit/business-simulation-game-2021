@@ -3,19 +3,21 @@
 .dragdrop-main-container {
   display: flex;
   flex-direction: row;
-  height: 73vh;
+  /* height: 73vh; */
 }
 
 .placeholders-main-container {
   border: 2px solid red;
-  max-width: 1200px;
+  /* max-width: 1200px; */
   width: 100%;
   background-color: white;
+  display: flex;
+  flex-direction: column;
 }
 
 .supermarket-main-container {
   background-color: white;
-  max-width: 390px;
+  max-width: 200px;
   width: 100%;
 }
 

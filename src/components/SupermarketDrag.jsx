@@ -3,7 +3,7 @@ import { useDrag } from "react-dnd";
 
 function SupermarketDrag(props) {
   const [{ isDragging }, drag] = useDrag({
-    type: "div",
+    type: "yes",
     item: { name: props.name, id: props.id },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
