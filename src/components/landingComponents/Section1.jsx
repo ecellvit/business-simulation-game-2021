@@ -71,7 +71,7 @@ export function Section1() {
           justifyContent="flex-start"
           alignItems="center"
         >
-          <Grid item xs={3}>
+          <Grid item  className="eventDate" xs={3}>
             <EventDate />
           </Grid>
 

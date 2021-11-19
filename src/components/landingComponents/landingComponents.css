@@ -3,7 +3,7 @@
 .section1-MainContainer {
     color: #2D3A3A;
     padding: 5vh 10vw;
-
+    overflow-x:auto;
 }
 
 .section1-head {
@@ -65,21 +65,7 @@
     margin-left: 4px;
 }
 
-@media (max-width:900px) {
 
-    .illusContainer {
-        height: 40vh;
-    }
-
-}
-
-@media (max-width:1000px) {
-
-    .section1-MainContainer {
-        padding: 0 10px;
-    }
-
-}
 
 /* Section2 */
 
@@ -184,8 +170,8 @@
 .column {
     position: relative;
     display: inline-block;
-    float: centre;
-    width: 20.33%;
+    float:none;
+    /* width: 20.33%; */
 }
 
 .Sapling {
@@ -210,7 +196,28 @@
   clear: both;
   display: table;
 }
+@media (max-width:900px) {
 
+    .illusContainer {
+        height: 40vh;
+    }
+    .section1-head, .section2-head {
+        text-align: center;
+        font-size: 2rem;
+    }
+    .section1-text {
+        text-align: center;
+    }
+    
+}
+
+@media (max-width:1000px) {
+
+    .section1-MainContainer {
+        padding: 0 10px;
+    }
+
+}
 
 
 /* foot */
