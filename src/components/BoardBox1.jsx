@@ -43,8 +43,6 @@ const BoardBox1 = (props) => {
     });
   }, [props.socket]);
 
-  useEffect(() => {});
-
   const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
       accept: props.canDrop,
@@ -61,8 +59,6 @@ const BoardBox1 = (props) => {
     }),
     [props.finalList]
   );
-
-  console.log(isOver);
 
   const addItemToBoard = (id) => {
     const itemList = Supermarket.filter(
