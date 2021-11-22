@@ -7,9 +7,9 @@ import { AuthContextProvider } from "./store/auth-context";
 
 require("dotenv").config();
 
-window.onbeforeunload = function() {
-  localStorage.clear();
-}
+// window.onbeforeunload = function() {
+//   localStorage.clear();
+// }
 
 ReactDOM.render(
   <React.StrictMode>

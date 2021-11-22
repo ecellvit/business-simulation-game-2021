@@ -18,7 +18,7 @@ export function Section2() {
         },
       }}
     >
-      <Box class="illusContainer">
+      <Box class="illusContainer1">
         <img src={illus2} alt={"illustration"}></img>
       </Box>
 

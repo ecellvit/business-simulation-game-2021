@@ -10,13 +10,13 @@ import {
   Section3,
   Section4,
   Section5,
-  Section6
+  Section6,
 } from "../../components/landingComponents";
 
 export function Landing() {
   return (
     <Box>
-      <Nav />
+      <Nav item1="About" item2="Timeline" item3="Sponsors" item4="Register" />
       <Section1 />
       <Section2 />
       <Timeline />
@@ -24,7 +24,6 @@ export function Landing() {
       <Section4 />
       <Section5 />
       <Section6 />
-
     </Box>
   );
 }

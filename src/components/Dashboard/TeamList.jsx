@@ -22,7 +22,7 @@ function TeamList(props) {
 
   // https://futurepreneursbackend.herokuapp.com/api/public/getAllTeams
   useEffect(() => {
-    fetch("https://futurepreneursbackend.herokuapp.com/api/public/getAllTeams")
+    fetch("http://127.0.0.1:2000/api/public/getAllTeams")
       .then((response) => response.json())
       .then((data) => {
         setTeamsData(data);

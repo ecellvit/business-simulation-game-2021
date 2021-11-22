@@ -67,7 +67,7 @@ export const Supermarket = [
     id: 2,
   },
   {
-    name: "Fruits",
+    name: "Biscuits",
     id: 3,
   },
   {

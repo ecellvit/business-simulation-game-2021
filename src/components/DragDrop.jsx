@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
-
+import AgoraRTC from "agora-rtc-react";
 import AuthContext from "../store/auth-context";
 
 import SupermarketDrag from "./SupermarketDrag";
@@ -10,24 +10,66 @@ import BoardBox1 from "./BoardBox1";
 import { Placeholders, Supermarket } from "../custom/data";
 
 import "./DragDrop.css";
+import { Nav } from "./nav";
 
 export const CardContext = React.createContext({
   finalList: [],
 });
 
-// const socket = io("http://127.0.0.1:2000/");
-const socket = io("https://futurepreneursbackend.herokuapp.com");
+const socket = io("http://127.0.0.1:2000/");
+// const socket = io("https://futurepreneursbackend.herokuapp.com");
+
+let rtc = {
+  localAudioTrack: null,
+  client: null,
+};
+
+let options = {
+  // Pass your App ID here.
+  appId: "583e53c6739745739d20fbb11ac8f0ef",
+  // Set the channel name.
+  channel: "test",
+  // Pass your temp token here.
+  token: "006583e53c6739745739d20fbb11ac8f0efIABhoblSpnxPZFqngi8fH5GDRwweNxnFYkcwBHUn/VFcwwx+f9gAAAAAEABw2xAICl2dYQEAAQAKXZ1h",
+  // Set the user ID.
+  uid: Math.floor(Math.random() * 202123),
+};
+
+async function startBasicCall() {
+  // Create an AgoraRTCClient object.
+  rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+
+  // Listen for the "user-published" event, from which you can get an AgoraRTCRemoteUser object.
+  rtc.client.on("user-published", async (user, mediaType) => {
+    // Subscribe to the remote user when the SDK triggers the "user-published" event
+    await rtc.client.subscribe(user, mediaType);
+    console.log("subscribe success");
+
+    // If the remote user publishes an audio track.
+    if (mediaType === "audio") {
+      // Get the RemoteAudioTrack object in the AgoraRTCRemoteUser object.
+      const remoteAudioTrack = user.audioTrack;
+      // Play the remote audio track.
+      remoteAudioTrack.play();
+    }
+  });
+}
+startBasicCall();
 
 function DragDrop() {
   const authCtx = useContext(AuthContext);
+  const [score, setScore] = useState(0);
+  const time = new Date();
+  time.setSeconds(time.getSeconds() + 600);
+  const [items, setItems] = useState(["", "", "", ""]);
   // const {pathname} = useLocation();
-  const [questions, setQuestion] = useState([
-    { id: "", instruction: "", options: [] },
-    { id: "", instruction: "", options: [] },
-    { id: "", instruction: "", options: [] },
-    { id: "", instruction: "", options: [] },
-    { id: "", instruction: "", options: [] },
-  ]);
+  const [question, setQuestion] = useState({
+    id: "",
+    instruction: "",
+    options: [],
+  });
+
+  const [attempts, setAttempts] = useState(1);
 
   const [currQuestionPointer, setcurrQuestionPointer] = useState(0);
 
@@ -96,6 +138,22 @@ function DragDrop() {
     return { ...placeholder, canDrop: canDrop[0][i].isDroppable };
   });
 
+  const joinCall = async function () {
+    // Join an RTC channel.
+    await rtc.client.join(
+      options.appId,
+      options.channel,
+      options.token,
+      options.uid
+    );
+    // Create a local audio track from the audio sampled by a microphone.
+    rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+    // Publish the local audio tracks to the RTC channel.
+    await rtc.client.publish([rtc.localAudioTrack]);
+
+    console.log("publish success!");
+  };
+
   const addToCanDrop = (blocked, unblocked, { Zones }) => {
     console.log("object", blocked, unblocked, Zones);
 
@@ -103,50 +161,50 @@ function DragDrop() {
       if (blockedPlaceHolder === "one") {
         setCanDrop((prevCanDrop) => [
           {
-            ...prevCanDrop[currQuestionPointer],
-            0: { ...prevCanDrop[currQuestionPointer][0], isDroppable: "no" },
+            ...prevCanDrop[0],
+            0: { ...prevCanDrop[0][0], isDroppable: "no" },
           },
         ]);
       } else if (blockedPlaceHolder === "two") {
         setCanDrop((prevCanDrop) => [
           {
-            ...prevCanDrop[currQuestionPointer],
-            1: { ...prevCanDrop[currQuestionPointer][1], isDroppable: "no" },
+            ...prevCanDrop[0],
+            1: { ...prevCanDrop[0][1], isDroppable: "no" },
           },
         ]);
       } else if (blockedPlaceHolder === "three") {
         setCanDrop((prevCanDrop) => [
           {
-            ...prevCanDrop[currQuestionPointer],
-            2: { ...prevCanDrop[currQuestionPointer][2], isDroppable: "no" },
+            ...prevCanDrop[0],
+            2: { ...prevCanDrop[0][2], isDroppable: "no" },
           },
         ]);
       } else if (blockedPlaceHolder === "four") {
         setCanDrop((prevCanDrop) => [
           {
-            ...prevCanDrop[currQuestionPointer],
-            3: { ...prevCanDrop[currQuestionPointer][3], isDroppable: "no" },
+            ...prevCanDrop[0],
+            3: { ...prevCanDrop[0][3], isDroppable: "no" },
           },
         ]);
       } else if (blockedPlaceHolder === "five") {
         setCanDrop((prevCanDrop) => [
           {
-            ...prevCanDrop[currQuestionPointer],
-            4: { ...prevCanDrop[currQuestionPointer][4], isDroppable: "no" },
+            ...prevCanDrop[0],
+            4: { ...prevCanDrop[0][4], isDroppable: "no" },
           },
         ]);
       } else if (blockedPlaceHolder === "six") {
         setCanDrop((prevCanDrop) => [
           {
-            ...prevCanDrop[currQuestionPointer],
-            5: { ...prevCanDrop[currQuestionPointer][5], isDroppable: "no" },
+            ...prevCanDrop[0],
+            5: { ...prevCanDrop[0][5], isDroppable: "no" },
           },
         ]);
       } else if (blockedPlaceHolder === "seven") {
         setCanDrop((prevCanDrop) => [
           {
-            ...prevCanDrop[currQuestionPointer],
-            6: { ...prevCanDrop[currQuestionPointer][6], isDroppable: "no" },
+            ...prevCanDrop[0],
+            6: { ...prevCanDrop[0][6], isDroppable: "no" },
           },
         ]);
       }
@@ -155,53 +213,53 @@ function DragDrop() {
       if (unblockedPlaceHolder === "one") {
         setCanDrop((prevCanDrop) => [
           {
-            ...prevCanDrop[currQuestionPointer],
-            0: { ...prevCanDrop[currQuestionPointer][0], isDroppable: "yes" },
+            ...prevCanDrop[0],
+            0: { ...prevCanDrop[0][0], isDroppable: "yes" },
           },
         ]);
       } else if (unblockedPlaceHolder === "two") {
         setCanDrop((prevCanDrop) => [
           {
-            ...prevCanDrop[currQuestionPointer],
-            1: { ...prevCanDrop[currQuestionPointer][1], isDroppable: "yes" },
+            ...prevCanDrop[0],
+            1: { ...prevCanDrop[0][1], isDroppable: "yes" },
           },
         ]);
       } else if (unblockedPlaceHolder === "three") {
         setCanDrop((prevCanDrop) => [
           {
-            ...prevCanDrop[currQuestionPointer],
-            2: { ...prevCanDrop[currQuestionPointer][2], isDroppable: "yes" },
+            ...prevCanDrop[0],
+            2: { ...prevCanDrop[0][2], isDroppable: "yes" },
           },
         ]);
       } else if (unblockedPlaceHolder === "four") {
         setCanDrop((prevCanDrop) => [
           {
-            ...prevCanDrop[currQuestionPointer],
-            3: { ...prevCanDrop[currQuestionPointer][3], isDroppable: "yes" },
+            ...prevCanDrop[0],
+            3: { ...prevCanDrop[0][3], isDroppable: "yes" },
           },
         ]);
       } else if (unblockedPlaceHolder === "five") {
         setCanDrop((prevCanDrop) => [
           {
-            ...prevCanDrop[currQuestionPointer],
-            4: { ...prevCanDrop[currQuestionPointer][4], isDroppable: "yes" },
+            ...prevCanDrop[0],
+            4: { ...prevCanDrop[0][4], isDroppable: "yes" },
           },
         ]);
       } else if (unblockedPlaceHolder === "six") {
         setCanDrop((prevCanDrop) => [
           {
-            ...prevCanDrop[currQuestionPointer],
-            5: { ...prevCanDrop[currQuestionPointer][5], isDroppable: "yes" },
+            ...prevCanDrop[0],
+            5: { ...prevCanDrop[0][5], isDroppable: "yes" },
           },
         ]);
       } else if (unblockedPlaceHolder === "seven") {
         setCanDrop((prevCanDrop) => [
           {
-            ...prevCanDrop[currQuestionPointer],
-            6: { ...prevCanDrop[currQuestionPointer][6], isDroppable: "yes" },
+            ...prevCanDrop[0],
+            6: { ...prevCanDrop[0][6], isDroppable: "yes" },
           },
         ]);
-      } 
+      }
     });
     Zones.map((presetZone) => {
       console.log("preset", presetZone);
@@ -211,6 +269,17 @@ function DragDrop() {
             ...prevCanDrop[0],
             0: {
               ...prevCanDrop[0][0],
+              element: presetZone.option,
+              isDroppable: "no",
+            },
+          },
+        ]);
+      } else if (presetZone.index === "four") {
+        setCanDrop((prevCanDrop) => [
+          {
+            ...prevCanDrop[0],
+            3: {
+              ...prevCanDrop[0][3],
               element: presetZone.option,
               isDroppable: "no",
             },
@@ -235,30 +304,32 @@ function DragDrop() {
     photoURL: authCtx.photoURL,
     teamID: authCtx.teamID,
   });
-
+  // "https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions"
   useEffect(() => {
-    fetch("https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions")
+    fetch(
+      `http://127.0.0.1:2000/api/RoundOne/getQuestions?question=${
+        currQuestionPointer + 1
+      }`
+    )
       .then((res) => {
         return res.json();
       })
       .then((data) => {
         addToCanDrop(
-          data[currQuestionPointer].BlockedZones,
-          data[currQuestionPointer].UnblockedZones,
-          data[currQuestionPointer].PrefixEnvironment
+          data.BlockedZones,
+          data.UnblockedZones,
+          data.PrefixEnvironment
         );
-        setQuestion(() => [
-          {
-            id: data[0]._id,
-            instruction: data[0].Instruction,
-            options: data[0].Options,
-          },
-          {
-            id: data[1]._id,
-            instruction: data[1].Instruction,
-            options: data[1].Options,
-          },
-        ]);
+        setItems((preItem) => {
+          return data.Options;
+        });
+        setQuestion((prevQuestion) => {
+          return {
+            id: data._id,
+            instruction: data.Instruction,
+            options: data.Options,
+          };
+        });
       });
   }, [currQuestionPointer]);
 
@@ -330,7 +401,7 @@ function DragDrop() {
       );
       setFinalList(() => [...newList]);
       socket.emit("update", newList);
-    } 
+    }
   };
 
   const deleteFinalPlaceHolder = (placeholderID) => {
@@ -343,35 +414,13 @@ function DragDrop() {
     setFinalList(deletedFinalList);
     socket.emit("update", deletedFinalList);
   };
-
-  const submitAnswerHandler = (event) => {
-    event.preventDefault();
-    fetch("http://127.0.0.1:2000/api/RoundOne/submitResponse", {
-      method: "POST",
-      body: JSON.stringify({}),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        alert(err);
-      });
-  };
-  console.log("finalList", finalList);
-  console.log("newfinalList", filteredFinalList);
-
-  // const emitUpdate = () => {
-  //   socket.emit("update", finalList);
-  // };
+  // {questionID:,teamID:,attempts:,responseEnvironment:{Zones:[{index:"",option:""}]}}
 
   const nextQuestionHandler = () => {
     setcurrQuestionPointer((prevPointer) => {
       if (prevPointer < 1) {
         prevPointer = prevPointer + 1;
+        setAttempts((prevAttempt) => 1);
         return prevPointer;
       } else {
         console.log(prevPointer);
@@ -380,10 +429,62 @@ function DragDrop() {
     });
   };
 
+  const submitAnswerHandler = (event) => {
+    event.preventDefault();
+    fetch("http://127.0.0.1:2000/api/RoundOne/submitResponse", {
+      method: "POST",
+      body: JSON.stringify({
+        attempts: attempts,
+        questionID: question.id,
+        teamID: authCtx.teamID,
+        responseEnvironment: {
+          Zones: filteredFinalList.map((element) => {
+            console.log({ option: element.item.name, index: element.id });
+            return { option: element.item.name, index: element.id };
+          }),
+        },
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setAttempts((prevAttempt) => prevAttempt + 1);
+        console.log(data);
+        console.log("attempt", attempts);
+        if (data.isCorrect || attempts === 3) {
+          nextQuestionHandler();
+        }
+        setScore((prevScore) => {
+          return data.currentPoints;
+        });
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+  // console.log("finalList", finalList);
+  console.log("newfinalList", filteredFinalList);
+  console.log("currQuestion", currQuestionPointer);
+  console.log("items", items);
+  // const emitUpdate = () => {
+  //   socket.emit("update", finalList);
+  // };
+
+  //iscorrect true in any attempt-->attempt=1 and setcurrQues++
+  //iscorrect false in 1st attempt-->give msg/prompt you are incorrect and attempt++
+  //3rd attempt false-->answer wrong and setcurrQues++
+  //3rd attempt true-->answer correct and setcurrQues++
+
   return (
     <CardContext.Provider value={{}}>
-      <h1>{questions[currQuestionPointer].instruction}</h1>
-      <h1>{questions[currQuestionPointer].id}</h1>
+      <Nav expiryTimestamp={time} />
+      <button onClick={joinCall}>Microphone</button>
+      <h1>{question.instruction}</h1>
+      <h1>{question.id}</h1>
+      <h1>Score:{score}</h1>
+      <h1>Attempt:{attempts}</h1>
       <button onClick={nextQuestionHandler}>Next question</button>
       <div className="dragdrop-main-container">
         <div className="placeholders-main-container">
@@ -406,10 +507,8 @@ function DragDrop() {
           })}
         </div>
         <div className="supermarket-main-container">
-          {Supermarket.map((item) => {
-            return (
-              <SupermarketDrag name={item.name} id={item.id} key={item.id} />
-            );
+          {items.map((item, index) => {
+            return <h1>{item}</h1>;
           })}
         </div>
       </div>

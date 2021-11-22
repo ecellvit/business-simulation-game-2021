@@ -1,31 +1,318 @@
-.TeamList__main--div {
-
+.Dashboard__main--div {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  background-size: cover;
+  background-position: center;
+  background-image: url("../../resources/images/bg-image.svg");
+  height: 85vh;
+  position: relative;
+}
+.teamDetails {
+  position: absolute;
+  width: 21%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.17);
+  backdrop-filter: blur(30px);
 }
 
-.createTeamForm {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  background-color: aliceblue;
-  color: black;
-  padding: 2%;
-}
-.TeamDisplay__main--div {
+.startTime {
+  position: absolute;
+  width: 62%;
+  height: 54px;
+  /* left: 105px; */
+  top: 36px;
+  left: 20%;
+  padding: 0px;
+  margin: 0%;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 150%;
+  line-height: 54px;
+  /* identical to box height */
 
+  color: #2c3030;
+}
+.time {
+  position: absolute;
+  width: 253px;
+  height: 75px;
+  top: 99px;
+  left: 12%;
+  font-family: Karla;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 200%;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 75px;
+  margin: 0%;
+  /* identical to box height */
+
+  color: #2c3030;
+}
+.hr {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  left: 0px;
+  top: 216px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(76, 255, 116, 0.8) -69.23%,
+    rgba(0, 223, 192, 0.8) 217.69%
+  );
+  backdrop-filter: blur(31px);
+}
+.yteam {
+  position: absolute;
+  height: 54px;
+  left: 13%;
+  right: auto;
+  top: 244px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 120%;
+  /* identical to box height */
+  color: #000000;
+}
+.tname {
+  position: relative;
+  width: 100%;
+  height: 0px;
+  left: 25%;
+  top: 345px;
+  margin: 0px;
+  padding-top: 10px;
+  font-family: Poppins;
+  font-weight: normal;
+  font-size: 125%;
+  padding-bottom: 50px;
+  margin-left: 10px;
+  /* identical to box height */
+  color: #000000;
 }
 
-.TeamListAndForm {
-  display: flex;
-  justify-content: space-between;
-  margin: 2%;
-}
+.tbox {
+  position: absolute;
+  width: 300%;
+  height: 75vh;
+  left: 140%;
+  top: 5%;
 
-.individual__team {
-  display: flex;
-  justify-content: flex-start;
-  margin: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(30px);
+  /* Note: backdrop-filter has minimal browser support */
+  border-style: solid;
+  border-radius: 15px;
+  border-color: #00dfc0;
+  border-width: 5px;
 }
+.rhead {
+  position: absolute;
+  width: 100%;
+  height: 72px;
+  left: 5%;
+  top: 40px;
+  margin: 0%;
 
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 38px;
+  line-height: 72px;
+  /* identical to box height */
+
+  color: #000000;
+}
+.inst {
+  position: absolute;
+  width: 209px;
+  height: 54px;
+  left: 5%;
+  margin: 0%;
+  padding: 0px;
+  top: 120px;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 30px;
+  line-height: 54px;
+  /* identical to box height */
+  color: #000000;
+}
+.content {
+  position: absolute;
+  width: 90%;
+  height: 10%;
+  left: 5%;
+  /* top: 180px; */
+  top: 40%;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 36px;
+
+  color: #000000;
+}
+.stbtn {
+  position: absolute;
+  width: 25%;
+  height: 74.99px;
+  left: 70%;
+  bottom: 2%;
+  /* gd3 */
+
+  background: linear-gradient(
+    180deg,
+    rgba(76, 255, 116, 0.8) -69.23%,
+    rgba(0, 223, 192, 0.8) 217.69%
+  );
+  box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.15);
+  border-radius: 11.5963px;
+  border-color: #6fe187;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 38.6544px;
+  line-height: 45px;
+  text-transform: uppercase;
+  color: white;
+}
+.contactus {
+  position: absolute;
+  width: 100%;
+  height: 36px;
+  left: 25%;
+  bottom: 20px;
+
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 36px;
+  /* identical to box height */
+
+  letter-spacing: 0.03em;
+
+  color: #000000;
+}
+.hr2 {
+  position: absolute;
+  width: 80%;
+  height: 4px;
+  left: 10%;
+  bottom: 80px;
+
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(31px);
+}
+.t1v1 {
+  position: absolute;
+  top: 345px !important;
+  left: 10% !important;
+  width: 45px;
+  border-radius: 100%;
+}
+.t1v2 {
+  position: absolute;
+  top: 375.54px;
+  left: 11.5%;
+}
+.t1v3 {
+  position: absolute;
+  top: 354px;
+  left: 15%;
+}
+.t1v4 {
+  position: absolute;
+  top: 330px;
+  left: 7.5%;
+  z-index: -1;
+}
+.t2v1 {
+  position: absolute;
+  top: 405px !important;
+  left: 10% !important;
+  width: 45px;
+  border-radius: 100%;
+}
+.t2v2 {
+  position: absolute;
+  top: 435.54px;
+  left: 11.5%;
+}
+.t2v3 {
+  position: absolute;
+  top: 414px;
+  left: 15%;
+}
+.t3v1 {
+  position: absolute;
+  top: 465px !important;
+  left: 10% !important;
+  width: 45px;
+  border-radius: 100%;
+}
+.t3v2 {
+  position: absolute;
+  top: 495.54px;
+  left: 11.5%;
+}
+.t3v3 {
+  position: absolute;
+  top: 474px;
+  left: 15%;
+}
+.t4v1 {
+  position: absolute;
+  top: 525px !important;
+  left: 10% !important;
+}
+.t4v2 {
+  position: absolute;
+  top: 555.54px;
+  left: 11.5%;
+}
+.t4v3 {
+  position: absolute;
+  top: 534px;
+  left: 15%;
+}
+.elp {
+  position: absolute;
+  width: 63px;
+  height: 63px;
+  left: 103%;
+  top: 250px;
+}
+.aro {
+  position: absolute;
+  left: 105%;
+  top: 261px;
+}
+.min {
+  position: absolute;
+  width: 68px;
+  height: 27px;
+  left: 90%;
+  top: 10%;
+
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 27px;
+  /* identical to box height */
+  color: #797979;
+}
+/* 
 input {
   font: inherit;
   background-color: #a197da;
@@ -61,5 +348,4 @@ button:hover {
   position: relative;
   left: 25%;
   padding: 0.5rem 1.5rem;
-}
-
+} */

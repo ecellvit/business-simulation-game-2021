@@ -76,15 +76,14 @@ const BoardBox1 = (props) => {
 
   return (
     <div
-      className="Placeholders"
+      className={`Placeholders placeholder-${props.id}`}
       ref={drop}
       style={{
         border: "2px solid black",
-        height: "80px",
-        margin: "65px",
-        width: "80px",
+        // height: "80px",
+        // margin: "65px",
+        // width: "80px",
         backgroundColor: props.canDrop === "yes" ? "#fff" : "grey",
-        position: "relative",
       }}
       key={props.id}
     >

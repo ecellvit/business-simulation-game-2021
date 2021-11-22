@@ -1,5 +1,7 @@
 import React from "react";
 import { Box, Typography, Grid } from "@mui/material";
+import { Link } from "react-router-dom";
+
 
 import "./landingComponents.css";
 import illus1 from "../../resources/images/illus1.jpg";
@@ -93,7 +95,7 @@ export function Section1() {
 
         <Grid item container xs justifyContent="flex-end" width="80%">
           <Grid item>
-            <Box className="registerButton">Register Now</Box>
+            <Box className="registerButton"><Link to="/Login" style={{color:"white",textDecoration:"none"}}>Register Now</Link></Box>
           </Grid>
         </Grid>
       </Grid>

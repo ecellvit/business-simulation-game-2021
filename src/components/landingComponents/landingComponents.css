@@ -26,6 +26,14 @@
     width: auto;
     z-index: -2;
     padding-right: 10%;
+    margin: auto;
+}
+.illusContainer1 {
+    height: 80vh;
+    width: auto;
+    z-index: -2;
+    /* padding-right: 10%; */
+    margin: auto;
 }
 
 .registerButton {

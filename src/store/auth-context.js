@@ -52,6 +52,7 @@ export const AuthContextProvider = (props) => {
     setTeamEmailId(teamID);
     localStorage.setItem("teamID", teamID);
   };
+  
   const contextValue = {
     id: id,
     name: userName,
