@@ -270,7 +270,7 @@ function DragDrop() {
   // "https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions"
   useEffect(() => {
     fetch(
-      `http://127.0.0.1:2000/api/RoundOne/getQuestions?question=${
+      `https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions?question=${
         currQuestionPointer + 1
       }`
     )
@@ -394,7 +394,7 @@ function DragDrop() {
 
   const submitAnswerHandler = (event) => {
     event.preventDefault();
-    fetch("http://127.0.0.1:2000/api/RoundOne/submitResponse", {
+    fetch("https://futurepreneursbackend.herokuapp.com/api/RoundOne/submitResponse", {
       method: "POST",
       body: JSON.stringify({
         attempts: attempts,
