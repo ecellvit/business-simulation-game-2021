@@ -119,11 +119,31 @@
   margin: 2vh;
   padding: 1vh;
 }
+.attempts-left{
+  position: absolute;
+  font-weight: bold;
+  top:0.1vh;
+  left: 2vw;
+  border-radius: 10px;
+  background: rgba(76, 255, 116, 0.8);
+}
 .game-skip{
   position: absolute;
   font-weight: bold;
   top:0.1vh;
   right: 2vw;
+  height: 6vh;
+  width: 7vw;
+  border-radius: 10px;
+  background: white;
+  border: 2px solid rgba(76, 255, 116, 0.8);
+  transition: 0.5s;
+}
+.game-microphone{
+  position: absolute;
+  font-weight: bold;
+  top:0.1vh;
+  left: 14vw;
   height: 6vh;
   width: 7vw;
   border-radius: 10px;
