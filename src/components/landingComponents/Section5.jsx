@@ -1,16 +1,5 @@
 import React from "react";
 import "./landingComponents.css";
-import wss from "../../resources/sponsor/wss.png";
-import cocacola from "../../resources/sponsor/cocacola.png";
-import geeksmate from "../../resources/sponsor/geeksmate.png";
-import intershala from "../../resources/sponsor/intershala.png";
-import ixigo from "../../resources/sponsor/ixigo.png";
-import paytm from "../../resources/sponsor/paytm.png";
-import polygon from "../../resources/sponsor/polygon.png";
-import portis from "../../resources/sponsor/portis.png";
-import snapchat from "../../resources/sponsor/snapchat.png";
-import xdc from "../../resources/sponsor/xdc.png";
-import yourstory from "../../resources/sponsor/yourstory.png";
 import { Grid } from "@mui/material";
 import yhills from "../../resources/sponsor/IMG_1109.PNG";
 import insightone from "../../resources/sponsor/insightone2.png";
