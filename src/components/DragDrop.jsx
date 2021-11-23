@@ -30,7 +30,7 @@ let options = {
   // Set the channel name.
   channel: "test",
   // Pass your temp token here.
-  token: `${process.env.REACT_APP_GOOGLE_ID}`,
+  token: "006583e53c6739745739d20fbb11ac8f0efIABhoblSpnxPZFqngi8fH5GDRwweNxnFYkcwBHUn/VFcwwx+f9gAAAAAEABw2xAICl2dYQEAAQAKXZ1h",
   // Set the user ID.
   uid: Math.floor(Math.random() * 202123),
 };
@@ -444,6 +444,9 @@ function DragDrop() {
     <CardContext.Provider value={{}}>
       <Nav expiryTimestamp={time} />
       <div className="game-options">
+        <div className="attempts-left">
+          ATTEMPTS LEFT: {4-attempts}
+        </div>
         <button className="game-microphone" onClick={joinCall}>
           Microphone
         </button>
@@ -520,7 +523,7 @@ function DragDrop() {
             <p className="question-instruction">{question.instruction}</p>
             {/* <h1>{question.id}</h1> */}
             <p className="question-score">Score:{score}</p>
-            <p className="question-attempt">Attempt:{attempts}</p>
+            <p className="question-attempt">Attempts Left:{4-attempts}</p>
           </div>
           {items.map((item, index) => {
             return <p className="question-item">{item}</p>;
