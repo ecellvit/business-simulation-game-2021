@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "../../store/auth-context";
 import CreateTeamForm from "./CreateTeamForm";
+import { Link } from "react-router-dom";
+
 
 import TeamList from "./TeamList";
 import TeamDisplay from "./TeamDisplay";
@@ -59,7 +61,7 @@ function DashBoard() {
               sunt in culpa qui officia deserunt mollit anim id est laborum.
             </p>
             <p class="min">30 Mins</p>
-            <button class="stbtn button">START</button>
+            <Link to="/Round1"><button class="stbtn button">START</button></Link>
             <input
               class="elp"
               type="image"
