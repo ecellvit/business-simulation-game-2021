@@ -1,9 +1,63 @@
-export const PLACEHOLDERS = {
-  one: "placeholderOne",
-  two: "placeholderTwo",
-};
+export const Placeholders = [
+  {
+    id: "one",
+    droppedItem: null,
+    position: {
+      top: null,
+      left: null,
+    },
+  },
+  {
+    id: "two",
+    droppedItem: null,
+    position: {
+      top: null,
+      left: null,
+    },
+  },
+  {
+    id: "three",
+    droppedItem: null,
+    position: {
+      top: null,
+      left: null,
+    },
+  },
+  {
+    id: "four",
+    droppedItem: null,
+    position: {
+      top: null,
+      left: null,
+    },
+  },
+  {
+    id: "five",
+    droppedItem: null,
+    position: {
+      top: null,
+      left: null,
+    },
+  },
+  {
+    id: "six",
+    droppedItem: null,
+    position: {
+      top: null,
+      left: null,
+    },
+  },
+  {
+    id: "seven",
+    droppedItem: null,
+    position: {
+      top: null,
+      left: null,
+    },
+  },
+];
 
-export const ITEMS = [
+export const Supermarket = [
   {
     name: "Drinks",
     id: 1,
@@ -13,7 +67,7 @@ export const ITEMS = [
     id: 2,
   },
   {
-    name: "Fruits",
+    name: "Biscuits",
     id: 3,
   },
   {
