@@ -5,7 +5,7 @@ import "./DashBoard.css";
 import crown from "../../resources/images/crown.svg";
 
 function Member(props) {
-  console.log(props.name);
+  // console.log(props.name);
   return (
     <p className="tname">{`${props.teamData.Members[props.name].User.name}`}</p>
   );
@@ -25,7 +25,7 @@ function TrimName(name){
     let name1 = name.slice(0,20);
     while (name1.charAt(name1.length-1)!== " " && name1.length!==0){
       name1 = name1.slice(0,-1);
-      console.log(name1);
+      // console.log(name1);
     }
     return name1;
   }
@@ -49,10 +49,10 @@ function TeamDisplay() {
     fetch(`https://futurepreneursbackend.herokuapp.com/api/public/getUserTeam?userID=${authCtx.id}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setTeamData(data);
         setNumOfMembers(data.Members.length);
-        console.log(data.Members.length);
+        // console.log(data.Members.length);
         setShowTeamDetails(true);
         authCtx.setTeam(data._id);
       });

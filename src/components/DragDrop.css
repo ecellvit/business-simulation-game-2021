@@ -3,7 +3,7 @@
 .dragdrop-main-container {
   display: flex;
   flex-direction: row;
-  /* height: 73vh; */
+  height:67vh;
 }
 
 .placeholders-main-container {
@@ -13,7 +13,6 @@
   width: 55%;
   background-color: white;
   margin: 0 10px 0px 40px;
-  height: 78vh;
 }
 
 .placeholder-one {
@@ -117,13 +116,22 @@
 }
 .game-options{
   position: relative;
+  margin: 2vh;
+  padding: 1vh;
 }
-.game-submit{
+.game-skip{
   position: absolute;
-  right: 5vw;
+  font-weight: bold;
+  top:0.1vh;
+  right: 2vw;
   height: 6vh;
   width: 7vw;
   border-radius: 10px;
   background: white;
   border: 2px solid rgba(76, 255, 116, 0.8);
+  transition: 0.5s;
+}
+.game-skip:hover{
+  background: rgba(76, 255, 116, 0.8);
+  color: white;
 }

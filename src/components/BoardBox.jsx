@@ -17,7 +17,7 @@ const BoardBox = ({ index, id, droppedItem }) => {
     accept: "div",
     drop: (item) => {
       addItemToBoard(index, item.id);
-      console.log(item.id);
+      // console.log(item.id);
       return { name: "akash" }; //whatever you return here can be caught in "end" method in useDrag using monitor.getDropResult()
     },
     collect: (monitor) => ({
