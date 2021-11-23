@@ -20,7 +20,7 @@ export function Section2() {
     >
       <Box class="illusContainer1"
         sx={{
-          height: "10px",
+          height: "100%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",

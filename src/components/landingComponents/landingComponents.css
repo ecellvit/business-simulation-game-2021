@@ -210,6 +210,9 @@
     .illusContainer {
         height: 40vh;
     }
+    .illusContainer1 {
+        height: 40vh;
+    }
     .section1-head, .section2-head {
         text-align: center;
         font-size: 2rem;

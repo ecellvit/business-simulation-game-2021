@@ -57,7 +57,7 @@ export const Placeholders = [
   },
 ];
 
-export const ITEMS = [
+export const Supermarket = [
   {
     name: "Drinks",
     id: 1,
