@@ -1,16 +1,5 @@
 import React from "react";
 import "./landingComponents.css";
-import wss from "../../resources/sponsor/wss.png";
-import cocacola from "../../resources/sponsor/cocacola.png";
-import geeksmate from "../../resources/sponsor/geeksmate.png";
-import intershala from "../../resources/sponsor/intershala.png";
-import ixigo from "../../resources/sponsor/ixigo.png";
-import paytm from "../../resources/sponsor/paytm.png";
-import polygon from "../../resources/sponsor/polygon.png";
-import portis from "../../resources/sponsor/portis.png";
-import snapchat from "../../resources/sponsor/snapchat.png";
-import xdc from "../../resources/sponsor/xdc.png";
-import yourstory from "../../resources/sponsor/yourstory.png";
 import { Grid } from "@mui/material";
 import yhills from "../../resources/sponsor/IMG_1109.PNG";
 import insightone from "../../resources/sponsor/insightone2.png";
@@ -18,6 +7,7 @@ import simpliclarify from "../../resources/sponsor/SIMPLICLARIFY TITLE SPONSOR.p
 import SNLogo from "../../resources/sponsor/SN Logo.jpg";
 import ventureCatalyst from "../../resources/sponsor/Venture Catalysts Logo Transparent BG.png";
 import gsc from "../../resources/sponsor/GSC.jpeg";
+import grabon from "../../resources/sponsor/GrabOn_highres_white_primary.png"
 
 export function Section5() {
   return (
@@ -112,13 +102,13 @@ export function Section5() {
             {/* <br /> */}
           </div>
         </Grid>
-        <Grid item xs={12} sm={12}>
+        <Grid item xs={12} sm={12} lg={12}>
           <div className="column ">
-            <a href="/" target="blank">
+            <a href="https://www.grabon.in/" target="blank">
               <img
-                src={geeksmate}
+                src={grabon}
                 className="center"
-                style={{ width: "300%", paddingTop: "10px" }}
+                style={{ width: "310px", paddingTop: "10px" ,backgroundColor:"#071938"}}
                 alt="altimage"
               />
             </a>

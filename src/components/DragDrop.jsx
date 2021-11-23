@@ -30,7 +30,8 @@ let options = {
   // Set the channel name.
   channel: "test",
   // Pass your temp token here.
-  token: "006583e53c6739745739d20fbb11ac8f0efIABhoblSpnxPZFqngi8fH5GDRwweNxnFYkcwBHUn/VFcwwx+f9gAAAAAEABw2xAICl2dYQEAAQAKXZ1h",
+  token:
+    "006583e53c6739745739d20fbb11ac8f0efIABhoblSpnxPZFqngi8fH5GDRwweNxnFYkcwBHUn/VFcwwx+f9gAAAAAEABw2xAICl2dYQEAAQAKXZ1h",
   // Set the user ID.
   uid: Math.floor(Math.random() * 202123),
 };
@@ -394,23 +395,26 @@ function DragDrop() {
 
   const submitAnswerHandler = (event) => {
     event.preventDefault();
-    fetch("https://futurepreneursbackend.herokuapp.com/api/RoundOne/submitResponse", {
-      method: "POST",
-      body: JSON.stringify({
-        attempts: attempts,
-        questionID: question.id,
-        teamID: authCtx.teamID,
-        responseEnvironment: {
-          Zones: filteredFinalList.map((element) => {
-            // console.log({ option: element.item.name, index: element.id });
-            return { option: element.item.name, index: element.id };
-          }),
+    fetch(
+      "https://futurepreneursbackend.herokuapp.com/api/RoundOne/submitResponse",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          attempts: attempts,
+          questionID: question.id,
+          teamID: authCtx.teamID,
+          responseEnvironment: {
+            Zones: filteredFinalList.map((element) => {
+              // console.log({ option: element.item.name, index: element.id });
+              return { option: element.item.name, index: element.id };
+            }),
+          },
+        }),
+        headers: {
+          "Content-Type": "application/json",
         },
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         setAttempts((prevAttempt) => prevAttempt + 1);
@@ -444,9 +448,7 @@ function DragDrop() {
     <CardContext.Provider value={{}}>
       <Nav expiryTimestamp={time} />
       <div className="game-options">
-        <div className="attempts-left">
-          ATTEMPTS LEFT: {4-attempts}
-        </div>
+        <span className="attempts-left">ATTEMPTS LEFT: {4 - attempts}</span>
         <button className="game-microphone" onClick={joinCall}>
           Microphone
         </button>
@@ -523,11 +525,21 @@ function DragDrop() {
             <p className="question-instruction">{question.instruction}</p>
             {/* <h1>{question.id}</h1> */}
             <p className="question-score">Score:{score}</p>
-            <p className="question-attempt">Attempts Left:{4-attempts}</p>
+            <p className="question-attempt">Attempts Left:{4 - attempts}</p>
           </div>
-          {items.map((item, index) => {
-            return <p className="question-item">{item}</p>;
-          })}
+          <div className="question-item-set">
+            {Supermarket.map((item, index) => {
+              return (
+                <div className="question-item">
+                  <SupermarketDrag
+                    name={item.name}
+                    id={item.id}
+                    key={item.id}
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
       <button onClick={submitAnswerHandler}>Submit</button>

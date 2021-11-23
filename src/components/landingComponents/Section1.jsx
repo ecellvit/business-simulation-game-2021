@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 
@@ -15,11 +15,21 @@ function EventDate() {
 }
 
 function DaysLeft() {
+  const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+  const [today, setToday] = useState(new Date());
+  const secondDate = new Date(2021, 11, 2);
+  const [daysLeft, setDaysLeft] = useState(2);
+  console.log(today, secondDate);
+  useEffect(() => {
+    setDaysLeft((prevDaysLeft) =>
+      Math.round(Math.abs((today - secondDate) / oneDay))
+    );
+  }, [today]);
   return (
     <>
       <Grid item container className="section1-text" xs>
         Registrations closing in
-        <div class="daysLeftDate1">8</div>
+        <div class="daysLeftDate1">{daysLeft}</div>
         <div class="daysLeftDate2">DAYS</div>
       </Grid>
     </>
@@ -101,7 +111,7 @@ export function Section1() {
                 to="/Login"
                 style={{ color: "white", textDecoration: "none" }}
               >
-                Register Now
+                Get In
               </Link>
             </Box>
           </Grid>

@@ -10,10 +10,10 @@ function SupermarketDrag(props) {
     }),
   });
   return (
-    <div>
+    <div className="question-div">
       {!isDragging ? (
         <div ref={drag} style={{ cursor: "pointer" }}>
-          <h1>{props.name}</h1>
+          <p>{props.name}</p>
         </div>
       ) : null}
     </div>

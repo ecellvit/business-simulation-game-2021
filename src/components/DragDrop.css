@@ -81,6 +81,7 @@
   width: 30%;
   border: 4px solid rgba(76, 255, 116, 0.8);
   padding: 1vw;
+  position: relative;
 }
 
 .roomUser__profile--pic {
@@ -107,10 +108,18 @@
 .question-item{
   border: 0.5px solid black;
   border-radius: 5px;
+  height: 7vh;
+  margin-bottom: 10px;
+}
+.question-div{
   padding: 2px;
   padding-left: 4px;
   padding-right: 4px;
+  margin-bottom: 3px;
+  height: 4.5vh;
+  font-size: 10px;
 }
+
 .question-instruction{
   font-weight: bold;
 }
@@ -120,11 +129,7 @@
   padding: 1vh;
 }
 .attempts-left{
-  position: absolute;
-  font-weight: bold;
-  top:0.1vh;
-  left: 2vw;
-  border-radius: 10px;
+  width: 12vw;
   background: rgba(76, 255, 116, 0.8);
 }
 .game-skip{
@@ -154,4 +159,8 @@
 .game-skip:hover{
   background: rgba(76, 255, 116, 0.8);
   color: white;
+}
+.question-item-set{
+  position: relative;
+  top: 5%;
 }

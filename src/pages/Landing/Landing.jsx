@@ -16,7 +16,7 @@ import {
 export function Landing() {
   return (
     <Box>
-      <Nav item1="About" item2="Timeline" item3="Sponsors" item4="Register" />
+      <Nav item1="About" item2="Timeline" item3="Sponsors" item4="Get In" />
       <Section1 />
       <Section2 />
       <Timeline />
