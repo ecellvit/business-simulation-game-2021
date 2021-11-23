@@ -7,7 +7,7 @@ import simpliclarify from "../../resources/sponsor/SIMPLICLARIFY TITLE SPONSOR.p
 import SNLogo from "../../resources/sponsor/SN Logo.jpg";
 import ventureCatalyst from "../../resources/sponsor/Venture Catalysts Logo Transparent BG.png";
 import gsc from "../../resources/sponsor/GSC.jpeg";
-import grabon from "../../resources/sponsor/GrabOn_highres_white_primary.png"
+import grabon from "../../resources/sponsor/GrabOn_highres_white_primary.png";
 
 export function Section5() {
   return (
@@ -17,6 +17,41 @@ export function Section5() {
       </h4>
 
       <Grid container spacing={3}>
+        <Grid item xs={12} sm={4}>
+          <div className="column ">
+            <a href="/" target="blank">
+              <img
+                src={simpliclarify}
+                className="center"
+                style={{
+                  width: "80%",
+                  paddingTop: "10px",
+                  background: "black",
+                }}
+                alt="altimage"
+              />
+            </a>
+            {/* <br /> */}
+            {/* <br /> */}
+          </div>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <div className="column ">
+            <a href="https://www.grabon.in/" target="blank">
+              <img
+                src={grabon}
+                className="center"
+                style={{
+                  width: "310px",
+                  paddingTop: "10px",
+                  backgroundColor: "#071938",
+                }}
+                alt="altimage"
+              />
+            </a>
+            <br />
+          </div>
+        </Grid>
         <Grid item xs={12} sm={4}>
           <div className="column">
             <a href="/" target="blank">
@@ -39,24 +74,6 @@ export function Section5() {
                 alt="altimage"
               />
             </a>
-          </div>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <div className="column ">
-            <a href="/" target="blank">
-              <img
-                src={simpliclarify}
-                className="center"
-                style={{
-                  width: "80%",
-                  paddingTop: "10px",
-                  background: "black",
-                }}
-                alt="altimage"
-              />
-            </a>
-            {/* <br /> */}
-            {/* <br /> */}
           </div>
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -86,40 +103,23 @@ export function Section5() {
             <br />
           </div>
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={12}>
           <div className="column ">
-            <a
-              href="/"
-              target="blank"
-            >
+            <a href="/" target="blank">
               <img
                 src={gsc}
                 className="center"
-                style={{ width: "80%", paddingTop: "10px" }}
+                style={{ width: "300px", paddingTop: "10px" }}
                 alt="altimage"
               />
             </a>
             {/* <br /> */}
           </div>
         </Grid>
-        <Grid item xs={12} sm={12} lg={12}>
-          <div className="column ">
-            <a href="https://www.grabon.in/" target="blank">
-              <img
-                src={grabon}
-                className="center"
-                style={{ width: "310px", paddingTop: "10px" ,backgroundColor:"#071938"}}
-                alt="altimage"
-              />
-            </a>
-            <br />
-          </div>
-        </Grid>
       </Grid>
     </div>
   );
 }
-
 
 // export function Section5() {
 //   return (
@@ -260,4 +260,3 @@ export function Section5() {
 //     </div>
 //   );
 // }
-

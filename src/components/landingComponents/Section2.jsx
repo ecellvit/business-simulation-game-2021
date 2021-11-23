@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
 import "./landingComponents.css";
-import illus2 from "../../resources/images/illus2.jpg";
+import illus2 from "../../resources/images/illus2.svg";
 
 export function Section2() {
   return (
@@ -18,7 +18,8 @@ export function Section2() {
         },
       }}
     >
-      <Box class="illusContainer1"
+      <Box
+        class="illusContainer1"
         sx={{
           height: "100%",
           display: "flex",
