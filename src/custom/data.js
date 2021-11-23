@@ -74,8 +74,4 @@ export const Supermarket = [
     name: "Milk",
     id: 4,
   },
-  {
-    name: "Grains",
-    id: 5,
-  },
 ];
