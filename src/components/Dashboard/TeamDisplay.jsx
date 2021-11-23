@@ -46,7 +46,7 @@ function TeamDisplay() {
   // https://futurepreneursbackend.herokuapp.com/api/public/getUserTeam?userID=${authCtx.id}
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:2000/api/public/getUserTeam?userID=${authCtx.id}`)
+    fetch(`https://futurepreneursbackend.herokuapp.com/api/public/getUserTeam?userID=${authCtx.id}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);

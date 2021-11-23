@@ -12,7 +12,7 @@ function CreateTeamForm(props) {
     const teamNameValue = teamIdInputRef.current.value;
     // https://futurepreneursbackend.herokuapp.com//api/public/createTeam
     // http://127.0.0.1:2000/api/public/createTeam
-    fetch("http://127.0.0.1:2000/api/public/createTeam", {
+    fetch("https://futurepreneursbackend.herokuapp.com/api/public/createTeam", {
       method: "POST",
       body: JSON.stringify({ teamName: teamNameValue, creatorID: authCtx.id }),
       headers: {

@@ -73,7 +73,7 @@ function Login() {
 
   // https://futurepreneursbackend.herokuapp.com/api/public/createUser
   const sendUserData = function () {
-    fetch("http://127.0.0.1:2000/api/public/createUser", {
+    fetch("https://futurepreneursbackend.herokuapp.com/api/public/createUser", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),

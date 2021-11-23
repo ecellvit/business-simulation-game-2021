@@ -29,7 +29,7 @@ export function Section5() {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={4}>
           <div className="column">
-            <a href="https://wharfstreetstrategies.com/" target="blank">
+            <a href="/" target="blank">
               <img
                 src={yhills}
                 className="center"
@@ -41,7 +41,7 @@ export function Section5() {
         </Grid>
         <Grid item xs={12} sm={4}>
           <div className="">
-            <a href="https://snapchat.com/" target="blank">
+            <a href="/" target="blank">
               <img
                 src={insightone}
                 className="center"
@@ -53,7 +53,7 @@ export function Section5() {
         </Grid>
         <Grid item xs={12} sm={4}>
           <div className="column ">
-            <a href="https://polygon.technology/" target="blank">
+            <a href="/" target="blank">
               <img
                 src={simpliclarify}
                 className="center"
@@ -71,7 +71,7 @@ export function Section5() {
         </Grid>
         <Grid item xs={12} sm={4}>
           <div className="column ">
-            <a href="https://www.coca-colaindia.com/" target="blank">
+            <a href="/" target="blank">
               <img
                 src={SNLogo}
                 className="center"
@@ -85,7 +85,7 @@ export function Section5() {
         </Grid>
         <Grid item xs={12} sm={4}>
           <div className="column ">
-            <a href="https://portis.io/" target="blank">
+            <a href="/" target="blank">
               <img
                 src={ventureCatalyst}
                 className="center"
@@ -99,7 +99,7 @@ export function Section5() {
         <Grid item xs={12} sm={4}>
           <div className="column ">
             <a
-              href="https://www.amdocs.com/products-services#/?utm_source=driveoperationalexcellencepage&utm_medium=amdocswebsite&utm_campaign=driveoperationalexcellencepagerightsectionlink"
+              href="/"
               target="blank"
             >
               <img
@@ -114,7 +114,7 @@ export function Section5() {
         </Grid>
         <Grid item xs={12} sm={12}>
           <div className="column ">
-            <a href="https://www.ixigo.com" target="blank">
+            <a href="/" target="blank">
               <img
                 src={geeksmate}
                 className="center"
