@@ -16,8 +16,8 @@ export const CardContext = React.createContext({
   finalList: [],
 });
 
-const socket = io("http://127.0.0.1:2000/");
-// const socket = io("https://futurepreneursbackend.herokuapp.com");
+// const socket = io("http://127.0.0.1:2000/");
+const socket = io("https://futurepreneursbackend.herokuapp.com");
 
 let rtc = {
   localAudioTrack: null,
@@ -447,7 +447,7 @@ function DragDrop() {
         <button className="game-microphone" onClick={joinCall}>
           Microphone
         </button>
-        <button className="game-submit" onClick={nextQuestionHandler}>
+        <button className="game-skip" onClick={nextQuestionHandler}>
           SKIP
         </button>
       </div>
