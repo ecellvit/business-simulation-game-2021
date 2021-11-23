@@ -36,7 +36,7 @@ function Login() {
       email: response.profileObj.email,
       photoURL: response.profileObj.imageUrl,
     });
-    console.log("Login Sucess");
+    // console.log("Login Sucess");
     localStorage.setItem("isGoogleLogin", "yes");
     localStorage.setItem("name", response.profileObj.name);
     localStorage.setItem("email", response.profileObj.email);

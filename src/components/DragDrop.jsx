@@ -118,7 +118,7 @@ function DragDrop() {
   };
 
   const addToCanDrop = (blocked, unblocked, { Zones }) => {
-    console.log("object", blocked, unblocked, Zones);
+    // console.log("object", blocked, unblocked, Zones);
 
     blocked.forEach((blockedPlaceHolder) => {
       if (blockedPlaceHolder === "one") {
@@ -225,7 +225,7 @@ function DragDrop() {
       }
     });
     Zones.map((presetZone) => {
-      console.log("preset", presetZone);
+      // console.log("preset", presetZone);
       if (presetZone.index === "one") {
         setCanDrop((prevCanDrop) => [
           {
@@ -251,7 +251,7 @@ function DragDrop() {
       }
     });
   };
-  console.log(canDrop);
+  // console.log(canDrop);
   // useEffect(() => {
   //   socket.emit("disconnects");
   //   console.log("disconnected")
@@ -298,7 +298,7 @@ function DragDrop() {
 
   useEffect(() => {
     socket.on("roomUsers", (data) => {
-      console.log(data.users);
+      // console.log(data.users);
       setRoomUsers(data.users);
     });
     socket.emit("joinRoom", roomData);
@@ -386,7 +386,7 @@ function DragDrop() {
         setAttempts((prevAttempt) => 1);
         return prevPointer;
       } else {
-        console.log(prevPointer);
+        // console.log(prevPointer);
         return prevPointer;
       }
     });
@@ -402,7 +402,7 @@ function DragDrop() {
         teamID: authCtx.teamID,
         responseEnvironment: {
           Zones: filteredFinalList.map((element) => {
-            console.log({ option: element.item.name, index: element.id });
+            // console.log({ option: element.item.name, index: element.id });
             return { option: element.item.name, index: element.id };
           }),
         },
@@ -414,8 +414,8 @@ function DragDrop() {
       .then((response) => response.json())
       .then((data) => {
         setAttempts((prevAttempt) => prevAttempt + 1);
-        console.log(data);
-        console.log("attempt", attempts);
+        // console.log(data);
+        // console.log("attempt", attempts);
         if (data.isCorrect || attempts === 3) {
           nextQuestionHandler();
         }
@@ -428,9 +428,9 @@ function DragDrop() {
       });
   };
   // console.log("finalList", finalList);
-  console.log("newfinalList", filteredFinalList);
-  console.log("currQuestion", currQuestionPointer);
-  console.log("items", items);
+  // console.log("newfinalList", filteredFinalList);
+  // console.log("currQuestion", currQuestionPointer);
+  // console.log("items", items);
   // const emitUpdate = () => {
   //   socket.emit("update", finalList);
   // };

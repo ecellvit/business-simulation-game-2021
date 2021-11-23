@@ -117,6 +117,8 @@
 }
 .game-options{
   position: relative;
+  margin: 1vh;
+  padding: 1vh;
 }
 .game-submit{
   position: absolute;
