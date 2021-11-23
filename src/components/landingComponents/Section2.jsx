@@ -18,7 +18,14 @@ export function Section2() {
         },
       }}
     >
-      <Box class="illusContainer1">
+      <Box class="illusContainer1"
+        sx={{
+          height: "10px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <img src={illus2} alt={"illustration"}></img>
       </Box>
 
@@ -39,23 +46,23 @@ export function Section2() {
         </Grid>
         <Grid item className="section1-text" alignSelf="center">
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem
-            ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua.
+            A 15-minute eliminator quiz to get you into your problem-solving
+            self. The results of the quiz will make way for the best and
+            eliminate the rest.
           </p>
-          <br />
           <p>
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-            nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur.
+            To dominate the market, one needs to describe it very slowly. With
+            the shortlisted participants competing against one another for the
+            optimum solution, the simulation round demands the participants to
+            leverage their thinking skills and put themselves into the shoes of
+            entrepreneurs.
           </p>
-
-          <br />
           <p>
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-            officia deserunt mollit anim id est laborum.
+            So put your thinking hats on and work through the real-world
+            business problems to make way for the adequate riposte. The first
+            round tests your technical knowledge while the second round calls
+            for prompt and instinctive entrepreneurial abilities to make
+            technically sound decisions.
           </p>
         </Grid>
       </Grid>

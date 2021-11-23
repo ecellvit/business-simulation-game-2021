@@ -101,7 +101,7 @@ export function Section6() {
           <ColoredLine color="black" />
           <br />
           <br />
-          <div style={{  marginLeft: "4rem" }}>
+          <div style={{ marginLeft: "4rem" }}>
             <AiFillFacebook />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <AiFillInstagram />

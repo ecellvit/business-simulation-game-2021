@@ -12,19 +12,19 @@ const itemsData = [
     icon: problemSolvingIcon,
     head: "Problem Solving",
     content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+      "The three rounds of business simulation not only test the capabilities of the qualifying team for managing an entire business but also require them to come up with coherent plans of action about restocking and consumer psychology.",
   },
   {
     icon: skillTestingIcon,
     head: "Skill Testing",
     content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+      "It also requires an acute understanding of finances and business modelling providing them with opportunities to exhibit their business acumen, setting themselves apart from the rest.",
   },
   {
     icon: selfAnalysisIcon,
     head: "Self Analysis",
     content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+      "In addition to the quick-witted and savvy ideas, it also tests your real-time knowledge about the goods as well as the consumers",
   },
 ];
 

@@ -39,21 +39,25 @@ export function Section4() {
         </Grid>
         <Grid item className="section1-text" alignSelf="center">
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem
-            ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua.
+            To shed light upon the unforeseen and brainstorm for the ideation of
+            pragmatic remedies for technical problems, E-Cell, VIT brings to you
+            its business ideation event- Futurepreneurs. During this event,
+            participants will brainstorm for pragmatic solutions to the problems
+            faced by startups.They will also test their knowledge in real-time
+            through business simulations, made to test the trading knowledge
+            besides market understanding for a precise apprehension about the
+            functionality of startups.
           </p>
           <br />
           <p>
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-            nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur.
+            Scrutinizing and authenticating the maneuvered schemes into an
+            effective plan of action remains the end goal of the event.
+            Futurepreneurs not only gets the participants in terms with the
+            requisites for a startup but also accentuate their road map to
+            success.
           </p>
 
           <br />
-
         </Grid>
       </Grid>
     </Box>

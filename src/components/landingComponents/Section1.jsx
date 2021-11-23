@@ -2,7 +2,6 @@ import React from "react";
 import { Box, Typography, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 
-
 import "./landingComponents.css";
 import illus1 from "../../resources/images/illus1.jpg";
 import eventDate from "../../resources/images/eventDate.svg";
@@ -20,7 +19,7 @@ function DaysLeft() {
     <>
       <Grid item container className="section1-text" xs>
         Registrations closing in
-        <div class="daysLeftDate1">27</div>
+        <div class="daysLeftDate1">8</div>
         <div class="daysLeftDate2">DAYS</div>
       </Grid>
     </>
@@ -57,10 +56,12 @@ export function Section1() {
         </Grid>
         <Grid item className="section1-text">
           <Typography>
-            Put Yourself In The Shoes Of A CEO And Conquer The Challenges Ahead
-            Of You. Take A Glance At What It’s Like To Be A Part Of A Startup
-            And Dive Into The World Of Business With Our Annual, Wildly Popular
-            GraVITas Event.
+            Entrepreneurship Cell, VIT brings to you Futurepreneurs 7.0, its
+            business simulation competition. The event is designed to test your
+            analytical thinking. Glaze up your business skills with the added
+            knowledge about consumers and the trends they tend to follow. Touch
+            it all up with a study of financial products and their marketing
+            strategies.
           </Typography>
         </Grid>
 
@@ -73,7 +74,7 @@ export function Section1() {
           justifyContent="flex-start"
           alignItems="center"
         >
-          <Grid item  className="eventDate" xs={3}>
+          <Grid item className="eventDate" xs={3}>
             <EventDate />
           </Grid>
 
@@ -95,7 +96,14 @@ export function Section1() {
 
         <Grid item container xs justifyContent="flex-end" width="80%">
           <Grid item>
-            <Box className="registerButton"><Link to="/Login" style={{color:"white",textDecoration:"none"}}>Register Now</Link></Box>
+            <Box className="registerButton">
+              <Link
+                to="/Login"
+                style={{ color: "white", textDecoration: "none" }}
+              >
+                Register Now
+              </Link>
+            </Box>
           </Grid>
         </Grid>
       </Grid>

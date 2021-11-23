@@ -30,7 +30,7 @@ let options = {
   // Set the channel name.
   channel: "test",
   // Pass your temp token here.
-  token: "006583e53c6739745739d20fbb11ac8f0efIABhoblSpnxPZFqngi8fH5GDRwweNxnFYkcwBHUn/VFcwwx+f9gAAAAAEABw2xAICl2dYQEAAQAKXZ1h",
+  token: `${process.env.REACT_APP_GOOGLE_ID}`,
   // Set the user ID.
   uid: Math.floor(Math.random() * 202123),
 };
@@ -74,7 +74,6 @@ function DragDrop() {
   const [currQuestionPointer, setcurrQuestionPointer] = useState(0);
 
   const [canDrop, setCanDrop] = useState([
-    // question1: {
     {
       0: { isDroppable: "yes", element: "" },
       1: { isDroppable: "yes", element: "" },
@@ -84,42 +83,6 @@ function DragDrop() {
       5: { isDroppable: "yes", element: "" },
       6: { isDroppable: "yes", element: "" },
     },
-    // question2: {
-    //   0: { isDroppable: "yes", element: "" },
-    //   1: { isDroppable: "yes", element: "" },
-    //   2: { isDroppable: "yes", element: "" },
-    //   3: { isDroppable: "yes", element: "" },
-    //   4: { isDroppable: "yes", element: "" },
-    //   5: { isDroppable: "yes", element: "" },
-    //   6: { isDroppable: "yes", element: "" },
-    // },
-    // question3: {
-    //   0: { isDroppable: "yes", element: "" },
-    //   1: { isDroppable: "yes", element: "" },
-    //   2: { isDroppable: "yes", element: "" },
-    //   3: { isDroppable: "yes", element: "" },
-    //   4: { isDroppable: "yes", element: "" },
-    //   5: { isDroppable: "yes", element: "" },
-    //   6: { isDroppable: "yes", element: "" },
-    // },
-    // question4: {
-    //   0: { isDroppable: "yes", element: "" },
-    //   1: { isDroppable: "yes", element: "" },
-    //   2: { isDroppable: "yes", element: "" },
-    //   3: { isDroppable: "yes", element: "" },
-    //   4: { isDroppable: "yes", element: "" },
-    //   5: { isDroppable: "yes", element: "" },
-    //   6: { isDroppable: "yes", element: "" },
-    // },
-    // question5: {
-    //   0: { isDroppable: "yes", element: "" },
-    //   1: { isDroppable: "yes", element: "" },
-    //   2: { isDroppable: "yes", element: "" },
-    //   3: { isDroppable: "yes", element: "" },
-    //   4: { isDroppable: "yes", element: "" },
-    //   5: { isDroppable: "yes", element: "" },
-    //   6: { isDroppable: "yes", element: "" },
-    // },
   ]);
 
   const [finalList, setFinalList] = useState([
@@ -480,13 +443,59 @@ function DragDrop() {
   return (
     <CardContext.Provider value={{}}>
       <Nav expiryTimestamp={time} />
-      <button onClick={joinCall}>Microphone</button>
-      <h1>{question.instruction}</h1>
-      <h1>{question.id}</h1>
-      <h1>Score:{score}</h1>
-      <h1>Attempt:{attempts}</h1>
-      <button onClick={nextQuestionHandler}>Next question</button>
+      <div className="game-options">
+        <button className="game-microphone" onClick={joinCall}>
+          Microphone
+        </button>
+        <button className="game-submit" onClick={nextQuestionHandler}>
+          SKIP
+        </button>
+      </div>
+
       <div className="dragdrop-main-container">
+        <div className="roomUsersDiv">
+          {roomUsers[0] && (
+            <div className="roomUserDiv">
+              <img
+                className="roomUser__profile--pic"
+                src={roomUsers[0].photoURL}
+                alt="1st team member"
+                title={roomUsers[0].username}
+              ></img>
+            </div>
+          )}
+
+          {roomUsers[1] && (
+            <div className="roomUserDiv">
+              <img
+                className="roomUser__profile--pic"
+                src={roomUsers[1].photoURL}
+                alt="2nd team member"
+                title={roomUsers[1].username}
+              ></img>
+            </div>
+          )}
+          {roomUsers[2] && (
+            <div className="roomUserDiv">
+              <img
+                className="roomUser__profile--pic"
+                src={roomUsers[2].photoURL}
+                alt="3rd team member"
+                title={roomUsers[2].username}
+              ></img>
+            </div>
+          )}
+          {roomUsers[3] && (
+            <div className="roomUserDiv">
+              <img
+                className="roomUser__profile--pic"
+                src={roomUsers[3].photoURL}
+                alt="4th team member"
+                title={roomUsers[3].username}
+              ></img>
+            </div>
+          )}
+        </div>
         <div className="placeholders-main-container">
           {board.map((placeholder) => {
             return (
@@ -507,55 +516,18 @@ function DragDrop() {
           })}
         </div>
         <div className="supermarket-main-container">
+          <div className="question-container">
+            <p className="question-instruction">{question.instruction}</p>
+            {/* <h1>{question.id}</h1> */}
+            <p className="question-score">Score:{score}</p>
+            <p className="question-attempt">Attempt:{attempts}</p>
+          </div>
           {items.map((item, index) => {
-            return <h1>{item}</h1>;
+            return <p className="question-item">{item}</p>;
           })}
         </div>
       </div>
       <button onClick={submitAnswerHandler}>Submit</button>
-      <div className="roomUsersDiv">
-        {roomUsers[0] && (
-          <div className="roomUserDiv">
-            <img
-              className="roomUser__profile--pic"
-              src={roomUsers[0].photoURL}
-              alt="1st team member"
-              title={roomUsers[0].username}
-            ></img>
-          </div>
-        )}
-
-        {roomUsers[1] && (
-          <div className="roomUserDiv">
-            <img
-              className="roomUser__profile--pic"
-              src={roomUsers[1].photoURL}
-              alt="2nd team member"
-              title={roomUsers[1].username}
-            ></img>
-          </div>
-        )}
-        {roomUsers[2] && (
-          <div className="roomUserDiv">
-            <img
-              className="roomUser__profile--pic"
-              src={roomUsers[2].photoURL}
-              alt="3rd team member"
-              title={roomUsers[2].username}
-            ></img>
-          </div>
-        )}
-        {roomUsers[3] && (
-          <div className="roomUserDiv">
-            <img
-              className="roomUser__profile--pic"
-              src={roomUsers[3].photoURL}
-              alt="4th team member"
-              title={roomUsers[3].username}
-            ></img>
-          </div>
-        )}
-      </div>
     </CardContext.Provider>
   );
 }

@@ -2,8 +2,13 @@ import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 
 import "./landingComponents.css";
-import HorizontalTimeline from "../../resources/images/TimelineSection.svg";
-import VerticalTimeline from "../../resources/images/TimelineSectionPhone.svg";
+// import HorizontalTimeline from "../../resources/images/TimelineSection.svg";
+import HorizontalTimeline from "../../resources/images/TimelineNew.svg";
+
+
+// import VerticalTimeline from "../../resources/images/TimelineSectionPhone.svg";
+import VerticalTimeline from "../../resources/images/NewTimelinePhone.svg";
+
 
 export function Timeline() {
   const [TimelineImage, settimelineImage] = useState(VerticalTimeline);

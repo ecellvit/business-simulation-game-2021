@@ -1,4 +1,4 @@
-import React, { useContext,useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -17,7 +17,7 @@ import { Landing } from "./pages/Landing";
 function App() {
   const authCtx = useContext(AuthContext);
   // const {pathname} = useLocation();
-  
+
   return (
     <div className="main-container">
       {/* <MainNavigation /> */}
@@ -28,13 +28,16 @@ function App() {
         <Route path="/Login" exact>
           <Login />
         </Route>
-        <Route path="/Round1">
-          <DndProvider backend={HTML5Backend}>
-            <div>
-              <DragDrop />
-            </div>
-          </DndProvider>
-        </Route>
+        {authCtx.isLoggedIn &&
+          authCtx.teamID!=="" && (
+            <Route path="/Round1">
+              <DndProvider backend={HTML5Backend}>
+                <div>
+                  <DragDrop />
+                </div>
+              </DndProvider>
+            </Route>
+          )}
         {authCtx.isLoggedIn && (
           <Route path="/Dashboard" exact>
             <DashBoard />
