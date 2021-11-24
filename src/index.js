@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
 import { AuthContextProvider } from "./store/auth-context";
+// import { ViewportProvider } from "./store/use-viewport";
 
 require("dotenv").config();
 
@@ -15,7 +16,7 @@ ReactDOM.render(
   <React.StrictMode>
     <AuthContextProvider>
       <BrowserRouter>
-        <App />
+          <App />
       </BrowserRouter>
     </AuthContextProvider>
   </React.StrictMode>,

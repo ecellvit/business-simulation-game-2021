@@ -104,7 +104,7 @@ const BoardBox1 = (props) => {
       className={`Placeholders placeholder-${props.id}`}
       ref={drop}
       style={{
-        border: "2px solid black",
+        border: "0.01px solid black",
         // height: "80px",
         // margin: "65px",
         // width: "80px",
@@ -150,7 +150,7 @@ const BoardBox1 = (props) => {
       })}
 
       {/* members side */}
-      {props.id === "one" ? (
+      {props.id === "one" && board.length? (
         <SupermarketDrag
           name={returnedItem[0].item.name}
           id={returnedItem[0].item.id}

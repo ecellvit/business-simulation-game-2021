@@ -72,9 +72,9 @@
 .yteam {
   position: absolute;
   height: 54px;
-  left: 13%;
+  left: 30%;
   right: auto;
-  top: 244px;
+  top: 35%;
   font-style: normal;
   font-weight: bold;
   font-size: 120%;
@@ -85,15 +85,15 @@
   position: relative;
   width: 100%;
   height: 0px;
-  left: 25%;
-  top: 345px;
-  margin: 0px;
-  padding-top: 10px;
+  left: 30%;
+  top: 35vh;
+  margin-top: 3.2vh;
+  /* padding-top: 10px; */
   font-family: Poppins;
   font-weight: normal;
   font-size: 125%;
   padding-bottom: 50px;
-  margin-left: 10px;
+  /* margin-left: 10px; */
   /* identical to box height */
   color: #000000;
 }
@@ -190,7 +190,7 @@
   width: 100%;
   height: 36px;
   left: 25%;
-  bottom: 20px;
+  bottom: 1%;
 
   font-family: Poppins;
   font-style: normal;
@@ -215,30 +215,30 @@
 }
 .t1v1 {
   position: absolute;
-  top: 345px !important;
+  top: 37vh !important;
   left: 10% !important;
   width: 45px;
   border-radius: 100%;
 }
 .t1v2 {
   position: absolute;
-  top: 375.54px;
+  top: 47%;
   left: 11.5%;
 }
 .t1v3 {
   position: absolute;
-  top: 354px;
+  top: 49%;
   left: 15%;
 }
 .t1v4 {
   position: absolute;
-  top: 330px;
-  left: 7.5%;
+  top: 34.5vh;
+  left: 7%;
   z-index: -1;
 }
 .t2v1 {
   position: absolute;
-  top: 405px !important;
+  top: 47vh !important;
   left: 10% !important;
   width: 45px;
   border-radius: 100%;
@@ -255,7 +255,7 @@
 }
 .t3v1 {
   position: absolute;
-  top: 465px !important;
+  top: 57vh !important;
   left: 10% !important;
   width: 45px;
   border-radius: 100%;
@@ -272,8 +272,10 @@
 }
 .t4v1 {
   position: absolute;
-  top: 525px !important;
+  top: 67vh !important;
   left: 10% !important;
+  width: 45px;
+  border-radius: 100%;
 }
 .t4v2 {
   position: absolute;

@@ -72,27 +72,18 @@ function TeamDisplay() {
           <p class="tname">{TrimName(teamData.Leader.User.name)}</p>
           {numOfMembers > 1 ? (
             <div>
-              {/* <img class="t2v1" src={vector} alt="" />
-              <img class="t2v2" src={vector1} alt="" />
-              <img class="t2v3" src={vector2} alt="" /> */}
               <MemberPhoto teamData={teamData} name={1} />
               <Member teamData={teamData} name={1} />
             </div>
           ) : null}
           {numOfMembers > 2 ? (
             <div>
-              {/* <img class="t3v1" src={vector} alt="" />
-              <img class="t3v2" src={vector1} alt="" />
-              <img class="t3v3" src={vector2} alt="" /> */}
               <MemberPhoto teamData={teamData} name={2} />
               <Member teamData={teamData} name={2} />
             </div>
           ) : null}
           {numOfMembers > 3 ? (
             <div>
-              {/* <img class="t4v1" src={vector} alt="" />
-              <img class="t4v2" src={vector1} alt="" />
-              <img class="t4v3" src={vector2} alt="" /> */}
               <MemberPhoto teamData={teamData} name={3} />
               <Member teamData={teamData} name={3} />
             </div>
