@@ -8,7 +8,29 @@ import DeleteIcon from "@mui/icons-material/Delete";
 const BoardBox1 = (props) => {
   const [board, setBoard] = useState([]);
   const [hasDropped, sethasDropped] = useState(false);
+  const [supermarketReceived, setSupermarketReceived] = useState([
+    {
+      name: "FreshProduce",
+      id: 1,
+    },
+    {
+      name: "Kids Section",
+      id: 2,
+    },
+    {
+      name: "Restraunt",
+      id: 3,
+    },
+    {
+      name: "Biscuits",
+      id: 4,
+    },
+  ]);
   const [returnedItem, setReturnedItem] = useState([
+    {
+      item: { name: "", id: "" },
+      id: "",
+    },
     {
       item: { name: "", id: "" },
       id: "",
@@ -49,8 +71,10 @@ const BoardBox1 = (props) => {
       drop: (item) => {
         setCurrItem(item);
         sethasDropped(true);
+        console.log(item.id);
         // props.emitUpdate();
         addItemToBoard(item.id);
+        console.log("from parent2", supermarketReceived);
       },
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
@@ -61,9 +85,10 @@ const BoardBox1 = (props) => {
   );
 
   const addItemToBoard = (id) => {
-    const itemList = Supermarket.filter(
-      (itemInSupermarket) => id === itemInSupermarket.id
-    );
+    const itemList = supermarketReceived.filter((itemInSupermarket) => {
+      return id === itemInSupermarket.id;
+    });
+    console.log("sentItem", itemList[0]);
     props.updateFinalPlaceHolder(props.id, itemList[0]);
     setBoard((board) => [itemList[0]]);
   };
@@ -159,6 +184,12 @@ const BoardBox1 = (props) => {
         <SupermarketDrag
           name={returnedItem[5].item.name}
           id={returnedItem[5].item.id}
+        />
+      ) : null}
+      {props.id === "seven" ? (
+        <SupermarketDrag
+          name={returnedItem[6].item.name}
+          id={returnedItem[6].item.id}
         />
       ) : null}
     </div>
