@@ -12,6 +12,7 @@ import { Placeholders } from "../custom/data";
 import "./DragDrop.css";
 import { Nav } from "./nav";
 
+import supermarketBG from "../resources/images/bgImg1.jpg"
 export const CardContext = React.createContext({
   finalList: [],
 });
@@ -522,6 +523,9 @@ function DragDrop() {
             </svg>
           </button>
         )}
+        <button className="game-submit" onClick={submitAnswerHandler}>
+          SUBMIT
+        </button>
         <button className="game-skip" onClick={nextQuestionHandler}>
           SKIP
         </button>
@@ -539,7 +543,6 @@ function DragDrop() {
               ></img>
             </div>
           )}
-
           {roomUsers[1] && (
             <div className="roomUserDiv">
               <img
@@ -572,6 +575,10 @@ function DragDrop() {
           )}
         </div>
         <div className="placeholders-main-container">
+        <img className="supermarketImg" src={supermarketBG} alt="supermarket" />
+          <div className="wall1"></div>
+          <div className="wall2"></div>
+          <div className="wall3"></div>
           {board.map((placeholder) => {
             return (
               <BoardBox1
@@ -613,7 +620,6 @@ function DragDrop() {
           </div>
         </div>
       </div>
-      <button onClick={submitAnswerHandler}>Submit</button>
     </CardContext.Provider>
   );
 }

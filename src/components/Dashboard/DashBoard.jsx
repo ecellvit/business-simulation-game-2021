@@ -45,8 +45,6 @@ function DashBoard() {
           <hr class="hr" />
 
           <TeamDisplay />
-          <hr class="hr2"></hr>
-          <p class="contactus">CONTACT US</p>
 
           <div class="tbox">
             <p class="rhead">Round 1</p>
