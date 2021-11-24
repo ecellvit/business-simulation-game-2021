@@ -30,7 +30,8 @@ let options = {
   // Set the channel name.
   channel: "test",
   // Pass your temp token here.
-  token: process.env.REACT_APP_AGORA_ID,
+  token:
+    "006583e53c6739745739d20fbb11ac8f0efIACLjOSOWphoCPS9d8v+ZvoU5wMg1G9yOwRcB/TUgN/RQAx+f9gAAAAAEACdnafAgkufYQEAAQCCS59h",
   // Set the user ID.
   uid: Math.floor(Math.random() * 202123),
 };
@@ -576,7 +577,7 @@ function DragDrop() {
               <BoardBox1
                 socket={socket}
                 // emitUpdate={emitUpdate}
-                supermarketUpdated = {supermarketUpdated}
+                supermarketUpdated={supermarketUpdated}
                 deleteFinalPlaceHolder={deleteFinalPlaceHolder}
                 canDrop={placeholder.canDrop}
                 roomData={roomData}
