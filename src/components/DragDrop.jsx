@@ -7,7 +7,7 @@ import AuthContext from "../store/auth-context";
 import SupermarketDrag from "./SupermarketDrag";
 import BoardBox1 from "./BoardBox1";
 
-import { Placeholders, Supermarket } from "../custom/data";
+import { Placeholders } from "../custom/data";
 
 import "./DragDrop.css";
 import { Nav } from "./nav";
@@ -30,8 +30,7 @@ let options = {
   // Set the channel name.
   channel: "test",
   // Pass your temp token here.
-  token:
-    "006583e53c6739745739d20fbb11ac8f0efIABhoblSpnxPZFqngi8fH5GDRwweNxnFYkcwBHUn/VFcwwx+f9gAAAAAEABw2xAICl2dYQEAAQAKXZ1h",
+  token: process.env.REACT_APP_AGORA_ID,
   // Set the user ID.
   uid: Math.floor(Math.random() * 202123),
 };
@@ -53,6 +52,11 @@ async function startBasicCall() {
       // Play the remote audio track.
       remoteAudioTrack.play();
     }
+    rtc.client.on("user-unpublished", async (user) => {
+      // Unsubscribe from the tracks of the remote user.
+
+      await rtc.client.unsubscribe(user);
+    });
   });
 }
 startBasicCall();
@@ -62,6 +66,7 @@ function DragDrop() {
   const [score, setScore] = useState(0);
   const time = new Date();
   time.setSeconds(time.getSeconds() + 600);
+  const [micMuted, setMicMuted] = useState(true);
   const [items, setItems] = useState(["", "", "", ""]);
   // const {pathname} = useLocation();
   const [question, setQuestion] = useState({
@@ -70,6 +75,24 @@ function DragDrop() {
     options: [],
   });
 
+  const [supermarketUpdated, setsupermarketUpdated] = useState([
+    {
+      name: "",
+      id: 1,
+    },
+    {
+      name: "",
+      id: 2,
+    },
+    {
+      name: "",
+      id: 3,
+    },
+    {
+      name: "",
+      id: 4,
+    },
+  ]);
   const [attempts, setAttempts] = useState(1);
 
   const [currQuestionPointer, setcurrQuestionPointer] = useState(0);
@@ -87,13 +110,13 @@ function DragDrop() {
   ]);
 
   const [finalList, setFinalList] = useState([
-    { id: "one", item: { id: "1", name: "" }, canDrop: "" },
-    { id: "two", item: { id: "2", name: "" }, canDrop: "" },
-    { id: "three", item: { id: "3", name: "" }, canDrop: "" },
-    { id: "four", item: { id: "4", name: "" }, canDrop: "" },
-    { id: "five", item: { id: "5", name: "" }, canDrop: "" },
-    { id: "six", item: { id: "6", name: "" }, canDrop: "" },
-    { id: "seven", item: { id: "6", name: "" }, canDrop: "" },
+    { id: "one", item: { id: "", name: "" }, canDrop: "" },
+    { id: "two", item: { id: "", name: "" }, canDrop: "" },
+    { id: "three", item: { id: "", name: "" }, canDrop: "" },
+    { id: "four", item: { id: "", name: "" }, canDrop: "" },
+    { id: "five", item: { id: "", name: "" }, canDrop: "" },
+    { id: "six", item: { id: "", name: "" }, canDrop: "" },
+    { id: "seven", item: { id: "", name: "" }, canDrop: "" },
   ]);
 
   const [filteredFinalList, setFilteredFinalList] = useState([]);
@@ -114,8 +137,18 @@ function DragDrop() {
     rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
     // Publish the local audio tracks to the RTC channel.
     await rtc.client.publish([rtc.localAudioTrack]);
-
+    setMicMuted(false);
     console.log("publish success!");
+  };
+
+  const leaveCall = async function () {
+    // Destroy the local audio track.
+    rtc.localAudioTrack.close();
+
+    // Leave the channel.
+    await rtc.client.leave();
+    setMicMuted(true);
+    console.log("leave Success");
   };
 
   const addToCanDrop = (blocked, unblocked, { Zones }) => {
@@ -269,6 +302,8 @@ function DragDrop() {
     teamID: authCtx.teamID,
   });
   // "https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions"
+
+  //useEffect to fetch questions
   useEffect(() => {
     fetch(
       `https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions?question=${
@@ -287,6 +322,11 @@ function DragDrop() {
         setItems((preItem) => {
           return data.Options;
         });
+        setsupermarketUpdated((prevSupermarketUpdated) => {
+          return prevSupermarketUpdated.map((SupermarketItem, index) => {
+            return { ...SupermarketItem, name: data.Options[index] };
+          });
+        });
         setQuestion((prevQuestion) => {
           return {
             id: data._id,
@@ -297,6 +337,7 @@ function DragDrop() {
       });
   }, [currQuestionPointer]);
 
+  //useEffect for sockets
   useEffect(() => {
     socket.on("roomUsers", (data) => {
       // console.log(data.users);
@@ -305,6 +346,7 @@ function DragDrop() {
     socket.emit("joinRoom", roomData);
   }, [roomData]);
 
+  //useEffect for canDrop property to finalList
   useEffect(() => {
     setFinalList((finalList) =>
       finalList.map((list, i) => {
@@ -313,6 +355,7 @@ function DragDrop() {
     );
   }, [canDrop]);
 
+  //to filter only unblocked zones from finalList with canDrop property
   useEffect(() => {
     setFilteredFinalList(finalList);
     setFilteredFinalList((finalList) => {
@@ -361,7 +404,7 @@ function DragDrop() {
       socket.emit("update", newList);
     } else if (placeHolderID === "seven") {
       const newList = finalList.map((x) =>
-        x.id === "six" ? { ...x, item: itemList } : x
+        x.id === "seven" ? { ...x, item: itemList } : x
       );
       setFinalList(() => [...newList]);
       socket.emit("update", newList);
@@ -431,10 +474,9 @@ function DragDrop() {
         alert(err);
       });
   };
-  // console.log("finalList", finalList);
-  // console.log("newfinalList", filteredFinalList);
-  // console.log("currQuestion", currQuestionPointer);
-  // console.log("items", items);
+  console.log("finalList", finalList);
+  console.log("newfinalList", filteredFinalList);
+
   // const emitUpdate = () => {
   //   socket.emit("update", finalList);
   // };
@@ -449,9 +491,36 @@ function DragDrop() {
       <Nav expiryTimestamp={time} />
       <div className="game-options">
         <span className="attempts-left">ATTEMPTS LEFT: {4 - attempts}</span>
-        <button className="game-microphone" onClick={joinCall}>
-          Microphone
-        </button>
+        {micMuted && (
+          <button className="game-microphone" onClick={joinCall}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="currentColor"
+              class="bi bi-mic-mute-fill"
+              viewBox="0 0 16 16"
+            >
+              <path d="M13 8c0 .564-.094 1.107-.266 1.613l-.814-.814A4.02 4.02 0 0 0 12 8V7a.5.5 0 0 1 1 0v1zm-5 4c.818 0 1.578-.245 2.212-.667l.718.719a4.973 4.973 0 0 1-2.43.923V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 1 0v1a4 4 0 0 0 4 4zm3-9v4.879L5.158 2.037A3.001 3.001 0 0 1 11 3z" />
+              <path d="M9.486 10.607 5 6.12V8a3 3 0 0 0 4.486 2.607zm-7.84-9.253 12 12 .708-.708-12-12-.708.708z" />
+            </svg>
+          </button>
+        )}
+        {!micMuted && (
+          <button className="game-microphone" onClick={leaveCall}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="currentColor"
+              class="bi bi-mic"
+              viewBox="0 0 16 16"
+            >
+              <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
+              <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
+            </svg>
+          </button>
+        )}
         <button className="game-skip" onClick={nextQuestionHandler}>
           SKIP
         </button>
@@ -507,6 +576,7 @@ function DragDrop() {
               <BoardBox1
                 socket={socket}
                 // emitUpdate={emitUpdate}
+                supermarketUpdated = {supermarketUpdated}
                 deleteFinalPlaceHolder={deleteFinalPlaceHolder}
                 canDrop={placeholder.canDrop}
                 roomData={roomData}
@@ -528,7 +598,7 @@ function DragDrop() {
             <p className="question-attempt">Attempts Left:{4 - attempts}</p>
           </div>
           <div className="question-item-set">
-            {Supermarket.map((item, index) => {
+            {supermarketUpdated.map((item) => {
               return (
                 <div className="question-item">
                   <SupermarketDrag

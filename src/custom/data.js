@@ -59,19 +59,19 @@ export const Placeholders = [
 
 export const Supermarket = [
   {
-    name: "Drinks",
+    name: "",
     id: 1,
   },
   {
-    name: "Vegetable",
+    name: "",
     id: 2,
   },
   {
-    name: "Biscuits",
+    name: "",
     id: 3,
   },
   {
-    name: "Milk",
+    name: "",
     id: 4,
   },
 ];

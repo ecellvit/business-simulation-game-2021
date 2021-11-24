@@ -89,20 +89,24 @@
   margin: 10px;
   display: inline;
   /* height:23%; */
-  width: 70%;
+  width: 60px;
 }
 .roomUsersDiv {
-  margin-left: 10px;
+  /* margin-left: 10px; */
   margin-right: 10px;
-  border-radius: px;
-  width: 7%;
+  border-radius: 10px;
+  position: relative;
+  top:14%;
+  /* right:1%; */
+  height: 70%;
+  width: 80px;
   background: linear-gradient(0deg, rgba(76, 255, 116, 0.5), rgba(76, 255, 116, 0.5)), linear-gradient(180deg, rgba(36, 130, 50, 0.5) 0%, rgba(43, 168, 74, 0.5) 419.5%);
 }
 
 .roomUserDiv {
   display: inline-block;
-  width: 90%;
-  margin: 5px;
+  /* width: 80px; */
+  /* margin: 30px 0px 5px 0px; */
 }
 
 .question-item{
@@ -149,9 +153,9 @@
   font-weight: bold;
   top:0.1vh;
   left: 14vw;
-  height: 6vh;
-  width: 7vw;
-  border-radius: 10px;
+  height: 30px;
+  /* width: 7vw; */
+  border-radius: 100%;
   background: white;
   border: 2px solid rgba(76, 255, 116, 0.8);
   transition: 0.5s;
