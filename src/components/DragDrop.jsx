@@ -12,51 +12,33 @@ import { Placeholders } from "../custom/data";
 import "./DragDrop.css";
 import { Nav } from "./nav";
 
-import supermarketBG from "../resources/images/bgImg1.jpg"
+import supermarketBG from "../resources/images/bgImg1.jpg";
 export const CardContext = React.createContext({
   finalList: [],
 });
 
 // const socket = io("http://127.0.0.1:2000/");
 const socket = io("https://futurepreneursbackend.herokuapp.com");
+// const socket = io("https://127.0.0.1:2000/",{transports: ['websocket']});
 
 let rtc = {
   localAudioTrack: null,
   client: null,
 };
 
-let options = {
-  // Pass your App ID here.
-  appId: "583e53c6739745739d20fbb11ac8f0ef",
-  // Set the channel name.
-  channel: "test",
-  // Pass your temp token here.
-  token:
-    "006583e53c6739745739d20fbb11ac8f0efIACLjOSOWphoCPS9d8v+ZvoU5wMg1G9yOwRcB/TUgN/RQAx+f9gAAAAAEACdnafAgkufYQEAAQCCS59h",
-  // Set the user ID.
-  uid: Math.floor(Math.random() * 202123),
-};
-
 async function startBasicCall() {
-  // Create an AgoraRTCClient object.
   rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
-  // Listen for the "user-published" event, from which you can get an AgoraRTCRemoteUser object.
   rtc.client.on("user-published", async (user, mediaType) => {
-    // Subscribe to the remote user when the SDK triggers the "user-published" event
     await rtc.client.subscribe(user, mediaType);
     console.log("subscribe success");
 
-    // If the remote user publishes an audio track.
     if (mediaType === "audio") {
-      // Get the RemoteAudioTrack object in the AgoraRTCRemoteUser object.
       const remoteAudioTrack = user.audioTrack;
       // Play the remote audio track.
       remoteAudioTrack.play();
     }
     rtc.client.on("user-unpublished", async (user) => {
-      // Unsubscribe from the tracks of the remote user.
-
       await rtc.client.unsubscribe(user);
     });
   });
@@ -75,6 +57,18 @@ function DragDrop() {
     id: "",
     instruction: "",
     options: [],
+  });
+
+  const [options, setOptions] = useState({
+    // Pass your App ID here.
+    appId: "583e53c6739745739d20fbb11ac8f0ef",
+    // Set the channel name.
+    channel: "", //teamID
+    // Pass your temp token here.
+    token: "",
+    // "006583e53c6739745739d20fbb11ac8f0efIACLjOSOWphoCPS9d8v+ZvoU5wMg1G9yOwRcB/TUgN/RQAx+f9gAAAAAEACdnafAgkufYQEAAQCCS59h",
+    // Set the user ID.
+    uid: authCtx.uID,
   });
 
   const [supermarketUpdated, setsupermarketUpdated] = useState([
@@ -127,8 +121,24 @@ function DragDrop() {
     return { ...placeholder, canDrop: canDrop[0][i].isDroppable };
   });
 
+  useEffect(() => {
+    fetch(
+      `https://futurepreneursbackend.herokuapp.com/api/voice/token?channel=${authCtx.teamID}&uid=${authCtx.uID}&role=publisher`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setOptions((prevOptions) => ({
+          ...prevOptions,
+          channel: authCtx.teamID,
+          token: data.token,
+        }));
+        console.log("token", data.token);
+      });
+  }, []);
+
   const joinCall = async function () {
     // Join an RTC channel.
+    console.log("object", options.token);
     await rtc.client.join(
       options.appId,
       options.channel,
@@ -575,7 +585,11 @@ function DragDrop() {
           )}
         </div>
         <div className="placeholders-main-container">
-        <img className="supermarketImg" src={supermarketBG} alt="supermarket" />
+          <img
+            className="supermarketImg"
+            src={supermarketBG}
+            alt="supermarket"
+          />
           <div className="wall1"></div>
           <div className="wall2"></div>
           <div className="wall3"></div>
@@ -604,19 +618,19 @@ function DragDrop() {
             {/* <h1>{question.id}</h1> */}
             <p className="question-score">Score:{score}</p>
             <p className="question-attempt">Attempts Left:{4 - attempts}</p>
-          </div>
-          <div className="question-item-set">
-            {supermarketUpdated.map((item) => {
-              return (
-                <div className="question-item">
-                  <SupermarketDrag
-                    name={item.name}
-                    id={item.id}
-                    key={item.id}
-                  />
-                </div>
-              );
-            })}
+            <div className="question-item-set">
+              {supermarketUpdated.map((item,index) => {
+                return (
+                  <div className={`question-item${index}`}>
+                    <SupermarketDrag
+                      name={item.name}
+                      id={item.id}
+                      key={item.id}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

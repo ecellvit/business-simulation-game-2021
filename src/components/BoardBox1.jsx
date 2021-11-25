@@ -62,7 +62,11 @@ const BoardBox1 = (props) => {
   useEffect(() => {
     props.socket.on("change", (data) => {
       setReturnedItem(data);
+      console.log("board",board)
+      // setBoard(()=>[])
     });
+    // removeItemFromBoard();
+    // setBoard([]);
   }, [props.socket]);
 
   const [{ isOver, canDrop }, drop] = useDrop(
@@ -74,7 +78,7 @@ const BoardBox1 = (props) => {
         console.log(item.id);
         // props.emitUpdate();
         addItemToBoard(item.id);
-        console.log("from parent2", supermarketReceived);
+        // console.log("from parent2", supermarketReceived);
       },
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
@@ -150,43 +154,43 @@ const BoardBox1 = (props) => {
       })}
 
       {/* members side */}
-      {props.id === "one" && board.length === 0 ? (
+      {props.id === "one" ? (
         <SupermarketDrag
           name={returnedItem[0].item.name}
           id={returnedItem[0].item.id}
         />
       ) : null}
-      {props.id === "two" && board.length === 0 ? (
+      {props.id === "two" ? (
         <SupermarketDrag
           name={returnedItem[1].item.name}
           id={returnedItem[1].item.id}
         />
       ) : null}
-      {props.id === "three" && board.length === 0 ? (
+      {props.id === "three" ? (
         <SupermarketDrag
           name={returnedItem[2].item.name}
           id={returnedItem[2].item.id}
         />
       ) : null}
-      {props.id === "four" && board.length === 0 ? (
+      {props.id === "four" ? (
         <SupermarketDrag
           name={returnedItem[3].item.name}
           id={returnedItem[3].item.id}
         />
       ) : null}
-      {props.id === "five" && board.length === 0 ? (
+      {props.id === "five" ? (
         <SupermarketDrag
           name={returnedItem[4].item.name}
           id={returnedItem[4].item.id}
         />
       ) : null}
-      {props.id === "six" && board.length === 0 ? (
+      {props.id === "six" ? (
         <SupermarketDrag
           name={returnedItem[5].item.name}
           id={returnedItem[5].item.id}
         />
       ) : null}
-      {props.id === "seven" && board.length === 0 ? (
+      {props.id === "seven" ? (
         <SupermarketDrag
           name={returnedItem[6].item.name}
           id={returnedItem[6].item.id}

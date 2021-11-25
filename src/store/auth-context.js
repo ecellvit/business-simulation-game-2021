@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const AuthContext = React.createContext({
   id: "",
+  uID:"",
   name: "",
   emailid: "",
   photoURL: "",
@@ -15,12 +16,14 @@ const AuthContext = React.createContext({
 
 export const AuthContextProvider = (props) => {
   const initialId = localStorage.getItem("id");
+  const initialUId = localStorage.getItem("uID");
   const initialName = localStorage.getItem("name");
   const initialEmail = localStorage.getItem("email");
   const initialTeamID = localStorage.getItem("teamID");
   const initialPhotoURL = localStorage.getItem("photoURL");
 
   const [id, setId] = useState(initialId);
+  const [uID, setuID] = useState(initialUId);
   const [userName, setUserName] = useState(initialName);
   const [userEmailId, setUserEmailId] = useState(initialEmail);
   const [userPhotoURL, setUserPhotoURL] = useState(initialPhotoURL);
@@ -55,6 +58,7 @@ export const AuthContextProvider = (props) => {
   
   const contextValue = {
     id: id,
+    uID: uID,
     name: userName,
     emailid: userEmailId,
     isLoggedIn: userIsLoggedIn,
