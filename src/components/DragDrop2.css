@@ -1,0 +1,130 @@
+.supermarketImg2 {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  /* right: 5px; */
+}
+
+.dragdrop-main-container2 {
+  display: flex;
+  flex-direction: row;
+  height: 67vh;
+}
+
+.placeholders2-main-container {
+  border: 4px solid;
+  position: relative;
+  border-image: linear-gradient(
+      119.39deg,
+      rgba(76, 255, 116, 0.8) 0%,
+      rgba(0, 223, 192, 0.8) 18.2%,
+      rgba(87, 245, 169, 0.8) 35.55%,
+      rgba(0, 200, 172, 0.8) 51.33%,
+      rgba(93, 247, 163, 0.8) 67.63%,
+      rgba(0, 223, 192, 0.8) 81.83%,
+      rgba(164, 245, 236, 0.8) 100.98%
+    )
+    1;
+  width: 55%;
+  background-color: white;
+  margin: 0 10px 0px 40px;
+}
+
+.placeholder2-one {
+  position: absolute;
+  left: 3.2%;
+  top: 23%;
+}
+
+.placeholder2-two {
+  position: absolute;
+  left: 3.2%;
+  top: 36%;
+}
+
+.placeholder2-three {
+  position: absolute;
+  left: 3.2%;
+  top: 49%;
+}
+
+.placeholder2-four {
+  position: absolute;
+  left: 3.2%;
+  top: 62%;
+}
+
+.placeholder2-five {
+  position: absolute;
+  left: 3.2%;
+  top: 75%;
+}
+
+.placeholder2-six {
+  position: absolute;
+  top: 23%;
+  left: 26%;
+}
+
+.placeholder2-seven {
+  position: absolute;
+  left: 26%;
+  top: 36%;
+}
+
+.placeholder2-eight {
+  position: absolute;
+  left: 26%;
+  top: 49%;
+}
+
+.placeholder2-nine {
+  position: absolute;
+  left: 26%;
+  top: 62%;
+}
+
+.placeholder2-ten {
+  position: absolute;
+  left: 26%;
+  top: 75%;
+}
+
+.placeholder2-eleven {
+  position: absolute;
+  top: 24%;
+  left: 73%;
+}
+
+.placeholder2-twelve {
+  position: absolute;
+  left: 73%;
+  top: 37%;
+}
+
+.placeholder2-thirteen {
+  position: absolute;
+  left: 73%;
+  top: 50%;
+}
+
+.placeholder2-fourteen {
+  position: absolute;
+  top: 63%;
+  left: 73%;
+}
+
+.placeholder2-fifteen {
+  position: absolute;
+  top: 76%;
+  left: 73%;
+}
+
+.supermarket2-main-container {
+  background-color: white;
+  /* max-width: 200px; */
+  width: 30%;
+  border: 4px solid rgba(76, 255, 116, 0.8);
+  padding: 1vw;
+  position: relative;
+}

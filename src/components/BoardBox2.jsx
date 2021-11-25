@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDrop } from "react-dnd";
 import SupermarketDrag from "./SupermarketDrag";
-import { Supermarket } from "../custom/data";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const BoardBox1 = (props) => {
   const [board, setBoard] = useState([]);
   const [hasDropped, sethasDropped] = useState(false);
+
   const [supermarketReceived, setSupermarketReceived] = useState([
     {
       name: "FreshProduce",
@@ -25,8 +25,85 @@ const BoardBox1 = (props) => {
       name: "Biscuits",
       id: 4,
     },
+    {
+      name: "Tea",
+      id: 5,
+    },
+    {
+      name: "Coffee",
+      id: 6,
+    },
+    {
+      name: "Grains",
+      id: 7,
+    },
+    {
+      name: "Pulses",
+      id: 8,
+    },
+    {
+      name: "Bread",
+      id: 9,
+    },
+    {
+      name: "Milk",
+      id: 10,
+    },
+    {
+      name: "Biscuits",
+      id: 11,
+    },
+    {
+      name: "Biscuits",
+      id: 12,
+    },
+    {
+      name: "Biscuits",
+      id: 13,
+    },
+    {
+      name: "Biscuits",
+      id: 14,
+    },
+    {
+      name: "Biscuits",
+      id: 15,
+    },
   ]);
+
   const [returnedItem, setReturnedItem] = useState([
+    {
+      item: { name: "", id: "" },
+      id: "",
+    },
+    {
+      item: { name: "", id: "" },
+      id: "",
+    },
+    {
+      item: { name: "", id: "" },
+      id: "",
+    },
+    {
+      item: { name: "", id: "" },
+      id: "",
+    },
+    {
+      item: { name: "", id: "" },
+      id: "",
+    },
+    {
+      item: { name: "", id: "" },
+      id: "",
+    },
+    {
+      item: { name: "", id: "" },
+      id: "",
+    },
+    {
+      item: { name: "", id: "" },
+      id: "",
+    },
     {
       item: { name: "", id: "" },
       id: "",
@@ -71,10 +148,8 @@ const BoardBox1 = (props) => {
       drop: (item) => {
         setCurrItem(item);
         sethasDropped(true);
-        console.log(item.id);
         // props.emitUpdate();
         addItemToBoard(item.id);
-        console.log("from parent2", supermarketReceived);
       },
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
@@ -88,7 +163,6 @@ const BoardBox1 = (props) => {
     const itemList = supermarketReceived.filter((itemInSupermarket) => {
       return id === itemInSupermarket.id;
     });
-    console.log("sentItem", itemList[0]);
     props.updateFinalPlaceHolder(props.id, itemList[0]);
     setBoard((board) => [itemList[0]]);
   };
@@ -101,13 +175,13 @@ const BoardBox1 = (props) => {
 
   return (
     <div
-      className={`Placeholders placeholder-${props.id}`}
+      className={`Placeholders2 placeholder2-${props.id}`}
       ref={drop}
       style={{
         border: "0.01px solid black",
-        // height: "80px",
-        // margin: "65px",
-        // width: "80px",
+        height: "12.2%",
+        margin: "15px",
+        width: "21%",
         backgroundColor: props.canDrop === "yes" ? "#fff" : "grey",
       }}
       key={props.id}
@@ -150,46 +224,94 @@ const BoardBox1 = (props) => {
       })}
 
       {/* members side */}
-      {props.id === "one" && board.length === 0 ? (
+      {props.id === "one" && board.length ? (
         <SupermarketDrag
           name={returnedItem[0].item.name}
           id={returnedItem[0].item.id}
         />
       ) : null}
-      {props.id === "two" && board.length === 0 ? (
+      {props.id === "two" ? (
         <SupermarketDrag
           name={returnedItem[1].item.name}
           id={returnedItem[1].item.id}
         />
       ) : null}
-      {props.id === "three" && board.length === 0 ? (
+      {props.id === "three" ? (
         <SupermarketDrag
           name={returnedItem[2].item.name}
           id={returnedItem[2].item.id}
         />
       ) : null}
-      {props.id === "four" && board.length === 0 ? (
+      {props.id === "four" ? (
         <SupermarketDrag
           name={returnedItem[3].item.name}
           id={returnedItem[3].item.id}
         />
       ) : null}
-      {props.id === "five" && board.length === 0 ? (
+      {props.id === "five" ? (
         <SupermarketDrag
           name={returnedItem[4].item.name}
           id={returnedItem[4].item.id}
         />
       ) : null}
-      {props.id === "six" && board.length === 0 ? (
+      {props.id === "six" ? (
         <SupermarketDrag
           name={returnedItem[5].item.name}
           id={returnedItem[5].item.id}
         />
       ) : null}
-      {props.id === "seven" && board.length === 0 ? (
+      {props.id === "seven" ? (
         <SupermarketDrag
           name={returnedItem[6].item.name}
           id={returnedItem[6].item.id}
+        />
+      ) : null}
+      {props.id === "eight" ? (
+        <SupermarketDrag
+          name={returnedItem[7].item.name}
+          id={returnedItem[7].item.id}
+        />
+      ) : null}
+      {props.id === "nine" ? (
+        <SupermarketDrag
+          name={returnedItem[8].item.name}
+          id={returnedItem[8].item.id}
+        />
+      ) : null}
+      {props.id === "ten" ? (
+        <SupermarketDrag
+          name={returnedItem[9].item.name}
+          id={returnedItem[9].item.id}
+        />
+      ) : null}
+      {props.id === "eleven" ? (
+        <SupermarketDrag
+          name={returnedItem[10].item.name}
+          id={returnedItem[10].item.id}
+        />
+      ) : null}
+      {props.id === "twelve" ? (
+        <SupermarketDrag
+          name={returnedItem[11].item.name}
+          id={returnedItem[11].item.id}
+        />
+      ) : null}
+      {props.id === "thirteen" ? (
+        <SupermarketDrag
+          name={returnedItem[12].item.name}
+          id={returnedItem[12].item.id}
+        />
+      ) : null}
+      {props.id === "fourteen" ? (
+        <SupermarketDrag
+          name={returnedItem[13].item.name}
+          id={returnedItem[13].item.id}
+        />
+      ) : null}
+      {props.id === "fifteen" ? (
+        <SupermarketDrag
+          name={returnedItem[14].item.name}
+          id={returnedItem[14].item.id}
         />
       ) : null}
     </div>

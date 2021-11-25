@@ -1,6 +1,6 @@
 /* DragDrop */
-.supermarketImg{
-  width:100% ;
+.supermarketImg {
+  width: 100%;
   height: 100%;
   /* object-fit: cover; */
 }
@@ -13,7 +13,17 @@
 .placeholders-main-container {
   border: 4px solid;
   position: relative;
-  border-color: rgba(76, 255, 116, 0.8);
+  border-image: linear-gradient(
+      119.39deg,
+      rgba(76, 255, 116, 0.8) 0%,
+      rgba(0, 223, 192, 0.8) 18.2%,
+      rgba(87, 245, 169, 0.8) 35.55%,
+      rgba(0, 200, 172, 0.8) 51.33%,
+      rgba(93, 247, 163, 0.8) 67.63%,
+      rgba(0, 223, 192, 0.8) 81.83%,
+      rgba(164, 245, 236, 0.8) 100.98%
+    )
+    1;
   width: 55%;
   background-color: white;
   margin: 0 10px 0px 40px;
@@ -47,7 +57,7 @@
 
 .placeholder-four {
   position: absolute;
-  right: 38%;
+  right: 25%;
   top: 0%;
   width: 36%;
   height: 10%;
@@ -149,7 +159,7 @@
 .attempts-left {
   width: 12vw;
   padding: 1.35vh;
-  border: 1px solid;
+
   margin-left: 8%;
   border-radius: 10px;
   background: linear-gradient(
@@ -157,17 +167,6 @@
     rgba(76, 255, 116, 0.8) -69.23%,
     rgba(0, 223, 192, 0.8) 217.69%
   );
-  border-image-source: linear-gradient(
-    119.39deg,
-    rgba(76, 255, 116, 0.8) 0%,
-    rgba(0, 223, 192, 0.8) 18.2%,
-    rgba(87, 245, 169, 0.8) 35.55%,
-    rgba(0, 200, 172, 0.8) 51.33%,
-    rgba(93, 247, 163, 0.8) 67.63%,
-    rgba(0, 223, 192, 0.8) 81.83%,
-    rgba(164, 245, 236, 0.8) 100.98%
-  );
-  /* background: rgba(76, 255, 116, 0.8); */
 }
 .game-skip {
   position: absolute;
@@ -230,7 +229,8 @@
   width: 25%;
   height: 10%;
   z-index: 1;
-  background-color: black;
+  background-color: grey;
+  border: 0.01px solid black
 }
 .wall2 {
   width: 30%;
@@ -239,7 +239,8 @@
   position: absolute;
   height: 10%;
   z-index: 1;
-  background-color: black;
+  background-color: grey;
+  border: 0.01px solid black
 }
 .wall3 {
   position: absolute;

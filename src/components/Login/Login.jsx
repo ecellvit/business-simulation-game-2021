@@ -3,10 +3,8 @@ import GoogleLogin from "react-google-login";
 // import { GoogleLogout } from "react-google-login";
 import { Link } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
-import Box from "@mui/material/Box";
 import illus from "../../resources/images/Group.svg";
 import useMeasure from "react-use-measure";
-import { useSpring, animated } from "@react-spring/web";
 import "./Login.css";
 
 import { Nav } from "../nav";
@@ -19,12 +17,6 @@ function Login() {
     name: "",
     email: "",
     photoURL: "",
-  });
-  const [open, toggle] = useState(false);
-  const [ref, { width }] = useMeasure();
-  const props1 = useSpring({
-    config: { friction: 35 },
-    to: { width: open ? width : 0 },
   });
 
   const authCtx = useContext(AuthContext);
@@ -134,20 +126,6 @@ function Login() {
             <button type="button" className="button__main">
               <p className="buttondesc__main">Let Me In</p>
             </button>
-            {/* <div
-              ref={ref}
-              className="button__main"
-              onMouseOver={() => toggle(true)}
-              onMouseOut={() => toggle(false)}
-            >
-              <animated.div className="button__fill" style={props1} />
-              <p
-                className="buttondesc__main"
-                style={{ color: open ? "white" : "black" }}
-              >
-                Let Me In
-              </p>
-            </div> */}
           </Link>
         ) : null}
       </div>

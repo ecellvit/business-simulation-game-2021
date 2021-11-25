@@ -3,6 +3,7 @@ import { Route, Switch, useLocation } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import DragDrop from "./components/DragDrop.jsx";
+import DragDrop2 from "./components/DragDrop2.jsx";
 import Login from "./components/Login/Login";
 
 // import MainNavigation from "./components/MainNavigation.jsx";
@@ -36,6 +37,15 @@ function App() {
             <DndProvider backend={HTML5Backend}>
               <div>
                 <DragDrop />
+              </div>
+            </DndProvider>
+          </Route>
+        )}
+        {authCtx.isLoggedIn && authCtx.teamID !== "" && (
+          <Route path="/Round2">
+            <DndProvider backend={HTML5Backend}>
+              <div>
+                <DragDrop2 />
               </div>
             </DndProvider>
           </Route>
