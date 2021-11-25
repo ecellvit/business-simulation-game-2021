@@ -17,20 +17,24 @@ function Login() {
     name: "",
     email: "",
     photoURL: "",
+    uID: 0,
   });
 
   const authCtx = useContext(AuthContext);
   
   const onLoginSuccess = (response) => {
+    const uid = Math.floor(Math.random() * 202123);
     setisLoggedInGoogle(true);
     setUserData({
       name: response.profileObj.name,
       email: response.profileObj.email,
       photoURL: response.profileObj.imageUrl,
+      uID: uid,
     });
     // console.log("Login Sucess");
     localStorage.setItem("isGoogleLogin", "yes");
     localStorage.setItem("name", response.profileObj.name);
+    localStorage.setItem("uID", uid);
     localStorage.setItem("email", response.profileObj.email);
     localStorage.setItem("photoURL", response.profileObj.imageUrl);
     setShowLoggedIn(false);
@@ -42,6 +46,7 @@ function Login() {
       name: localStorage.getItem("name"),
       email: localStorage.getItem("email"),
       photoURL: localStorage.getItem("photoURL"),
+      uID: localStorage.getItem("uID"),
     });
   }, []);
 
@@ -78,7 +83,8 @@ function Login() {
           data._id,
           userData.name,
           userData.email,
-          userData.photoURL
+          userData.photoURL,
+          userData.uID
         );
       })
       .catch((err) => {
