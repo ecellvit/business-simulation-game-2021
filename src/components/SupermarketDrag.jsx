@@ -22,7 +22,7 @@ function SupermarketDrag(props) {
     <div className="question-div">
       {!isDragging ? (
         <div ref={drag} style={{ cursor: "pointer" }}>
-          <p>{props.name}</p>
+          <p style={{color:props.color}}>{props.name}</p>
         </div>
       ) : null}
     </div>

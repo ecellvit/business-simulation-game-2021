@@ -396,18 +396,6 @@ function DragDrop() {
   };
   // {questionID:,teamID:,attempts:,responseEnvironment:{Zones:[{index:"",option:""}]}}
 
-  const nextQuestionHandler = () => {
-    setcurrQuestionPointer((prevPointer) => {
-      if (prevPointer < 1) {
-        prevPointer = prevPointer + 1;
-        setAttempts((prevAttempt) => 1);
-        return prevPointer;
-      } else {
-        // console.log(prevPointer);
-        return prevPointer;
-      }
-    });
-  };
 
   const submitAnswerHandler = (event) => {
     event.preventDefault();
@@ -454,7 +442,7 @@ function DragDrop() {
     <CardContext.Provider value={{}}>
       <Nav expiryTimestamp={time} />
       <div className="game-options">
-        <h1>{score}</h1>
+        {/* <h1>{score}</h1> */}
         {/* <span className="attempts-left">ATTEMPTS LEFT: {4 - attempts}</span> */}
         {micMuted && (
           <button className="game-microphone" onClick={joinCall}>
@@ -488,9 +476,6 @@ function DragDrop() {
         )}
         <button className="game-submit" onClick={submitAnswerHandler}>
           SUBMIT
-        </button>
-        <button className="game-skip" onClick={nextQuestionHandler}>
-          SKIP
         </button>
       </div>
 
@@ -567,17 +552,17 @@ function DragDrop() {
             <p className="question-instruction">{question.instruction}</p>
           </div>
           <div className="question-item-set">
-            {supermarketUpdated.map((item) => {
-              return (
-                <div className="question-item">
-                  <SupermarketDrag
-                    name={item.name}
-                    id={item.id}
-                    key={item.id}
-                  />
-                </div>
-              );
-            })}
+            {supermarketUpdated.map((item, index) => {
+                return (
+                  <div className={`question-item2${index}`}>
+                    <SupermarketDrag
+                      name={item.name}
+                      id={item.id}
+                      key={item.id}
+                    />
+                  </div>
+                );
+              })}
           </div>
         </div>
       </div>

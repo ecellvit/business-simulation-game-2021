@@ -1,12 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Route, Switch, useLocation } from "react-router-dom";
+import { Route, Switch, useLocation, useHistory } from "react-router-dom";
 import { io } from "socket.io-client";
 import AgoraRTC from "agora-rtc-react";
 import AuthContext from "../store/auth-context";
 import handImg from "../resources/images/hand.png";
 import handDownImg from "../resources/images/handDown.jpeg";
-
+import cashCounter from "../resources/images/cashCounter.jpg";
 import SupermarketDrag from "./SupermarketDrag";
+import arrow from "../resources/images/arrow2.png"
 import BoardBox1 from "./BoardBox1";
 
 import { Placeholders } from "../custom/data";
@@ -15,6 +16,7 @@ import "./DragDrop.css";
 import { Nav } from "./nav";
 
 import supermarketBG from "../resources/images/bgImg1.jpg";
+// import SubmissionPage from "./SubmissionPage";
 export const CardContext = React.createContext({
   finalList: [],
 });
@@ -48,6 +50,7 @@ async function startBasicCall() {
 startBasicCall();
 
 function DragDrop() {
+  const history = useHistory();
   const authCtx = useContext(AuthContext);
   const [score, setScore] = useState(0);
   const time = new Date();
@@ -79,18 +82,18 @@ function DragDrop() {
       name: "",
       id: 1,
     },
-    {
-      name: "",
-      id: 2,
-    },
-    {
-      name: "",
-      id: 3,
-    },
-    {
-      name: "",
-      id: 4,
-    },
+    // {
+    //   name: "",
+    //   id: 2,
+    // },
+    // {
+    //   name: "",
+    //   id: 3,
+    // },
+    // {
+    //   name: "",
+    //   id: 4,
+    // },
   ]);
   const [attempts, setAttempts] = useState(1);
 
@@ -124,6 +127,7 @@ function DragDrop() {
     return { ...placeholder, canDrop: canDrop[0][i].isDroppable };
   });
 
+  //token generation
   useEffect(() => {
     // console.log("token details", authCtx.teamID, authCtx.uID);
     fetch(
@@ -178,7 +182,7 @@ function DragDrop() {
   };
 
   const addToCanDrop = (blocked, unblocked, { Zones }) => {
-    // console.log("object", blocked, unblocked, Zones);
+    console.log("object", blocked, unblocked, Zones);
 
     blocked.forEach((blockedPlaceHolder) => {
       if (blockedPlaceHolder === "one") {
@@ -398,9 +402,14 @@ function DragDrop() {
         setItems((preItem) => {
           return data.Options;
         });
+        console.log(data.Options);
         setsupermarketUpdated((prevSupermarketUpdated) => {
-          return prevSupermarketUpdated.map((SupermarketItem, index) => {
-            return { ...SupermarketItem, name: data.Options[index] };
+          return prevSupermarketUpdated.map((SupermarketItem) => {
+            return {
+              ...SupermarketItem,
+              name: data.Options[0].name,
+              id: data.Options[0].id,
+            };
           });
         });
         setQuestion((prevQuestion) => {
@@ -422,12 +431,13 @@ function DragDrop() {
     socket.emit("joinRoom", roomData);
     socket.on("goNext", () => {
       setcurrQuestionPointer((prevPointer) => {
-        if (prevPointer < 1) {
+        if (prevPointer < 6) {
           prevPointer = prevPointer + 1;
           setAttempts((prevAttempt) => 1);
           return prevPointer;
         } else {
           // console.log(prevPointer);
+          history.replace("/Submission");
           return prevPointer;
         }
       });
@@ -452,6 +462,17 @@ function DragDrop() {
       });
     });
   }, [finalList]);
+
+  //useEffect to check for user's current question
+  useEffect(() => {
+    fetch(
+      `https://futurepreneursbackend.herokuapp.com/api/public/getUserTeam?userID=${authCtx.id}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setcurrQuestionPointer(data.RoundOneAttemptedQuestions.length);
+      });
+  }, []);
 
   const updateFinalPlaceHolder = (placeHolderID, itemList) => {
     if (placeHolderID === "one") {
@@ -520,7 +541,7 @@ function DragDrop() {
         console.log("prevPointer", prevPointer);
         return prevPointer;
       } else {
-        // console.log(prevPointer);
+        history.replace("/Submission");
         return prevPointer;
       }
     });
@@ -538,7 +559,10 @@ function DragDrop() {
           teamID: authCtx.teamID,
           responseEnvironment: {
             Zones: filteredFinalList.map((element) => {
-              // console.log({ option: element.item.name, index: element.id });
+              console.log("ans", {
+                option: element.item.name,
+                index: element.id,
+              });
               return { option: element.item.name, index: element.id };
             }),
           },
@@ -562,6 +586,7 @@ function DragDrop() {
         alert(err);
       });
   };
+
   // console.log("finalList", finalList);
   // console.log("newfinalList", filteredFinalList);
 
@@ -599,6 +624,7 @@ function DragDrop() {
       )}
       <div className="game-options">
         <span className="attempts-left">ATTEMPTS LEFT: {4 - attempts}</span>
+        <span className="score">SCORE: {score}</span>
         {micMuted && (
           <button className="game-microphone" onClick={joinCall}>
             <svg
@@ -680,7 +706,11 @@ function DragDrop() {
             </div>
           )}
         </div>
+        <img src={arrow} alt="arrow1" className="arrow1" />
+        <img src={arrow} alt="arrow2" className="arrow2" />
+        <img src={arrow} alt="arrow3" className="arrow3" />
         <div className="placeholders-main-container">
+          <img src={cashCounter} alt="cashCounter" className="cashCounter" />
           <img
             className="supermarketImg"
             src={supermarketBG}
@@ -712,7 +742,13 @@ function DragDrop() {
           <div className="question-container">
             <h2>Question {currQuestionPointer + 1}:</h2>
             <p className="question-instruction">{question.instruction}</p>
-            <p className="question-score">Score:{score}</p>
+            <p className="question-rules">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam
+              accusamus nisi nemo blanditiis fugiat optio, molestias molestiae
+              facilis necessitatibus veritatis officia quod maxime. Totam dolore
+              dolorem ratione sapiente aspernatur accusantium.nemo blanditiis
+              fugiat optio, molestias molestiae
+            </p>
             <div className="question-item-set">
               {supermarketUpdated.map((item, index) => {
                 return (

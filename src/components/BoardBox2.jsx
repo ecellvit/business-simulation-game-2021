@@ -10,63 +10,63 @@ const BoardBox1 = (props) => {
 
   const [supermarketReceived, setSupermarketReceived] = useState([
     {
-      name: "Pencils",
+      name: "Erasers",
       id: 1,
     },
     {
-      name: "Kids Section",
+      name: "Shampoos",
       id: 2,
     },
     {
-      name: "Restraunt",
+      name: "Shaving Kits",
       id: 3,
     },
     {
-      name: "Biscuits",
+      name: "Tooth Pastes",
       id: 4,
     },
     {
-      name: "Tea",
+      name: "Crayons",
       id: 5,
     },
     {
-      name: "Coffee",
+      name: "After Shave Kits",
       id: 6,
     },
     {
-      name: "Grains",
+      name: "Pencils",
       id: 7,
     },
     {
-      name: "Pulses",
+      name: "Conditioners",
       id: 8,
     },
     {
-      name: "Bread",
+      name: "Sketch Books",
       id: 9,
     },
     {
-      name: "Milk",
+      name: "Tooth Brushes",
       id: 10,
     },
     {
-      name: "Biscuits",
+      name: "Dark Chocolates",
       id: 11,
     },
     {
-      name: "Biscuits",
+      name: "Barbie Dolls",
       id: 12,
     },
     {
-      name: "Biscuits",
+      name: "Kitchen Tools",
       id: 13,
     },
     {
-      name: "Biscuits",
+      name: "Trimmer",
       id: 14,
     },
     {
-      name: "Biscuits",
+      name: "Board Games",
       id: 15,
     },
   ]);

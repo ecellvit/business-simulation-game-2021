@@ -5,17 +5,20 @@ import AuthContext from "../../store/auth-context";
 import CreateTeamForm from "./CreateTeamForm";
 import { Link } from "react-router-dom";
 
-
 import TeamList from "./TeamList";
 import TeamDisplay from "./TeamDisplay";
 import { Nav } from "../nav";
 import "./DashBoard.css";
 
 import arrow from "../../resources/images/arrow.svg";
-import ellipse from "../../resources/images/Ellipse7.svg"
+import ellipse from "../../resources/images/Ellipse7.svg";
 
 function DashBoard() {
   const location = useLocation();
+  const [hasStarted1, sethasStarted1] = useState(false);
+  const [hasCompleted1, sethasCompleted1] = useState(false);
+  const [hasCompleted2, sethasCompleted2] = useState(false);
+
   const authCtx = useContext(AuthContext);
   const [hasTeam, setHasTeam] = useState(true);
   const [showTeam, setShowTeam] = useState(false);
@@ -28,13 +31,30 @@ function DashBoard() {
   // `https://futurepreneursbackend.herokuapp.com/api/public/hasTeam?userID=${authCtx.id}`
   // `http://127.0.0.1:2000/api/public/hasTeam?userID=${authCtx.id}`
 
-
   // useEffect(() => {
   //   alert('Location changed');
   // }, [location]);
+  const roundOneStarted = (hasStarted) => {
+    if (hasStarted) {
+      sethasStarted1(true);
+    }
+  };
+  const roundOneCompleted = (hasCompleted) => {
+    if (hasCompleted) {
+      sethasCompleted1(true);
+    }
+  };
+  const roundTwoCompleted = (hasCompleted) => {
+    console.log("in",hasCompleted)
+    if (hasCompleted) {
+      sethasCompleted2(true);
+    }
+  };
 
   useEffect(() => {
-    fetch(`https://futurepreneursbackend.herokuapp.com/api/public/hasTeam?userID=${authCtx.id}`)
+    fetch(
+      `https://futurepreneursbackend.herokuapp.com/api/public/hasTeam?userID=${authCtx.id}`
+    )
       .then((response) => response.json())
       .then((data) => {
         setHasTeam(data);
@@ -44,58 +64,67 @@ function DashBoard() {
   }, []);
 
   return (
-    <div >
+    <div>
       <Nav />
-      <div style={{ color: "black" }} className="Dashboard__main--div">
-        <div class="teamDetails">
-          <p class="startTime">Starting In</p>
-          <p class="time">12:60:49</p>
-          <hr class="hr" />
+      
+        <div style={{ color: "black" }} className="Dashboard__main--div">
+          <div class="teamDetails">
+            <p class="startTime">Starting In</p>
+            <p class="time">12:60:49</p>
+            <hr class="hr" />
 
-          <TeamDisplay />
+            <TeamDisplay
+              roundOneStarted={roundOneStarted}
+              roundOneCompleted={roundOneCompleted}
+              roundTwoCompleted={roundTwoCompleted}
+            />
 
-          <div class="tbox">
-            <p class="rhead">Round 1</p>
-            <p class="inst">Instructions</p>
-            <p class="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <p class="min">30 Mins</p>
-            <Link to="/Round1"><button class="stbtn button">START</button></Link>
-            <input
-              class="elp"
-              type="image"
-              name="eli"
-              src={ellipse}
-              alt="text"
-            ></input>
-            <img class="aro" src={arrow} alt=""></img>
+            {!hasCompleted2?<div class="tbox">
+              <p class="rhead">{hasCompleted1 ? "Round 1.2" : "Round 1.1"}</p>
+              <p class="inst">Instructions</p>
+              <p class="content">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+              <p class="min">30 Mins</p>
+              <Link to={hasCompleted1 ? "/Round2" : "/Round1"}>
+                <button class="stbtn button">
+                  {hasStarted1 ? "Continue" : "Start"}
+                </button>
+              </Link>
+              <input
+                class="elp"
+                type="image"
+                name="eli"
+                src={ellipse}
+                alt="text"
+              ></input>
+              <img class="aro" src={arrow} alt=""></img>
+            </div>:null}
           </div>
-        </div>
-        {/* <li className="">UserName: {authCtx.name}</li>
+          {/* <li className="">UserName: {authCtx.name}</li>
       <li>Email: {authCtx.emailid}</li> */}
-        {/* <TeamDisplay /> */}
+          {/* <TeamDisplay /> */}
 
-        {/* <button
+          {/* <button
         onClick={checkTeamHandler}
         style={{ margin: "3% 50%", fontSize: "30px" }}
       >
         hasTeam
       </button> */}
-        {/* {!hasTeam && (
+          {/* {!hasTeam && (
         <div className="TeamListAndForm">
           <TeamList />
           <CreateTeamForm />
         </div>
       )} */}
-        {/* {hasTeam && showTeam && <TeamDisplay />} */}
-      </div>
+          {/* {hasTeam && showTeam && <TeamDisplay />} */}
+        </div>
     </div>
   );
 }

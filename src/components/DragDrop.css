@@ -44,8 +44,8 @@
   position: absolute;
   left: 0%;
   top: 10%;
-  width: 10%;
-  height: 28%;
+  width: 20%;
+  height: 10%;
   text-align: center;
 }
 
@@ -93,7 +93,7 @@
   position: absolute;
   bottom: 15%;
   left: 53%;
-  width: 17%;
+  width: 1%;
   height: 50%;
   font-size: 1.75vh;
   text-align: center;
@@ -155,7 +155,6 @@
 .question-item-set {
   position: relative;
   top: 50px;
-  margin-top: 15%;
 }
 
 .question-item0 {
@@ -218,7 +217,12 @@
 .question-instruction {
   font-weight: bold;
 }
-
+.question-rules {
+  color: grey;
+  padding: 0px 5%;
+  text-align: center;
+  margin: 0px;
+}
 .game-options {
   position: relative;
   margin: 2vh;
@@ -226,9 +230,19 @@
 }
 .attempts-left {
   width: 12vw;
-  padding: 1.35vh;
-
+  padding: 2vh;
   margin-left: 8%;
+  border-radius: 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(76, 255, 116, 0.8) -69.23%,
+    rgba(0, 223, 192, 0.8) 217.69%
+  );
+}
+.score {
+  width: 12vw;
+  padding: 2vh;
+  margin-left: 1%;
   border-radius: 10px;
   background: linear-gradient(
     180deg,
@@ -317,9 +331,45 @@
   background-color: black;
 }
 
-.hand{
+.hand {
   width: 40px;
   position: absolute;
-  top: 17vh;
-  left: 21vw;
+  top: 300px;
+  left: 1vw;
+}
+.cashCounter {
+  width: 20%;
+  height: 24%;
+  position: absolute;
+  border-radius: 10px;
+  right: -2%;
+  bottom: 18%;
+  transform: rotate(-90deg);
+}
+
+.arrow1 {
+  position: absolute;
+  width: 5%;
+  height: 10%;
+  z-index: 2;
+  left: 24.8%;
+  transform: rotate(90deg);
+}
+
+.arrow2 {
+  position: absolute;
+  width: 5%;
+  top: 82%;
+  z-index: 1;
+  left: 20%;
+  transform: rotate(-90deg);
+}
+
+.arrow3 {
+  position: absolute;
+  width: 5%;
+  transform: rotate(90deg);
+  left: 48%;
+  top: 82%;
+  z-index: 1;
 }
