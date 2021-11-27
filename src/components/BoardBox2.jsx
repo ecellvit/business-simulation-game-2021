@@ -10,7 +10,7 @@ const BoardBox1 = (props) => {
 
   const [supermarketReceived, setSupermarketReceived] = useState([
     {
-      name: "FreshProduce",
+      name: "Pencils",
       id: 1,
     },
     {
@@ -144,11 +144,10 @@ const BoardBox1 = (props) => {
 
   const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
-      accept: props.canDrop,
+      accept: "yes",
       drop: (item) => {
         setCurrItem(item);
         sethasDropped(true);
-        // props.emitUpdate();
         addItemToBoard(item.id);
       },
       collect: (monitor) => ({
@@ -182,7 +181,7 @@ const BoardBox1 = (props) => {
         height: "12.2%",
         margin: "15px",
         width: "21%",
-        backgroundColor: props.canDrop === "yes" ? "#fff" : "grey",
+        backgroundColor: "#fff",
       }}
       key={props.id}
     >
@@ -198,19 +197,6 @@ const BoardBox1 = (props) => {
           </IconButton>
         </div>
       ) : null}
-
-      {/* both sides i.e for prefixed env*/}
-      {props.finalList.map((listItem) => {
-        if (props.id === listItem.id) {
-          return (
-            <SupermarketDrag
-              name={listItem.canDrop.element}
-              id={listItem.item.id}
-              key={listItem.item.id}
-            />
-          );
-        }
-      })}
 
       {/* leader side */}
       {board.map((boardItem) => {

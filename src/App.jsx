@@ -20,7 +20,6 @@ function App() {
   const authCtx = useContext(AuthContext);
   // const {pathname} = useLocation();
   // const {isMobile,height,width} = useViewport();
-  // console.log(isMobile);
   return (
     <div className="main-container">
       {/* <h1>{height}</h1> */}
@@ -32,7 +31,7 @@ function App() {
         <Route path="/Login" exact>
           <Login />
         </Route>
-        {authCtx.isLoggedIn && authCtx.teamID !== "" && (
+        {authCtx.isLoggedIn && authCtx.teamID && (
           <Route path="/Round1">
             <DndProvider backend={HTML5Backend}>
               <div>
@@ -41,7 +40,7 @@ function App() {
             </DndProvider>
           </Route>
         )}
-        {authCtx.isLoggedIn && authCtx.teamID !== "" && (
+        {authCtx.isLoggedIn && authCtx.teamID && (
           <Route path="/Round2">
             <DndProvider backend={HTML5Backend}>
               <div>

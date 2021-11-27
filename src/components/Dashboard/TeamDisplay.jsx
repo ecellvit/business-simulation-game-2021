@@ -7,7 +7,7 @@ import crown from "../../resources/images/crown.svg";
 function Member(props) {
   // console.log(props.name);
   return (
-    <p className="tname">{`${props.teamData.Members[props.name].User.name}`}</p>
+    <p className="tname">{`${TrimName(props.teamData.Members[props.name].User.name)}`}</p>
   );
 }
 function MemberPhoto(props) {
@@ -21,8 +21,8 @@ function MemberPhoto(props) {
 }
 function TrimName(name){
   // console.log(name);
-  if(name.length>20){ 
-    let name1 = name.slice(0,20);
+  if(name.length>17){ 
+    let name1 = name.slice(0,17);
     while (name1.charAt(name1.length-1)!== " " && name1.length!==0){
       name1 = name1.slice(0,-1);
       // console.log(name1);
@@ -36,7 +36,7 @@ function TrimName(name){
 function TeamDisplay() {
   const [teamData, setTeamData] = useState({
     TeamName: "",
-    Leader: { User: { name: "",photoURL:"" } },
+    Leader: { User: { name: "",photoURL:"",_id:"" } },
   });
   const [showTeamDetails, setShowTeamDetails] = useState(false);
   const [numOfMembers, setNumOfMembers] = useState(0);
@@ -57,6 +57,10 @@ function TeamDisplay() {
         authCtx.setTeam(data._id);
       });
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("leaderID",teamData.Leader.User._id)
+  }, [teamData])
 
   return (
     <div className="">

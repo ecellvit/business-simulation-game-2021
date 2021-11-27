@@ -25,38 +25,19 @@ let rtc = {
   client: null,
 };
 
-let options = {
-  // Pass your App ID here.
-  appId: "583e53c6739745739d20fbb11ac8f0ef",
-  // Set the channel name.
-  channel: "test",
-  // Pass your temp token here.
-  token:
-    "006583e53c6739745739d20fbb11ac8f0efIACLjOSOWphoCPS9d8v+ZvoU5wMg1G9yOwRcB/TUgN/RQAx+f9gAAAAAEACdnafAgkufYQEAAQCCS59h",
-  // Set the user ID.
-  uid: Math.floor(Math.random() * 202123),
-};
-
 async function startBasicCall() {
-  // Create an AgoraRTCClient object.
   rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
-  // Listen for the "user-published" event, from which you can get an AgoraRTCRemoteUser object.
   rtc.client.on("user-published", async (user, mediaType) => {
-    // Subscribe to the remote user when the SDK triggers the "user-published" event
     await rtc.client.subscribe(user, mediaType);
     console.log("subscribe success");
 
-    // If the remote user publishes an audio track.
     if (mediaType === "audio") {
-      // Get the RemoteAudioTrack object in the AgoraRTCRemoteUser object.
       const remoteAudioTrack = user.audioTrack;
       // Play the remote audio track.
       remoteAudioTrack.play();
     }
     rtc.client.on("user-unpublished", async (user) => {
-      // Unsubscribe from the tracks of the remote user.
-
       await rtc.client.unsubscribe(user);
     });
   });
@@ -64,6 +45,70 @@ async function startBasicCall() {
 startBasicCall();
 
 function DragDrop() {
+  const board = Placeholders2;
+
+  const [supermarketUpdated, setSupermarketReceived] = useState([
+    {
+      name: "Pencils",
+      id: 1,
+    },
+    {
+      name: "Kids Section",
+      id: 2,
+    },
+    {
+      name: "Restraunt",
+      id: 3,
+    },
+    {
+      name: "Biscuits",
+      id: 4,
+    },
+    {
+      name: "Tea",
+      id: 5,
+    },
+    {
+      name: "Coffee",
+      id: 6,
+    },
+    {
+      name: "Grains",
+      id: 7,
+    },
+    {
+      name: "Pulses",
+      id: 8,
+    },
+    {
+      name: "Bread",
+      id: 9,
+    },
+    {
+      name: "Milk",
+      id: 10,
+    },
+    {
+      name: "Biscuits",
+      id: 11,
+    },
+    {
+      name: "Biscuits",
+      id: 12,
+    },
+    {
+      name: "Biscuits",
+      id: 13,
+    },
+    {
+      name: "Biscuits",
+      id: 14,
+    },
+    {
+      name: "Biscuits",
+      id: 15,
+    },
+  ]);
   const authCtx = useContext(AuthContext);
   const [score, setScore] = useState(0);
   const time = new Date();
@@ -77,106 +122,103 @@ function DragDrop() {
     options: [],
   });
 
-  const [supermarketUpdated, setsupermarketUpdated] = useState([
-    {
-      name: "",
-      id: 1,
-    },
-    {
-      name: "",
-      id: 2,
-    },
-    {
-      name: "",
-      id: 3,
-    },
-    {
-      name: "",
-      id: 4,
-    },
-    {
-      name: "",
-      id: 5,
-    },{
-      name: "",
-      id: 6,
-    },{
-      name: "",
-      id: 7,
-    },{
-      name: "",
-      id: 8,
-    },{
-      name: "",
-      id: 9,
-    },{
-      name: "",
-      id: 10,
-    },{
-      name: "",
-      id: 11,
-    },{
-      name: "",
-      id: 12,
-    },{
-      name: "",
-      id: 13,
-    },{
-      name: "",
-      id: 14,
-    },{
-      name: "",
-      id: 15,
-    },
-  ]);
+  const [options, setOptions] = useState({
+    // Pass your App ID here.
+    appId: "583e53c6739745739d20fbb11ac8f0ef",
+    // Set the channel name.
+    channel: "", //teamID
+    // Pass your temp token here.
+    token: "",
+    // "006583e53c6739745739d20fbb11ac8f0efIACLjOSOWphoCPS9d8v+ZvoU5wMg1G9yOwRcB/TUgN/RQAx+f9gAAAAAEACdnafAgkufYQEAAQCCS59h",
+    // Set the user ID.
+    uid: authCtx.uID,
+  });
+
+  // const [supermarketUpdated, setsupermarketUpdated] = useState([
+  //   {
+  //     name: "",
+  //     id: 1,
+  //   },
+  //   {
+  //     name: "",
+  //     id: 2,
+  //   },
+  //   {
+  //     name: "",
+  //     id: 3,
+  //   },
+  //   {
+  //     name: "",
+  //     id: 4,
+  //   },
+  //   {
+  //     name: "",
+  //     id: 5,
+  //   },
+  //   {
+  //     name: "",
+  //     id: 6,
+  //   },
+  //   {
+  //     name: "",
+  //     id: 7,
+  //   },
+  //   {
+  //     name: "",
+  //     id: 8,
+  //   },
+  //   {
+  //     name: "",
+  //     id: 9,
+  //   },
+  //   {
+  //     name: "",
+  //     id: 10,
+  //   },
+  //   {
+  //     name: "",
+  //     id: 11,
+  //   },
+  //   {
+  //     name: "",
+  //     id: 12,
+  //   },
+  //   {
+  //     name: "",
+  //     id: 13,
+  //   },
+  //   {
+  //     name: "",
+  //     id: 14,
+  //   },
+  //   {
+  //     name: "",
+  //     id: 15,
+  //   },
+  // ]);
   const [attempts, setAttempts] = useState(1);
 
   const [currQuestionPointer, setcurrQuestionPointer] = useState(0);
 
-  const [canDrop, setCanDrop] = useState([
-    {
-      0: { isDroppable: "yes", element: "" },
-      1: { isDroppable: "yes", element: "" },
-      2: { isDroppable: "yes", element: "" },
-      3: { isDroppable: "yes", element: "" },
-      4: { isDroppable: "yes", element: "" },
-      5: { isDroppable: "yes", element: "" },
-      6: { isDroppable: "yes", element: "" },
-      7: { isDroppable: "yes", element: "" },
-      8: { isDroppable: "yes", element: "" },
-      9: { isDroppable: "yes", element: "" },
-      10: { isDroppable: "yes", element: "" },
-      11: { isDroppable: "yes", element: "" },
-      12: { isDroppable: "yes", element: "" },
-      13: { isDroppable: "yes", element: "" },
-      14: { isDroppable: "yes", element: "" },
-      15: { isDroppable: "yes", element: "" },
-    },
-  ]);
-
   const [finalList, setFinalList] = useState([
-    { id: "one", item: { id: "", name: "" }, canDrop: "" },
-    { id: "two", item: { id: "", name: "" }, canDrop: "" },
-    { id: "three", item: { id: "", name: "" }, canDrop: "" },
-    { id: "four", item: { id: "", name: "" }, canDrop: "" },
-    { id: "five", item: { id: "", name: "" }, canDrop: "" },
-    { id: "six", item: { id: "", name: "" }, canDrop: "" },
-    { id: "seven", item: { id: "", name: "" }, canDrop: "" },
-    { id: "eight", item: { id: "", name: "" }, canDrop: "" },
-    { id: "nine", item: { id: "", name: "" }, canDrop: "" },
-    { id: "ten", item: { id: "", name: "" }, canDrop: "" },
-    { id: "eleven", item: { id: "", name: "" }, canDrop: "" },
-    { id: "twelve", item: { id: "", name: "" }, canDrop: "" },
-    { id: "thirteen", item: { id: "", name: "" }, canDrop: "" },
-    { id: "fourteen", item: { id: "", name: "" }, canDrop: "" },
-    { id: "fifteen", item: { id: "", name: "" }, canDrop: "" },
+    { id: "one", item: { id: "", name: "" } },
+    { id: "two", item: { id: "", name: "" } },
+    { id: "three", item: { id: "", name: "" } },
+    { id: "four", item: { id: "", name: "" } },
+    { id: "five", item: { id: "", name: "" } },
+    { id: "six", item: { id: "", name: "" } },
+    { id: "seven", item: { id: "", name: "" } },
+    { id: "eight", item: { id: "", name: "" } },
+    { id: "nine", item: { id: "", name: "" } },
+    { id: "ten", item: { id: "", name: "" } },
+    { id: "eleven", item: { id: "", name: "" } },
+    { id: "twelve", item: { id: "", name: "" } },
+    { id: "thirteen", item: { id: "", name: "" } },
+    { id: "fourteen", item: { id: "", name: "" } },
+    { id: "fifteen", item: { id: "", name: "" } },
   ]);
 
   const [filteredFinalList, setFilteredFinalList] = useState([]);
-
-  const board = Placeholders2.map((placeholder, i) => {
-    return { ...placeholder, canDrop: canDrop[0][i].isDroppable };
-  });
 
   const joinCall = async function () {
     // Join an RTC channel.
@@ -204,258 +246,6 @@ function DragDrop() {
     console.log("leave Success");
   };
 
-  const addToCanDrop = (blocked, unblocked, { Zones }) => {
-    // console.log("object", blocked, unblocked, Zones);
-
-    blocked.forEach((blockedPlaceHolder) => {
-      if (blockedPlaceHolder === "one") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            0: { ...prevCanDrop[0][0], isDroppable: "no" },
-          },
-        ]);
-      } else if (blockedPlaceHolder === "two") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            1: { ...prevCanDrop[0][1], isDroppable: "no" },
-          },
-        ]);
-      } else if (blockedPlaceHolder === "three") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            2: { ...prevCanDrop[0][2], isDroppable: "no" },
-          },
-        ]);
-      } else if (blockedPlaceHolder === "four") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            3: { ...prevCanDrop[0][3], isDroppable: "no" },
-          },
-        ]);
-      } else if (blockedPlaceHolder === "five") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            4: { ...prevCanDrop[0][4], isDroppable: "no" },
-          },
-        ]);
-      } else if (blockedPlaceHolder === "six") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            5: { ...prevCanDrop[0][5], isDroppable: "no" },
-          },
-        ]);
-      } else if (blockedPlaceHolder === "seven") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][6], isDroppable: "no" },
-          },
-        ]);
-      } else if (blockedPlaceHolder === "eight") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][7], isDroppable: "no" },
-          },
-        ]);
-      } else if (blockedPlaceHolder === "nine") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][8], isDroppable: "no" },
-          },
-        ]);
-      } else if (blockedPlaceHolder === "ten") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][9], isDroppable: "no" },
-          },
-        ]);
-      } else if (blockedPlaceHolder === "eleven") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][10], isDroppable: "no" },
-          },
-        ]);
-      } else if (blockedPlaceHolder === "twelve") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][11], isDroppable: "no" },
-          },
-        ]);
-      } else if (blockedPlaceHolder === "thirteen") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][12], isDroppable: "no" },
-          },
-        ]);
-      } else if (blockedPlaceHolder === "fourteen") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][13], isDroppable: "no" },
-          },
-        ]);
-      } else if (blockedPlaceHolder === "fifteen") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][14], isDroppable: "no" },
-          },
-        ]);
-      }
-    });
-    unblocked.forEach((unblockedPlaceHolder) => {
-      if (unblockedPlaceHolder === "one") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            0: { ...prevCanDrop[0][0], isDroppable: "yes" },
-          },
-        ]);
-      } else if (unblockedPlaceHolder === "two") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            1: { ...prevCanDrop[0][1], isDroppable: "yes" },
-          },
-        ]);
-      } else if (unblockedPlaceHolder === "three") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            2: { ...prevCanDrop[0][2], isDroppable: "yes" },
-          },
-        ]);
-      } else if (unblockedPlaceHolder === "four") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            3: { ...prevCanDrop[0][3], isDroppable: "yes" },
-          },
-        ]);
-      } else if (unblockedPlaceHolder === "five") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            4: { ...prevCanDrop[0][4], isDroppable: "yes" },
-          },
-        ]);
-      } else if (unblockedPlaceHolder === "six") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            5: { ...prevCanDrop[0][5], isDroppable: "yes" },
-          },
-        ]);
-      } else if (unblockedPlaceHolder === "seven") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][6], isDroppable: "yes" },
-          },
-        ]);
-      } else if (unblockedPlaceHolder === "eight") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][7], isDroppable: "yes" },
-          },
-        ]);
-      } else if (unblockedPlaceHolder === "nine") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][8], isDroppable: "yes" },
-          },
-        ]);
-      } else if (unblockedPlaceHolder === "ten") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][9], isDroppable: "yes" },
-          },
-        ]);
-      } else if (unblockedPlaceHolder === "eleven") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][10], isDroppable: "yes" },
-          },
-        ]);
-      } else if (unblockedPlaceHolder === "twelve") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][11], isDroppable: "yes" },
-          },
-        ]);
-      } else if (unblockedPlaceHolder === "thirteen") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][12], isDroppable: "yes" },
-          },
-        ]);
-      } else if (unblockedPlaceHolder === "fourteen") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][13], isDroppable: "yes" },
-          },
-        ]);
-      } else if (unblockedPlaceHolder === "fifteen") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            6: { ...prevCanDrop[0][14], isDroppable: "yes" },
-          },
-        ]);
-      }
-    });
-    Zones.map((presetZone) => {
-      // console.log("preset", presetZone);
-      if (presetZone.index === "one") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            0: {
-              ...prevCanDrop[0][0],
-              element: presetZone.option,
-              isDroppable: "no",
-            },
-          },
-        ]);
-      } else if (presetZone.index === "four") {
-        setCanDrop((prevCanDrop) => [
-          {
-            ...prevCanDrop[0],
-            3: {
-              ...prevCanDrop[0][3],
-              element: presetZone.option,
-              isDroppable: "no",
-            },
-          },
-        ]);
-      }
-    });
-  };
-  // console.log(canDrop);
-  // useEffect(() => {
-  //   socket.emit("disconnects");
-  //   console.log("disconnected")
-  // }, [pathname]);
-
   const [roomUsers, setRoomUsers] = useState([
     { id: "", username: "", room: "", email: "", photoURL: "" },
   ]);
@@ -479,18 +269,8 @@ function DragDrop() {
         return res.json();
       })
       .then((data) => {
-        addToCanDrop(
-          data.BlockedZones,
-          data.UnblockedZones,
-          data.PrefixEnvironment
-        );
         setItems((preItem) => {
           return data.Options;
-        });
-        setsupermarketUpdated((prevSupermarketUpdated) => {
-          return prevSupermarketUpdated.map((SupermarketItem, index) => {
-            return { ...SupermarketItem, name: data.Options[index] };
-          });
         });
         setQuestion((prevQuestion) => {
           return {
@@ -505,30 +285,10 @@ function DragDrop() {
   //useEffect for sockets
   useEffect(() => {
     socket.on("roomUsers", (data) => {
-      // console.log(data.users);
       setRoomUsers(data.users);
     });
     socket.emit("joinRoom", roomData);
   }, [roomData]);
-
-  //useEffect for canDrop property to finalList
-  useEffect(() => {
-    setFinalList((finalList) =>
-      finalList.map((list, i) => {
-        return { ...list, canDrop: canDrop[0][i] };
-      })
-    );
-  }, [canDrop]);
-
-  //to filter only unblocked zones from finalList with canDrop property
-  useEffect(() => {
-    setFilteredFinalList(finalList);
-    setFilteredFinalList((finalList) => {
-      return finalList.filter((list) => {
-        return list.canDrop.isDroppable === "yes";
-      });
-    });
-  }, [finalList]);
 
   const updateFinalPlaceHolder = (placeHolderID, itemList) => {
     if (placeHolderID === "one") {
@@ -652,19 +412,16 @@ function DragDrop() {
   const submitAnswerHandler = (event) => {
     event.preventDefault();
     fetch(
-      "https://futurepreneursbackend.herokuapp.com/api/RoundOne/submitResponse",
+      "https://futurepreneursbackend.herokuapp.com/api/roundTwo/submitResponse",
       {
         method: "POST",
         body: JSON.stringify({
-          attempts: attempts,
-          questionID: question.id,
           teamID: authCtx.teamID,
-          responseEnvironment: {
-            Zones: filteredFinalList.map((element) => {
-              // console.log({ option: element.item.name, index: element.id });
-              return { option: element.item.name, index: element.id };
-            }),
-          },
+
+          Zones: finalList.map((element) => {
+            console.log({ option: element.item.name, index: element.id });
+            return { option: element.item.name, index: element.id };
+          }),
         }),
         headers: {
           "Content-Type": "application/json",
@@ -673,12 +430,6 @@ function DragDrop() {
     )
       .then((response) => response.json())
       .then((data) => {
-        setAttempts((prevAttempt) => prevAttempt + 1);
-        // console.log(data);
-        // console.log("attempt", attempts);
-        if (data.isCorrect || attempts === 3) {
-          nextQuestionHandler();
-        }
         setScore((prevScore) => {
           return data.currentPoints;
         });
@@ -703,6 +454,7 @@ function DragDrop() {
     <CardContext.Provider value={{}}>
       <Nav expiryTimestamp={time} />
       <div className="game-options">
+        <h1>{score}</h1>
         {/* <span className="attempts-left">ATTEMPTS LEFT: {4 - attempts}</span> */}
         {micMuted && (
           <button className="game-microphone" onClick={joinCall}>
@@ -813,9 +565,6 @@ function DragDrop() {
         <div className="supermarket2-main-container">
           <div className="question-container">
             <p className="question-instruction">{question.instruction}</p>
-            {/* <h1>{question.id}</h1> */}
-            {/* <p className="question-score">Score:{score}</p> */}
-            {/* <p className="question-attempt">Attempts Left:{4 - attempts}</p> */}
           </div>
           <div className="question-item-set">
             {supermarketUpdated.map((item) => {
