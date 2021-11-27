@@ -3,6 +3,8 @@ import { Route, Switch, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 import AgoraRTC from "agora-rtc-react";
 import AuthContext from "../store/auth-context";
+import handImg from "../resources/images/hand.png";
+import handDownImg from "../resources/images/handDown.jpeg";
 
 import SupermarketDrag from "./SupermarketDrag";
 import BoardBox1 from "./BoardBox1";
@@ -51,6 +53,7 @@ function DragDrop() {
   const time = new Date();
   time.setSeconds(time.getSeconds() + 600);
   const [micMuted, setMicMuted] = useState(true);
+  const [isHandRaised, setisHandRaised] = useState(false);
   const [items, setItems] = useState(["", "", "", ""]);
   // const {pathname} = useLocation();
   const [question, setQuestion] = useState({
@@ -122,6 +125,7 @@ function DragDrop() {
   });
 
   useEffect(() => {
+    // console.log("token details", authCtx.teamID, authCtx.uID);
     fetch(
       `https://futurepreneursbackend.herokuapp.com/api/voice/token?channel=${authCtx.teamID}&uid=${authCtx.uID}&role=publisher`
     )
@@ -132,13 +136,13 @@ function DragDrop() {
           channel: authCtx.teamID,
           token: data.token,
         }));
-        console.log("token", data.token);
+        // console.log("token", data.token);
       });
   }, []);
 
   const joinCall = async function () {
     // Join an RTC channel.
-    console.log("object", options.token);
+    // console.log("object", options.token);
     await rtc.client.join(
       options.appId,
       options.channel,
@@ -161,6 +165,16 @@ function DragDrop() {
     await rtc.client.leave();
     setMicMuted(true);
     console.log("leave Success");
+  };
+
+  const handRaise = () => {
+    socket.emit("handraise", "fp");
+    setisHandRaised(true);
+  };
+
+  const handDown = () => {
+    socket.emit("handdown", "fp");
+    setisHandRaised(false);
   };
 
   const addToCanDrop = (blocked, unblocked, { Zones }) => {
@@ -283,6 +297,28 @@ function DragDrop() {
             },
           },
         ]);
+      } else if (presetZone.index === "two") {
+        setCanDrop((prevCanDrop) => [
+          {
+            ...prevCanDrop[0],
+            1: {
+              ...prevCanDrop[0][1],
+              element: presetZone.option,
+              isDroppable: "no",
+            },
+          },
+        ]);
+      } else if (presetZone.index === "three") {
+        setCanDrop((prevCanDrop) => [
+          {
+            ...prevCanDrop[0],
+            2: {
+              ...prevCanDrop[0][2],
+              element: presetZone.option,
+              isDroppable: "no",
+            },
+          },
+        ]);
       } else if (presetZone.index === "four") {
         setCanDrop((prevCanDrop) => [
           {
@@ -294,14 +330,42 @@ function DragDrop() {
             },
           },
         ]);
+      } else if (presetZone.index === "five") {
+        setCanDrop((prevCanDrop) => [
+          {
+            ...prevCanDrop[0],
+            4: {
+              ...prevCanDrop[0][4],
+              element: presetZone.option,
+              isDroppable: "no",
+            },
+          },
+        ]);
+      } else if (presetZone.index === "six") {
+        setCanDrop((prevCanDrop) => [
+          {
+            ...prevCanDrop[0],
+            5: {
+              ...prevCanDrop[0][5],
+              element: presetZone.option,
+              isDroppable: "no",
+            },
+          },
+        ]);
+      } else if (presetZone.index === "seven") {
+        setCanDrop((prevCanDrop) => [
+          {
+            ...prevCanDrop[0],
+            6: {
+              ...prevCanDrop[0][6],
+              element: presetZone.option,
+              isDroppable: "no",
+            },
+          },
+        ]);
       }
     });
   };
-  // console.log(canDrop);
-  // useEffect(() => {
-  //   socket.emit("disconnects");
-  //   console.log("disconnected")
-  // }, [pathname]);
 
   const [roomUsers, setRoomUsers] = useState([
     { id: "", username: "", room: "", email: "", photoURL: "" },
@@ -356,6 +420,18 @@ function DragDrop() {
       setRoomUsers(data.users);
     });
     socket.emit("joinRoom", roomData);
+    socket.on("goNext", () => {
+      setcurrQuestionPointer((prevPointer) => {
+        if (prevPointer < 1) {
+          prevPointer = prevPointer + 1;
+          setAttempts((prevAttempt) => 1);
+          return prevPointer;
+        } else {
+          // console.log(prevPointer);
+          return prevPointer;
+        }
+      });
+    });
   }, [roomData]);
 
   //useEffect for canDrop property to finalList
@@ -436,10 +512,12 @@ function DragDrop() {
   // {questionID:,teamID:,attempts:,responseEnvironment:{Zones:[{index:"",option:""}]}}
 
   const nextQuestionHandler = () => {
+    socket.emit("nextQuestion", "nextques");
     setcurrQuestionPointer((prevPointer) => {
-      if (prevPointer < 1) {
+      if (prevPointer < 6) {
         prevPointer = prevPointer + 1;
         setAttempts((prevAttempt) => 1);
+        console.log("prevPointer", prevPointer);
         return prevPointer;
       } else {
         // console.log(prevPointer);
@@ -473,8 +551,6 @@ function DragDrop() {
       .then((response) => response.json())
       .then((data) => {
         setAttempts((prevAttempt) => prevAttempt + 1);
-        // console.log(data);
-        // console.log("attempt", attempts);
         if (data.isCorrect || attempts === 3) {
           nextQuestionHandler();
         }
@@ -486,8 +562,8 @@ function DragDrop() {
         alert(err);
       });
   };
-  console.log("finalList", finalList);
-  console.log("newfinalList", filteredFinalList);
+  // console.log("finalList", finalList);
+  // console.log("newfinalList", filteredFinalList);
 
   // const emitUpdate = () => {
   //   socket.emit("update", finalList);
@@ -501,6 +577,26 @@ function DragDrop() {
   return (
     <CardContext.Provider value={{}}>
       <Nav expiryTimestamp={time} />
+      {isHandRaised ? (
+        <img
+          alt="handDown"
+          onClick={handDown}
+          className="hand"
+          src={handDownImg}
+        />
+      ) : (
+        <img alt="hand" onClick={handRaise} className="hand" src={handImg} />
+      )}
+      {!isHandRaised ? (
+        <img alt="hand" onClick={handRaise} className="hand" src={handImg} />
+      ) : (
+        <img
+          alt="handDown"
+          onClick={handDown}
+          className="hand"
+          src={handDownImg}
+        />
+      )}
       <div className="game-options">
         <span className="attempts-left">ATTEMPTS LEFT: {4 - attempts}</span>
         {micMuted && (
@@ -614,12 +710,11 @@ function DragDrop() {
         </div>
         <div className="supermarket-main-container">
           <div className="question-container">
+            <h2>Question {currQuestionPointer + 1}:</h2>
             <p className="question-instruction">{question.instruction}</p>
-            {/* <h1>{question.id}</h1> */}
             <p className="question-score">Score:{score}</p>
-            <p className="question-attempt">Attempts Left:{4 - attempts}</p>
             <div className="question-item-set">
-              {supermarketUpdated.map((item,index) => {
+              {supermarketUpdated.map((item, index) => {
                 return (
                   <div className={`question-item${index}`}>
                     <SupermarketDrag

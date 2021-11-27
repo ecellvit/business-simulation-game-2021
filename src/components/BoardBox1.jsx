@@ -56,15 +56,17 @@ const BoardBox1 = (props) => {
       id: "",
     },
   ]);
-
+  // console.log("returned Item",returnedItem);
   const [currItem, setCurrItem] = useState({ name: "", id: "" });
 
   useEffect(() => {
     props.socket.on("change", (data) => {
       setReturnedItem(data);
-      console.log("board",board)
       // setBoard(()=>[])
     });
+    // props.socket.on("change1", (id) => {
+    //   removeItemFromBoard(id);
+    // });
     // removeItemFromBoard();
     // setBoard([]);
   }, [props.socket]);
@@ -76,9 +78,8 @@ const BoardBox1 = (props) => {
         setCurrItem(item);
         sethasDropped(true);
         console.log(item.id);
-        // props.emitUpdate();
+        props.socket.emit("update1", props.id);
         addItemToBoard(item.id);
-        // console.log("from parent2", supermarketReceived);
       },
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
@@ -94,14 +95,15 @@ const BoardBox1 = (props) => {
     });
     console.log("sentItem", itemList[0]);
     props.updateFinalPlaceHolder(props.id, itemList[0]);
-    setBoard((board) => [itemList[0]]);
+    setBoard(() => [itemList[0]]);
   };
 
-  const removeItemFromBoard = () => {
+  const removeItemFromBoard = (id) => {
     sethasDropped(false);
-    setBoard([]);
-    props.deleteFinalPlaceHolder(props.id);
+    setBoard([])
+    props.deleteFinalPlaceHolder(id);
   };
+  // console.log("board", board, props.id);
 
   return (
     <div
@@ -119,7 +121,9 @@ const BoardBox1 = (props) => {
       {props.canDrop === "yes" && hasDropped && board[0] ? (
         <div style={{ position: "absolute", right: "2px", bottom: "0px" }}>
           <IconButton
-            onClick={removeItemFromBoard}
+            onClick={() => {
+              removeItemFromBoard(props.id);
+            }}
             aria-label="delete"
             size="small"
             color="error"

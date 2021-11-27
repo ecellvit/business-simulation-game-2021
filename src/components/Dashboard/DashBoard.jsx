@@ -1,4 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
+import { Route, Switch, useLocation } from "react-router-dom";
+
 import AuthContext from "../../store/auth-context";
 import CreateTeamForm from "./CreateTeamForm";
 import { Link } from "react-router-dom";
@@ -13,6 +15,7 @@ import arrow from "../../resources/images/arrow.svg";
 import ellipse from "../../resources/images/Ellipse7.svg"
 
 function DashBoard() {
+  const location = useLocation();
   const authCtx = useContext(AuthContext);
   const [hasTeam, setHasTeam] = useState(true);
   const [showTeam, setShowTeam] = useState(false);
@@ -24,6 +27,11 @@ function DashBoard() {
 
   // `https://futurepreneursbackend.herokuapp.com/api/public/hasTeam?userID=${authCtx.id}`
   // `http://127.0.0.1:2000/api/public/hasTeam?userID=${authCtx.id}`
+
+
+  // useEffect(() => {
+  //   alert('Location changed');
+  // }, [location]);
 
   useEffect(() => {
     fetch(`https://futurepreneursbackend.herokuapp.com/api/public/hasTeam?userID=${authCtx.id}`)
