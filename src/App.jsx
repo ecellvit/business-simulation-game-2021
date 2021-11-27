@@ -5,6 +5,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import DragDrop from "./components/DragDrop.jsx";
 import DragDrop2 from "./components/DragDrop2.jsx";
 import Login from "./components/Login/Login";
+import SubmissionPage from "./components/SubmissionPage.jsx";
 
 // import MainNavigation from "./components/MainNavigation.jsx";
 import AuthContext from "./store/auth-context.js";
@@ -54,6 +55,9 @@ function App() {
             <DashBoard />
           </Route>
         )}
+        <Route path="/Submission" exact>
+          <SubmissionPage />
+        </Route>
         {/* <Route path="*">
           <Redirect to="/" />
         </Route> */}

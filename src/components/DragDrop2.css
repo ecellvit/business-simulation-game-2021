@@ -180,13 +180,14 @@
 .question-item0 {
   position: absolute;
   border-radius: 5px;
-  width: 47%;
+  left: 5%;
+  width: 90%;
   height: 60px;
   padding: 1px 0;
   border: 0.5px solid black;
   text-align: center;
 }
-.question-item1 {
+/* .question-item1 {
   position: absolute;
   border-radius: 5px;
   width: 47%;
@@ -216,7 +217,7 @@
   text-align: center;
   right: 0.2%;
   top: 80px;
-}
+} */
 .question-item0:hover {
   background-color: #40444c;
   color: white;
@@ -243,6 +244,16 @@
   margin: 2vh;
   padding: 1vh;
 }
+
+/* .question-div{
+    border-radius: 5px;
+    width: 93%;
+    margin: 10px;
+    height: 60px;
+    padding: 1px 0;
+    border: 0.5px solid black;
+    text-align: center;
+} */
 
 .game-microphone {
   position: absolute;
@@ -277,6 +288,6 @@
 .hand{
   width: 40px;
   position: absolute;
-  top: 17vh;
-  left: 21vw;
+  top: 17%;
+  left: 5%;
 }

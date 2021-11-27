@@ -10,20 +10,28 @@ const BoardBox1 = (props) => {
   const [hasDropped, sethasDropped] = useState(false);
   const [supermarketReceived, setSupermarketReceived] = useState([
     {
-      name: "FreshProduce",
+      name: "Fresh Produce",
       id: 1,
     },
     {
-      name: "Kids Section",
+      name: "Tea",
       id: 2,
     },
     {
-      name: "Restraunt",
+      name: "Restaurant",
       id: 3,
     },
     {
-      name: "Biscuits",
+      name: "Kids Section",
       id: 4,
+    },
+    {
+      name: "Essentials Section",
+      id: 5,
+    },
+    {
+      name: "Impulse buys Section",
+      id: 6,
     },
   ]);
   const [returnedItem, setReturnedItem] = useState([
@@ -100,7 +108,7 @@ const BoardBox1 = (props) => {
 
   const removeItemFromBoard = (id) => {
     sethasDropped(false);
-    setBoard([])
+    setBoard([]);
     props.deleteFinalPlaceHolder(id);
   };
   // console.log("board", board, props.id);
@@ -138,6 +146,7 @@ const BoardBox1 = (props) => {
         if (props.id === listItem.id) {
           return (
             <SupermarketDrag
+              color="white"
               name={listItem.canDrop.element}
               id={listItem.item.id}
               key={listItem.item.id}

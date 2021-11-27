@@ -1,0 +1,41 @@
+.thankyou__submission {
+  color: rgba(0, 0, 0, 1);
+  font-family: Roboto;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 47px;
+  letter-spacing: 0.2em;
+  text-align: center;
+}
+
+.fp__logo {
+  height: 300px;
+  width: 250px;
+  left: 495px;
+  top: 176px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  margin-top: 20px;
+}
+
+.ecell__logo{
+  height: 50px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.final__submission {
+  color: rgba(129, 123, 123, 1);
+  font-family: Roboto;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 29px;
+  letter-spacing: 0em;
+  text-align: center;
+}
