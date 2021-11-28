@@ -286,24 +286,6 @@
   color: white;
 }
 
-.game-submit {
-  position: absolute;
-  font-weight: bold;
-  top: 0.1vh;
-  right: 0;
-  height: 6vh;
-  width: 7vw;
-  border-radius: 10px;
-  background: #40444c;
-  border: 2px solid #40444c;
-  /* transition: 0.4s; */
-  color: white;
-}
-.game-submit:hover {
-  background: black;
-  color: white;
-}
-
 .wall1 {
   position: absolute;
   top: 65%;

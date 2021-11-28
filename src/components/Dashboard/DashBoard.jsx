@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Route, Switch, useLocation, useHistory } from "react-router-dom";
-
 import AuthContext from "../../store/auth-context";
 import CreateTeamForm from "./CreateTeamForm";
 import { Link } from "react-router-dom";
@@ -14,7 +13,7 @@ import arrow from "../../resources/images/arrow.svg";
 import ellipse from "../../resources/images/Ellipse7.svg";
 
 function DashBoard() {
-  const location = useLocation();
+  // const location = useLocation();
   const history = useHistory();
   const [hasStarted1, sethasStarted1] = useState(false);
   const [hasCompleted1, sethasCompleted1] = useState(false);
@@ -53,16 +52,14 @@ function DashBoard() {
   };
 
   useEffect(() => {
-    fetch(
-      `https://futurepreneursbackend.herokuapp.com/api/public/hasTeam?userID=${authCtx.id}`
-    )
+    fetch(`https://futurepreneursbackend.herokuapp.com/api/public/hasTeam?userID=${authCtx.id}`)
       .then((response) => response.json())
       .then((data) => {
         setHasTeam(data);
         setShowTeam(true);
       })
       .catch((err) => {
-        // alert(err);
+        alert(err);
         history.replace("/Error");
       });
   }, []);
@@ -70,12 +67,13 @@ function DashBoard() {
   return (
     <div>
       <Nav />
-
       <div style={{ color: "black" }} className="Dashboard__main--div">
-        <div class="teamDetails">
-          <p class="startTime">Starting In</p>
-          <p class="time">12:60:49</p>
-          <hr class="hr" />
+        <div className="teamDetails">
+          <p className="startTime">Starting In</p>
+          <div className="time__div">
+            <p className="time">12:60:49</p>
+          </div>
+          <hr className="hr" />
 
           <TeamDisplay
             roundOneStarted={roundOneStarted}
@@ -84,49 +82,53 @@ function DashBoard() {
           />
 
           {!hasCompleted2 ? (
-            <div class="tbox">
-              <p class="rhead">{hasCompleted1 ? "Round 1.2" : "Round 1.1"}</p>
-              <p class="inst">Instructions</p>
-              <p class="content">
-                <p>
-                  You can see the floor-plan of the supermarket that you are
-                  managing. On the right you are given a list of sections that
-                  you have to arrange in the supermarket. You have to decide at
-                  which position a particular section will go, and place it
-                  there in order to achieve your target.
-                </p>
-                <p>
-                  1. You have to manually drag and drop a particular section in
-                  the empty slots on the map in the way you see fit.
-                </p>
-                <p>
-                  2. Be very careful about your moves because the number of
-                  attempts matter.
-                </p>
-                <p>
-                  3. Only the team leader can submit , others can see the
-                  proceedings in real time.
-                </p>
-                <p>4. You have 6 questions and 15 mins in total.</p>
-                <p>
-                  5. Once Submitted/skipped , you can not go back to previous
-                  question.
-                </p>
+            <div className="tbox">
+              <p className="rhead">
+                {hasCompleted1 ? "Round 1.2" : "Round 1.1"}
               </p>
-              <p class="min">30 Mins</p>
+              <p className="inst">Instructions</p>
+              <p className="content">
+                <div className="scrollable-content">
+                  <p>
+                    You can see the floor-plan of the supermarket that you are
+                    managing. On the right you are given a list of sections that
+                    you have to arrange in the supermarket. You have to decide
+                    at which position a particular section will go, and place it
+                    there in order to achieve your target.
+                  </p>
+                  <p>
+                    1. You have to manually drag and drop a particular section
+                    in the empty slots on the map in the way you see fit.
+                  </p>
+                  <p>
+                    2. Be very careful about your moves because the number of
+                    attempts matter.
+                  </p>
+                  <p>
+                    3. Only the team leader can submit , others can see the
+                    proceedings in real time.
+                  </p>
+                  <p>4. You have 6 questions and 15 mins in total.</p>
+                  <p>
+                    5. Once Submitted/skipped , you can not go back to previous
+                    question.
+                  </p>
+                </div>
+              </p>
+              <p className="min">30 Mins</p>
               <Link to={hasCompleted1 ? "/Round2" : "/Round1"}>
-                <button class="stbtn button">
+                <button className="stbtn button">
                   {hasStarted1 ? "Continue" : "Start"}
                 </button>
               </Link>
               {/* <input
-                class="elp"
+                className="elp"
                 type="image"
                 name="eli"
                 src={ellipse}
                 alt="text"
               ></input>
-              <img class="aro" src={arrow} alt=""></img> */}
+              <img className="aro" src={arrow} alt=""></img> */}
             </div>
           ) : null}
         </div>

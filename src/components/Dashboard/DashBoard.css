@@ -4,7 +4,7 @@
   background-size: cover;
   background-position: center;
   background-image: url("../../resources/images/bg-image.svg");
-  height: 120vh;
+  height: 85vh;
   position: relative;
 }
 .teamDetails {
@@ -36,23 +36,39 @@
   color: #2c3030;
 }
 .time {
-  position: absolute;
+  position: relative;
   width: 253px;
   height: 75px;
-  top: 99px;
-  left: 24%;
+  top: -7px;
+  left: 12px;
   font-family: Karla;
   font-style: normal;
   font-weight: bold;
-  font-size: 200%;
+  font-size: 30px;
   font-family: Poppins;
   font-style: normal;
   font-weight: normal;
   line-height: 75px;
-  margin: 0%;
+  margin:auto;
   /* identical to box height */
-
-  color: #2c3030;
+  color: rgb(187, 183, 183);
+}
+.time__div {
+  position: relative;
+  font-weight: bold;
+  top: 13vh;
+  left: 5vw;
+  height: 8vh;
+  width: 10vw;
+  border-radius: 10px;
+  background: #40444c;
+  border: 2px solid #40444c;
+  /* transition: 0.4s; */
+  color: white;
+}
+.time__div:hover {
+  background: black;
+  color: white;
 }
 .hr {
   position: absolute;
@@ -60,7 +76,6 @@
   height: 4px;
   left: 0px;
   top: 216px;
-
   background: linear-gradient(
     180deg,
     rgba(76, 255, 116, 0.8) -69.23%,
@@ -85,7 +100,7 @@
   width: 100%;
   height: 0px;
   left: 30%;
-  top: 35vh;
+  top: 26.5vh;
   margin-top: 3.2vh;
   /* padding-top: 10px; */
   font-family: Poppins;
@@ -100,9 +115,9 @@
 .tbox {
   position: relative;
   width: 300%;
-  height: 100vh;
+  height: 75vh;
   left: 140%;
-  bottom: 28%;
+  bottom: 45%;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(30px);
   /* Note: backdrop-filter has minimal browser support */
@@ -111,12 +126,13 @@
   border-color: #00dfc0;
   border-width: 5px;
 }
+
 .rhead {
   position: absolute;
   width: 100%;
   height: 72px;
   left: 5%;
-  top: 40px;
+  top: 30px;
   margin: 0%;
 
   font-family: Poppins;
@@ -139,31 +155,38 @@
   font-family: Poppins;
   font-style: normal;
   font-weight: normal;
-  font-size: 30px;
+  font-size: 25px;
   line-height: 54px;
   /* identical to box height */
   color: #000000;
 }
+
 .content {
   position: absolute;
   width: 90%;
   height: 10%;
   left: 5%;
-  top: 20%;
+  top: 25%;
   font-family: Poppins;
   font-style: normal;
   font-weight: normal;
-  font-size: 20px;
+  font-size: 17px;
   line-height: 36px;
   margin: 0px;
-  color: #000000;
+  color: gray;
 }
+.scrollable-content{
+  height: 280px;
+  width: 100%;  
+  overflow-y: scroll;
+}
+
 .stbtn {
   position: absolute;
   width: 25%;
   height: 74.99px;
   left: 70%;
-  bottom: 1%;
+  bottom: 5%;
   /* gd3 */
 
   background: linear-gradient(
