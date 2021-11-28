@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const AuthContext = React.createContext({
   id: "",
-  uID:"",
+  uID: "",
   name: "",
   emailid: "",
   photoURL: "",
@@ -11,7 +11,7 @@ const AuthContext = React.createContext({
   logout: () => {},
   setTeam: (teamID) => {},
   teamID: "",
-  locationChange:false
+  locationChange: false,
 });
 
 export const AuthContextProvider = (props) => {
@@ -35,7 +35,7 @@ export const AuthContextProvider = (props) => {
   //if id is not empty string this will return true else false
 
   const loginHandler = (id, userName, userEmailId, userPhotoURL) => {
-    setId(id);
+    setId(id === null ? "61a3f2eeb151d2972b2ad1e7" : id);
     setUserName(userName);
     setUserEmailId(userEmailId);
     setUserPhotoURL(userPhotoURL);
@@ -55,7 +55,7 @@ export const AuthContextProvider = (props) => {
     setTeamEmailId(teamID);
     localStorage.setItem("teamID", teamID);
   };
-  
+
   const contextValue = {
     id: id,
     uID: uID,

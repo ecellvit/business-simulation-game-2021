@@ -406,7 +406,7 @@ function DragDrop() {
         setItems((preItem) => {
           return data.Options;
         });
-        console.log("data",data.Options);
+        // console.log("data", data.Options);
         setsupermarketUpdated((prevSupermarketUpdated) => {
           return prevSupermarketUpdated.map((SupermarketItem) => {
             return {
@@ -474,14 +474,29 @@ function DragDrop() {
   //useEffect to check for user's current question
   useEffect(() => {
     fetch(
-      `https://futurepreneursbackend.herokuapp.com/api/public/getUserTeam?userID=${authCtx.id}`
+      `https://futurepreneursbackend.herokuapp.com/api/public/getUserTeam`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          userID: authCtx.id === null ? "61a3f2eeb151d2972b2ad1e7" : authCtx.id,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 400) {
+          history.replace("/Error");
+        }
+        return response.json();
+      })
       .then((data) => {
         setcurrQuestionPointer(data.RoundOneAttemptedQuestions.length);
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
       });
   }, []);
 
@@ -795,7 +810,7 @@ function DragDrop() {
                 proceedings in real time.
               </p>
               <p>3. You have 6 questions and 15 mins in total. </p>
-              <p style={{margin:"0"}}>
+              <p style={{ margin: "0" }}>
                 4. Once Submitted/skipped , you can not go back to previous
                 question.
               </p>
