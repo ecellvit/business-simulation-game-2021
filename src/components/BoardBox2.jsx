@@ -157,7 +157,6 @@ const BoardBox1 = (props) => {
     }),
     [props.finalList]
   );
-
   const addItemToBoard = (id) => {
     const itemList = supermarketReceived.filter((itemInSupermarket) => {
       return id === itemInSupermarket.id;
@@ -210,7 +209,7 @@ const BoardBox1 = (props) => {
       })}
 
       {/* members side */}
-      {props.id === "one" && board.length ? (
+      {props.id === "one" ? (
         <SupermarketDrag
           name={returnedItem[0].item.name}
           id={returnedItem[0].item.id}
