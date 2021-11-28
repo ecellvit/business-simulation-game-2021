@@ -185,7 +185,7 @@ const BoardBox1 = (props) => {
       }}
       key={props.id}
     >
-      {props.canDrop === "yes" && hasDropped && board[0] ? (
+      {hasDropped && board[0] ? (
         <div style={{ position: "absolute", right: "2px", bottom: "0px" }}>
           <IconButton
             onClick={removeItemFromBoard}

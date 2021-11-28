@@ -27,7 +27,7 @@
     1;
   width: 55%;
   background-color: white;
-  margin: 0 10px 0px 40px;
+  margin: 0px 10px 0px 40px;
 }
 
 .placeholder2-one {
@@ -127,6 +127,18 @@
   border: 4px solid rgba(76, 255, 116, 0.8);
   padding: 1vw;
   position: relative;
+  /* margin: 30px 10px 0px 0px; */
+  border-image: linear-gradient(
+      119.39deg,
+      rgba(76, 255, 116, 0.8) 0%,
+      rgba(0, 223, 192, 0.8) 18.2%,
+      rgba(87, 245, 169, 0.8) 35.55%,
+      rgba(0, 200, 172, 0.8) 51.33%,
+      rgba(93, 247, 163, 0.8) 67.63%,
+      rgba(0, 223, 192, 0.8) 81.83%,
+      rgba(164, 245, 236, 0.8) 100.98%
+    )
+    1;
 }
 
 .roomUsersDiv {
@@ -176,22 +188,184 @@
     1;
   padding: 1vw;
 }
+/* 
+.question-item0{
 
-.question-item0 {
+} */
+
+.question-item-set2{
+ position: relative;
+ top: 10px;
+}
+.question-item20 {
   position: absolute;
   border-radius: 5px;
-  left: 5%;
-  width: 90%;
-  height: 60px;
+  left: 4%;
+  width: 45%;
+  height: 40px;
   padding: 1px 0;
   border: 0.5px solid black;
   text-align: center;
 }
+.question-item21 {
+  position: absolute;
+  border-radius: 5px;
+  left: 4%;
+  top: 55px;
+  width: 45%;
+  height: 40px;
+  padding: 1px 0;
+  border: 0.5px solid black;
+  text-align: center;
+}
+.question-item22 {
+  position: absolute;
+  border-radius: 5px;
+  left: 4%;
+  top: 110px;
+  width: 45%;
+  height: 40px;
+  padding: 1px 0;
+  border: 0.5px solid black;
+  text-align: center;
+}
+.question-item23 {
+  position: absolute;
+  border-radius: 5px;
+  left: 4%;
+  top: 165px;
+  width: 45%;
+  height: 40px;
+  padding: 1px 0;
+  border: 0.5px solid black;
+  text-align: center;
+}
+.question-item24 {
+  position: absolute;
+  border-radius: 5px;
+  left: 4%;
+  top: 220px;
+  width: 45%;
+  height: 40px;
+  padding: 1px 0;
+  border: 0.5px solid black;
+  text-align: center;
+}
+.question-item25 {
+  position: absolute;
+  border-radius: 5px;
+  left: 4%;
+  top: 275px;
+  width: 45%;
+  height: 40px;
+  padding: 1px 0;
+  border: 0.5px solid black;
+  text-align: center;
+}
+.question-item26 {
+  position: absolute;
+  border-radius: 5px;
+  left: 4%;
+  top: 330px;
+  width: 45%;
+  height: 40px;
+  padding: 1px 0;
+  border: 0.5px solid black;
+  text-align: center;
+}
+.question-item27 {
+  position: absolute;
+  border-radius: 5px;
+  left: 52%;
+  width: 45%;
+  height: 40px;
+  padding: 1px 0;
+  border: 0.5px solid black;
+  text-align: center;
+}
+.question-item28 {
+  position: absolute;
+  border-radius: 5px;
+  left: 52%;
+  top: 55px;
+  width: 45%;
+  height: 40px;
+  padding: 1px 0;
+  border: 0.5px solid black;
+  text-align: center;
+}
+.question-item29 {
+  position: absolute;
+  border-radius: 5px;
+  left: 52%;
+  top: 110px;
+  width: 45%;
+  height: 40px;
+  padding: 1px 0;
+  border: 0.5px solid black;
+  text-align: center;
+}
+.question-item210 {
+  position: absolute;
+  border-radius: 5px;
+  left: 52%;
+  top: 165px;
+  width: 45%;
+  height: 40px;
+  padding: 1px 0;
+  border: 0.5px solid black;
+  text-align: center;
+}
+.question-item211 {
+  position: absolute;
+  border-radius: 5px;
+  left: 52%;
+  top: 220px;
+  width: 45%;
+  height: 40px;
+  padding: 1px 0;
+  border: 0.5px solid black;
+  text-align: center;
+}
+.question-item212 {
+  position: absolute;
+  border-radius: 5px;
+  left: 52%;
+  top: 275px;
+  width: 45%;
+  height: 40px;
+  padding: 1px 0;
+  border: 0.5px solid black;
+  text-align: center;
+}
+.question-item213 {
+  position: absolute;
+  border-radius: 5px;
+  left: 52%;
+  top: 330px;
+  width: 45%;
+  height: 40px;
+  /* padding: 0px 0 30px 0; */
+  border: 0.5px solid black;
+  text-align: center;
+}
+.question-item214 {
+  position: absolute;
+  border-radius: 5px;
+  left: 52%;
+  top: 380px;
+  width: 45%;
+  height: 40px;
+  /* padding: 1px 0; */
+  border: 0.5px solid black;
+  text-align: center;
+}
+
 /* .question-item1 {
   position: absolute;
   border-radius: 5px;
   width: 47%;
-  height: 60px;
+  height: 40px;
   padding: 1px 0;
   border: 0.5px solid black;
   text-align: center;
@@ -201,7 +375,7 @@
   position: absolute;
   border-radius: 5px;
   width: 47%;
-  height: 60px;
+  height: 40px;
   padding: 1px 0;
   border: 0.5px solid black;
   text-align: center;
@@ -218,11 +392,8 @@
   right: 0.2%;
   top: 80px;
 } */
-.question-item0:hover {
-  background-color: #40444c;
-  color: white;
-}
-.question-item1:hover {
+
+/* .question-item1:hover {
   background-color: #40444c;
   color: white;
 }
@@ -233,10 +404,11 @@
 .question-item3:hover {
   background-color: #40444c;
   color: white;
-}
+} */
 
-.question-instruction {
+.question-instruction2 {
   font-weight: bold;
+  margin-bottom: 0px;
 }
 
 .game-options {
@@ -255,24 +427,23 @@
     text-align: center;
 } */
 
-.game-microphone {
-  position: absolute;
+.game-microphone2 {
+  position: relative;
   font-weight: bold;
   top: 10vh;
-  left: 0.5vw;
-
+  left: 0.2vw;
   height: 30px;
   /* width: 7vw; */
   border-radius: 100%;
   background: white;
   border: 2px solid rgba(76, 255, 116, 0.8);
-  transition:0.3s;
+  transition: 0.3s;
 }
 .game-submit {
   position: absolute;
   font-weight: bold;
   top: 0.1vh;
-  right: 12.2%;
+  right: 4.2%;
   height: 6vh;
   width: 7vw;
   border-radius: 10px;
@@ -285,9 +456,9 @@
   background: black;
   color: white;
 }
-.hand{
+.hand2 {
   width: 40px;
   position: absolute;
   top: 17%;
-  left: 5%;
+  left: 1.5%;
 }

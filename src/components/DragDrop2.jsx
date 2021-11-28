@@ -1,9 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Route, Switch, useLocation } from "react-router-dom";
+import { Route, Switch, useLocation,useHistory } from "react-router-dom";
 import { io } from "socket.io-client";
 import AgoraRTC from "agora-rtc-react";
 import AuthContext from "../store/auth-context";
-
+import handImg from "../resources/images/hand.png";
+import handDownImg from "../resources/images/handDown.jpeg";
 import SupermarketDrag from "./SupermarketDrag";
 import BoardBox2 from "./BoardBox2";
 
@@ -45,75 +46,77 @@ async function startBasicCall() {
 startBasicCall();
 
 function DragDrop() {
+  const history = useHistory();
   const board = Placeholders2;
 
   const [supermarketUpdated, setSupermarketReceived] = useState([
     {
-      name: "Pencils",
+      name: "Erasers",
       id: 1,
     },
     {
-      name: "Kids Section",
+      name: "Shampoos",
       id: 2,
     },
     {
-      name: "Restraunt",
+      name: "Shaving Kits",
       id: 3,
     },
     {
-      name: "Biscuits",
+      name: "Tooth Pastes",
       id: 4,
     },
     {
-      name: "Tea",
+      name: "Crayons",
       id: 5,
     },
     {
-      name: "Coffee",
+      name: "After Shave Kits",
       id: 6,
     },
     {
-      name: "Grains",
+      name: "Pencils",
       id: 7,
     },
     {
-      name: "Pulses",
+      name: "Conditioners",
       id: 8,
     },
     {
-      name: "Bread",
+      name: "Sketch Books",
       id: 9,
     },
     {
-      name: "Milk",
+      name: "Tooth Brushes",
       id: 10,
     },
     {
-      name: "Biscuits",
+      name: "Dark Chocolates",
       id: 11,
     },
     {
-      name: "Biscuits",
+      name: "Barbie Dolls",
       id: 12,
     },
     {
-      name: "Biscuits",
+      name: "Kitchen Tools",
       id: 13,
     },
     {
-      name: "Biscuits",
+      name: "Trimmer",
       id: 14,
     },
     {
-      name: "Biscuits",
+      name: "Board Games",
       id: 15,
     },
   ]);
   const authCtx = useContext(AuthContext);
   const [score, setScore] = useState(0);
-  const time = new Date();
-  time.setSeconds(time.getSeconds() + 600);
+  // const time = new Date();
+  // time.setSeconds(time.getSeconds() + 600);
   const [micMuted, setMicMuted] = useState(true);
+  const [isHandRaised, setisHandRaised] = useState(false);
   const [items, setItems] = useState(["", "", "", ""]);
   // const {pathname} = useLocation();
   const [question, setQuestion] = useState({
@@ -196,6 +199,7 @@ function DragDrop() {
   //     id: 15,
   //   },
   // ]);
+  
   const [attempts, setAttempts] = useState(1);
 
   const [currQuestionPointer, setcurrQuestionPointer] = useState(0);
@@ -219,6 +223,32 @@ function DragDrop() {
   ]);
 
   const [filteredFinalList, setFilteredFinalList] = useState([]);
+
+  const [roomUsers, setRoomUsers] = useState([
+    { id: "", username: "", room: "", email: "", photoURL: "" },
+  ]);
+
+  const [roomData, setRoomData] = useState({
+    name: authCtx.name,
+    email: authCtx.emailid,
+    photoURL: authCtx.photoURL,
+    teamID: authCtx.teamID,
+  });
+
+  // "https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions"
+  useEffect(() => {
+    fetch(
+      `https://futurepreneursbackend.herokuapp.com/api/voice/token?channel=${authCtx.teamID}&uid=${authCtx.uID}&role=publisher`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setOptions((prevOptions) => ({
+          ...prevOptions,
+          channel: authCtx.teamID,
+          token: data.token,
+        }));
+      });
+  }, []);
 
   const joinCall = async function () {
     // Join an RTC channel.
@@ -246,19 +276,16 @@ function DragDrop() {
     console.log("leave Success");
   };
 
-  const [roomUsers, setRoomUsers] = useState([
-    { id: "", username: "", room: "", email: "", photoURL: "" },
-  ]);
+  const handRaise = () => {
+    socket.emit("handraise", "fp");
+    setisHandRaised(true);
+  };
 
-  const [roomData, setRoomData] = useState({
-    name: authCtx.name,
-    email: authCtx.emailid,
-    photoURL: authCtx.photoURL,
-    teamID: authCtx.teamID,
-  });
-  // "https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions"
+  const handDown = () => {
+    socket.emit("handdown", "fp");
+    setisHandRaised(false);
+  };
 
-  //useEffect to fetch questions
   useEffect(() => {
     fetch(
       `https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions?question=${
@@ -384,6 +411,8 @@ function DragDrop() {
     }
   };
 
+
+
   const deleteFinalPlaceHolder = (placeholderID) => {
     const deletedFinalList = finalList.map((list) => {
       if (list.id === placeholderID) {
@@ -395,7 +424,6 @@ function DragDrop() {
     socket.emit("update", deletedFinalList);
   };
   // {questionID:,teamID:,attempts:,responseEnvironment:{Zones:[{index:"",option:""}]}}
-
 
   const submitAnswerHandler = (event) => {
     event.preventDefault();
@@ -421,9 +449,12 @@ function DragDrop() {
         setScore((prevScore) => {
           return data.currentPoints;
         });
+        socket.emit('round2',{teamID:authCtx.teamID});
+        history.replace("/Submission");
       })
       .catch((err) => {
-        alert(err);
+        // alert(err);
+        history.replace('/Error')
       });
   };
   console.log("finalList", finalList);
@@ -440,12 +471,31 @@ function DragDrop() {
 
   return (
     <CardContext.Provider value={{}}>
-      <Nav expiryTimestamp={time} />
+      {/* <Nav expiryTimestamp={time} /> */}
+      <Nav/>
+      {isHandRaised ? (
+        <img
+          alt="handDown"
+          onClick={handDown}
+          className="hand"
+          src={handDownImg}
+        />
+      ) : (
+        <img alt="hand" onClick={handRaise} className="hand2" src={handImg} />
+      )}
+      {!isHandRaised ? (
+        <img alt="hand" onClick={handRaise} className="hand2" src={handImg} />
+      ) : (
+        <img
+          alt="handDown"
+          onClick={handDown}
+          className="hand"
+          src={handDownImg}
+        />
+      )}
       <div className="game-options">
-        {/* <h1>{score}</h1> */}
-        {/* <span className="attempts-left">ATTEMPTS LEFT: {4 - attempts}</span> */}
         {micMuted && (
-          <button className="game-microphone" onClick={joinCall}>
+          <button className="game-microphone2" onClick={joinCall}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -460,7 +510,7 @@ function DragDrop() {
           </button>
         )}
         {!micMuted && (
-          <button className="game-microphone" onClick={leaveCall}>
+          <button className="game-microphone2" onClick={leaveCall}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -474,9 +524,11 @@ function DragDrop() {
             </svg>
           </button>
         )}
-        <button className="game-submit" onClick={submitAnswerHandler}>
-          SUBMIT
-        </button>
+        {localStorage.getItem("leaderID") === authCtx.id ? (
+          <button className="game-submit" onClick={submitAnswerHandler}>
+            SUBMIT
+          </button>
+        ) : null}
       </div>
 
       <div className="dragdrop-main-container2">
@@ -535,7 +587,6 @@ function DragDrop() {
                 // emitUpdate={emitUpdate}
                 supermarketUpdated={supermarketUpdated}
                 deleteFinalPlaceHolder={deleteFinalPlaceHolder}
-                canDrop={placeholder.canDrop}
                 roomData={roomData}
                 finalList={finalList}
                 updateFinalPlaceHolder={updateFinalPlaceHolder}
@@ -549,20 +600,21 @@ function DragDrop() {
         </div>
         <div className="supermarket2-main-container">
           <div className="question-container">
-            <p className="question-instruction">{question.instruction}</p>
+            {/* <p className="question-instruction">{question.instruction}</p> */}
+            <p className="question-instruction2">Arrange the </p>
           </div>
-          <div className="question-item-set">
+          <div className="question-item-set2">
             {supermarketUpdated.map((item, index) => {
-                return (
-                  <div className={`question-item2${index}`}>
-                    <SupermarketDrag
-                      name={item.name}
-                      id={item.id}
-                      key={item.id}
-                    />
-                  </div>
-                );
-              })}
+              return (
+                <div className={`question-item2${index}`}>
+                  <SupermarketDrag
+                    name={item.name}
+                    id={item.id}
+                    key={item.id}
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

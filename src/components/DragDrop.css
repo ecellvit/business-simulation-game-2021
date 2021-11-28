@@ -160,7 +160,8 @@
 .question-item0 {
   position: absolute;
   border-radius: 5px;
-  width: 47%;
+  width: 85%;
+  left: 30px;
   height: 60px;
   padding: 1px 0;
   border: 0.5px solid black;
@@ -197,6 +198,7 @@
   right: 0.2%;
   top: 80px;
 }
+
 .question-item0:hover {
   background-color: #40444c;
   color: white;
@@ -254,7 +256,7 @@
   position: absolute;
   font-weight: bold;
   top: 0.1vh;
-  right: 4.2%;
+  right: 12.2%;
   height: 6vh;
   width: 7vw;
   border-radius: 10px;
@@ -288,7 +290,7 @@
   position: absolute;
   font-weight: bold;
   top: 0.1vh;
-  right: 12.2%;
+  right: 0;
   height: 6vh;
   width: 7vw;
   border-radius: 10px;
