@@ -49,14 +49,23 @@ function TeamDisplay(props) {
   // http://127.0.0.1:2000/api/public/getUserTeam?userID=${authCtx.id}
   // https://futurepreneursbackend.herokuapp.com/api/public/getUserTeam?userID=${authCtx.id}
 
+  // ?userID=${
+  //   authCtx.id === undefined ? "61a3f2eeb151d2972b2ad1e7" : authCtx.id
+  // }
   useEffect(() => {
-    fetch(`https://futurepreneursbackend.herokuapp.com/api/public/getUserTeam?userID=${authCtx.id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    })
+    fetch(
+      `https://futurepreneursbackend.herokuapp.com/api/public/getUserTeam`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          userID: authCtx.id === null ? "61a3f2eeb151d2972b2ad1e7" : authCtx.id,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    )
       .then((response) => {
         if (response.status === 400) {
           history.replace("/Error");

@@ -50,10 +50,28 @@ function DashBoard() {
       sethasCompleted2(true);
     }
   };
-
+  
+  console.log("is authCtx.id null?",authCtx.id===null);
+  // ?userID=${authCtx.id}
   useEffect(() => {
-    fetch(`https://futurepreneursbackend.herokuapp.com/api/public/hasTeam?userID=${authCtx.id}`)
-      .then((response) => response.json())
+    fetch(
+      `https://futurepreneursbackend.herokuapp.com/api/public/hasTeam`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          userID: authCtx.id === null ? "61a3f2eeb151d2972b2ad1e7" : authCtx.id,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => {
+        if (response.status === 400) {
+          history.replace("/Error");
+        }
+        return response.json();
+      })
       .then((data) => {
         setHasTeam(data);
         setShowTeam(true);

@@ -81,7 +81,7 @@ function Login() {
     })
       .then((response) => {
         if (response.status === 300) {
-          console.log("erorrrr")
+          // console.log("erorrrr")
           history.replace("/Error");
         }
         return response.json();
