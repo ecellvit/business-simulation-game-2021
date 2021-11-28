@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Route, Switch, useLocation,useHistory } from "react-router-dom";
+import { Route, Switch, useLocation, useHistory } from "react-router-dom";
 import { io } from "socket.io-client";
 import AgoraRTC from "agora-rtc-react";
 import AuthContext from "../store/auth-context";
@@ -199,7 +199,7 @@ function DragDrop() {
   //     id: 15,
   //   },
   // ]);
-  
+
   const [attempts, setAttempts] = useState(1);
 
   const [currQuestionPointer, setcurrQuestionPointer] = useState(0);
@@ -411,8 +411,6 @@ function DragDrop() {
     }
   };
 
-
-
   const deleteFinalPlaceHolder = (placeholderID) => {
     const deletedFinalList = finalList.map((list) => {
       if (list.id === placeholderID) {
@@ -427,34 +425,31 @@ function DragDrop() {
 
   const submitAnswerHandler = (event) => {
     event.preventDefault();
-    fetch(
-      "https://futurepreneursbackend.herokuapp.com/api/roundTwo/submitResponse",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          teamID: authCtx.teamID,
+    fetch("https://futurepreneursbackend.herokuapp.com/api/roundTwo/submitResponse", {
+      method: "POST",
+      body: JSON.stringify({
+        teamID: authCtx.teamID,
 
-          Zones: finalList.map((element) => {
-            console.log({ option: element.item.name, index: element.id });
-            return { option: element.item.name, index: element.id };
-          }),
+        Zones: finalList.map((element) => {
+          console.log({ option: element.item.name, index: element.id });
+          return { option: element.item.name, index: element.id };
         }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         setScore((prevScore) => {
           return data.currentPoints;
         });
-        socket.emit('round2',{teamID:authCtx.teamID});
+        socket.emit("round2", { teamID: authCtx.teamID });
         history.replace("/Submission");
       })
       .catch((err) => {
         // alert(err);
-        history.replace('/Error')
+        history.replace("/Error");
       });
   };
   console.log("finalList", finalList);
@@ -472,7 +467,7 @@ function DragDrop() {
   return (
     <CardContext.Provider value={{}}>
       {/* <Nav expiryTimestamp={time} /> */}
-      <Nav/>
+      <Nav />
       {isHandRaised ? (
         <img
           alt="handDown"
@@ -601,7 +596,13 @@ function DragDrop() {
         <div className="supermarket2-main-container">
           <div className="question-container">
             {/* <p className="question-instruction">{question.instruction}</p> */}
-            <p className="question-instruction2">Arrange the </p>
+            <p className="question-instruction2">Rules</p>
+            <p className="questions-rules2">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Itaque
+              odio distinctio, non ab iusto nesciunt officiis voluptatibus
+              officia ex veniam aperiam eaque voluptas omnis consequatur
+              perspiciatis quidem natus error dolore.
+            </p>
           </div>
           <div className="question-item-set2">
             {supermarketUpdated.map((item, index) => {

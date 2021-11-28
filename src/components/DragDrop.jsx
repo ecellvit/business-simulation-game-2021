@@ -406,7 +406,7 @@ function DragDrop() {
         setItems((preItem) => {
           return data.Options;
         });
-        console.log(data.Options);
+        console.log("data",data.Options);
         setsupermarketUpdated((prevSupermarketUpdated) => {
           return prevSupermarketUpdated.map((SupermarketItem) => {
             return {
@@ -435,7 +435,7 @@ function DragDrop() {
     socket.emit("joinRoom", roomData);
     socket.on("goNext", () => {
       setcurrQuestionPointer((prevPointer) => {
-        if (prevPointer < 6) {
+        if (prevPointer < 5) {
           prevPointer = prevPointer + 1;
           setAttempts((prevAttempt) => 1);
           return prevPointer;
@@ -481,7 +481,7 @@ function DragDrop() {
         setcurrQuestionPointer(data.RoundOneAttemptedQuestions.length);
       })
       .catch((err) => {
-        history.replace("/error");
+        console.log(err)
       });
   }, []);
 
@@ -547,7 +547,7 @@ function DragDrop() {
   const nextQuestionHandler = () => {
     socket.emit("nextQuestion", "nextques");
     setcurrQuestionPointer((prevPointer) => {
-      if (prevPointer < 6) {
+      if (prevPointer < 5) {
         prevPointer = prevPointer + 1;
         setAttempts((prevAttempt) => 1);
         console.log("prevPointer", prevPointer);

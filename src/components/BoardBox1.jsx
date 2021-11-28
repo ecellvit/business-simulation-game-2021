@@ -11,27 +11,27 @@ const BoardBox1 = (props) => {
   const [supermarketReceived, setSupermarketReceived] = useState([
     {
       name: "Fresh Produce",
-      id: 1,
+      id: 6,
     },
     {
       name: "Tea",
-      id: 2,
+      id: 1,
     },
     {
       name: "Restaurant",
-      id: 3,
+      id: 2,
     },
     {
       name: "Kids Section",
-      id: 4,
+      id: 3,
     },
     {
       name: "Essentials Section",
-      id: 5,
+      id: 4,
     },
     {
       name: "Impulse buys Section",
-      id: 6,
+      id: 5,
     },
   ]);
   const [returnedItem, setReturnedItem] = useState([

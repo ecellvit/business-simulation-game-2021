@@ -1,13 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "../../store/auth-context";
 import "./DashBoard.css";
-
-
+import { useHistory } from "react-router";
 import crown from "../../resources/images/crown.svg";
 import Thanks from "./Thanks";
 
 function Member(props) {
-  // console.log(props.name);
+  console.log(props.name);
+  console.log(props.teamData);
   return (
     <p className="tname">{`${TrimName(
       props.teamData.Members[props.name].User.name
@@ -37,6 +37,7 @@ function TrimName(name) {
   }
 }
 function TeamDisplay(props) {
+  const history = useHistory();
   const [teamData, setTeamData] = useState({
     TeamName: "",
     Leader: { User: { name: "", photoURL: "", _id: "" } },
@@ -49,10 +50,19 @@ function TeamDisplay(props) {
   // https://futurepreneursbackend.herokuapp.com/api/public/getUserTeam?userID=${authCtx.id}
 
   useEffect(() => {
-    fetch(
-      `https://futurepreneursbackend.herokuapp.com/api/public/getUserTeam?userID=${authCtx.id}`
-    )
-      .then((response) => response.json())
+    fetch(`https://futurepreneursbackend.herokuapp.com/api/public/getUserTeam?userID=${authCtx.id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    })
+      .then((response) => {
+        if (response.status === 400) {
+          history.replace("/Error");
+        }
+        return response.json();
+      })
       .then((data) => {
         console.log("teamData", data);
         setTeamData(data);
@@ -63,15 +73,14 @@ function TeamDisplay(props) {
         props.roundOneCompleted(
           data.RoundOneAttempted && !data.RoundTwoAttempted
         );
-        console.log(data.RoundOneAttempted)
-        props.roundTwoCompleted(
-          data.RoundTwoAttempted
-        )
+        console.log(data.RoundOneAttempted);
+        props.roundTwoCompleted(data.RoundTwoAttempted);
         setNumOfMembers(data.Members.length);
         // console.log(data.Members.length);
         setShowTeamDetails(true);
         authCtx.setTeam(data._id);
-      });
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
@@ -107,7 +116,9 @@ function TeamDisplay(props) {
               <MemberPhoto teamData={teamData} name={3} />
               <Member teamData={teamData} name={3} />
             </div>
-          ) : <div>IIII</div>}
+          ) : (
+            <div>IIII</div>
+          )}
         </div>
       )}
 

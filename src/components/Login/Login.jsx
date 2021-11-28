@@ -9,7 +9,6 @@ import illus from "../../resources/images/Group.svg";
 import useMeasure from "react-use-measure";
 import "./Login.css";
 
-
 import { Nav } from "../nav";
 
 function Login() {
@@ -25,7 +24,7 @@ function Login() {
   });
 
   const authCtx = useContext(AuthContext);
-  
+
   const onLoginSuccess = (response) => {
     const uid = Math.floor(Math.random() * 202123);
     setisLoggedInGoogle(true);
@@ -76,10 +75,15 @@ function Login() {
   const sendUserData = function () {
     fetch("https://futurepreneursbackend.herokuapp.com/api/public/createUser", {
       method: "POST",
+      // mode: 'no-cors',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),
     })
       .then((response) => {
+        if (response.status === 300) {
+          console.log("erorrrr")
+          history.replace("/Error");
+        }
         return response.json();
       })
       .then((data) => {
@@ -92,8 +96,8 @@ function Login() {
         );
       })
       .catch((err) => {
-        // console.log(err);
-        history.replace('/Error')
+        console.log(err);
+        history.replace("/Error");
       });
   };
 
@@ -133,7 +137,6 @@ function Login() {
             onClick={sendUserData}
             style={{ color: "white", textDecoration: "none" }}
           >
-            
             <button type="button" className="button__main">
               <p className="buttondesc__main">Let Me In</p>
             </button>
