@@ -441,7 +441,7 @@ function DragDrop() {
           return prevPointer;
         } else {
           // console.log(prevPointer);
-          socket.emit('round1',{teamID:authCtx.teamID});
+          socket.emit("round1", { teamID: authCtx.teamID });
           history.replace("/Submission");
           return prevPointer;
         }
@@ -547,7 +547,7 @@ function DragDrop() {
   const nextQuestionHandler = () => {
     socket.emit("nextQuestion", "nextques");
     setcurrQuestionPointer((prevPointer) => {
-      if (prevPointer < 5) {
+      if (prevPointer < 6) {
         prevPointer = prevPointer + 1;
         setAttempts((prevAttempt) => 1);
         console.log("prevPointer", prevPointer);
@@ -607,7 +607,7 @@ function DragDrop() {
         socket.emit("attempts", {
           attempt: attempts + 1,
           currQuestion: currQuestionPointer,
-          teamID: authCtx.teamID
+          teamID: authCtx.teamID,
         });
         if (data.isCorrect || attempts === 3) {
           nextQuestionHandler();
@@ -786,11 +786,19 @@ function DragDrop() {
             <h2>Question {currQuestionPointer + 1}:</h2>
             <p className="question-instruction">{question.instruction}</p>
             <p className="question-rules">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam
-              accusamus nisi nemo blanditiis fugiat optio, molestias molestiae
-              facilis necessitatibus veritatis officia quod maxime. Totam dolore
-              dolorem ratione sapiente aspernatur accusantium.nemo blanditiis
-              fugiat optio, molestias molestiae
+              <p>
+                1. Be very careful about your moves because the number of
+                attempts matter.
+              </p>
+              <p>
+                2. Only the team leader can submit , others can see the
+                proceedings in real time.
+              </p>
+              <p>3. You have 6 questions and 15 mins in total. </p>
+              <p style={{margin:"0"}}>
+                4. Once Submitted/skipped , you can not go back to previous
+                question.
+              </p>
             </p>
             <div className="question-item-set">
               {supermarketUpdated.map((item, index) => {
