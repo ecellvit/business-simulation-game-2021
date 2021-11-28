@@ -64,12 +64,23 @@ const BoardBox1 = (props) => {
       id: "",
     },
   ]);
-  // console.log("returned Item",returnedItem);
+
+  const [placeHolderIds, setplaceHolderIds] = useState([
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+  ]);
+
   const [currItem, setCurrItem] = useState({ name: "", id: "" });
 
   useEffect(() => {
     props.socket.on("change", (data) => {
       setReturnedItem(data);
+      // console.log("returned item", data);
       // setBoard(()=>[])
     });
     // props.socket.on("change1", (id) => {
@@ -86,7 +97,8 @@ const BoardBox1 = (props) => {
         setCurrItem(item);
         sethasDropped(true);
         console.log(item.id);
-        props.socket.emit("update1", props.id);
+        // props.socket.emit("update1", props.id);
+        clearRemainingBoards(props.id);
         addItemToBoard(item.id);
       },
       collect: (monitor) => ({
@@ -97,16 +109,35 @@ const BoardBox1 = (props) => {
     [props.finalList]
   );
 
+  //useEffect for clearing placeholders
+  useEffect(() => {
+    //check in remaining placeholders and if exists clear placeholders in that only!
+    props.remainingPlaceHoldersIds.map((id) => {
+      // console.log("remove",props.id,id)
+      if (props.id === id) {
+        setBoard([]);
+      }
+    });
+  }, [props.remainingPlaceHoldersIds]);
+  const clearRemainingBoards = (id) => {
+    const remainingPlaceHolders = placeHolderIds.filter(
+      (id) => id !== props.id
+    );
+    props.setremainingPlaceHolderIds(remainingPlaceHolders);
+    props.setremainingPlaceHolderIdsMember(remainingPlaceHolders)
+  };
+
   const addItemToBoard = (id) => {
     const itemList = supermarketReceived.filter((itemInSupermarket) => {
       return id === itemInSupermarket.id;
     });
-    console.log("sentItem", itemList[0]);
+    // console.log("sentItem", itemList[0]);
     props.updateFinalPlaceHolder(props.id, itemList[0]);
     setBoard(() => [itemList[0]]);
   };
 
   const removeItemFromBoard = (id) => {
+    // console.log("id", id);
     sethasDropped(false);
     setBoard([]);
     props.deleteFinalPlaceHolder(id);

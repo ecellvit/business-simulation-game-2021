@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
-import { useTimer } from 'react-timer-hook';
+// import { useTimer } from 'react-timer-hook';
 
 import "./nav.css";
 
@@ -12,19 +12,19 @@ import ecellLogo from "../../resources/images/ecellLogoBlack.png";
 import AuthContext from "../../store/auth-context";
 
 export function Nav(props) {
-  const time = new Date();
-  time.setSeconds(time.getSeconds() + 600);
-  const {
-    seconds,
-    minutes,
-    hours,
-    days,
-    isRunning,
-    start,
-    pause,
-    resume,
-    restart,
-  } = useTimer({time, onExpire: () => console.warn('onExpire called') });
+  // const time = new Date();
+  // time.setSeconds(time.getSeconds() + 600);
+  // const {
+  //   seconds,
+  //   minutes,
+  //   hours,
+  //   days,
+  //   isRunning,
+  //   start,
+  //   pause,
+  //   resume,
+  //   restart,
+  // } = useTimer({time, onExpire: () => console.warn('onExpire called') });
   const history = useHistory();
   const authCtx = useContext(AuthContext);
 
@@ -48,7 +48,7 @@ export function Nav(props) {
             className="logosSection-item1"
             justifyContent="flex-start"
           >
-            <img src={fpLogo} alt={"FuturePreneurs Logo"} />
+            <Link to="/"><img style={{width:"80%"}} src={fpLogo} alt={"FuturePreneurs Logo"} /></Link>
           </Grid>
           <Grid
             item

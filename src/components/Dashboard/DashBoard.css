@@ -4,7 +4,7 @@
   background-size: cover;
   background-position: center;
   background-image: url("../../resources/images/bg-image.svg");
-  height: 85vh;
+  height: 120vh;
   position: relative;
 }
 .teamDetails {
@@ -22,11 +22,10 @@
   position: absolute;
   width: 62%;
   height: 54px;
-  /* left: 105px; */
   top: 36px;
   left: 20%;
   padding: 0px;
-  margin: 0%;
+  margin: 0% 5%;
   font-family: Poppins;
   font-style: normal;
   font-weight: bold;
@@ -41,7 +40,7 @@
   width: 253px;
   height: 75px;
   top: 99px;
-  left: 12%;
+  left: 24%;
   font-family: Karla;
   font-style: normal;
   font-weight: bold;
@@ -72,9 +71,9 @@
 .yteam {
   position: absolute;
   height: 54px;
-  left: 30%;
+  left: 20%;
   right: auto;
-  top: 35%;
+  top: 25%;
   font-style: normal;
   font-weight: bold;
   font-size: 120%;
@@ -99,12 +98,11 @@
 }
 
 .tbox {
-  position: absolute;
+  position: relative;
   width: 300%;
-  height: 75vh;
+  height: 100vh;
   left: 140%;
-  top: 5%;
-
+  bottom: 28%;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(30px);
   /* Note: backdrop-filter has minimal browser support */
@@ -135,9 +133,9 @@
   width: 209px;
   height: 54px;
   left: 5%;
-  margin: 0%;
+  margin: 0px;
   padding: 0px;
-  top: 120px;
+  top: 90px;
   font-family: Poppins;
   font-style: normal;
   font-weight: normal;
@@ -151,14 +149,13 @@
   width: 90%;
   height: 10%;
   left: 5%;
-  /* top: 180px; */
-  top: 40%;
+  top: 20%;
   font-family: Poppins;
   font-style: normal;
   font-weight: normal;
   font-size: 20px;
   line-height: 36px;
-
+  margin: 0px;
   color: #000000;
 }
 .stbtn {
@@ -166,7 +163,7 @@
   width: 25%;
   height: 74.99px;
   left: 70%;
-  bottom: 2%;
+  bottom: 1%;
   /* gd3 */
 
   background: linear-gradient(
@@ -198,7 +195,6 @@
   font-size: 24px;
   line-height: 36px;
   /* identical to box height */
-
   letter-spacing: 0.03em;
 
   color: #000000;

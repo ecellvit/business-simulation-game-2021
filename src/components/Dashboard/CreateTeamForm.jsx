@@ -1,8 +1,10 @@
 import React, { useContext, useRef } from "react";
+import {useHistory } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import "./DashBoard.css";
 
 function CreateTeamForm(props) {
+  const history = useHistory();
   // const [teamName, setTeamName] = useState("");
   const teamIdInputRef = useRef();
   const authCtx = useContext(AuthContext);
@@ -25,7 +27,8 @@ function CreateTeamForm(props) {
         console.log(teamNameValue, authCtx.id);
       })
       .catch((err) => {
-        alert(err);
+        // alert(err);
+        history.replace('/Error')
       });
     // props.refresh();
   };

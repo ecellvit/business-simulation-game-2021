@@ -7,7 +7,7 @@ import handImg from "../resources/images/hand.png";
 import handDownImg from "../resources/images/handDown.jpeg";
 import cashCounter from "../resources/images/cashCounter.jpg";
 import SupermarketDrag from "./SupermarketDrag";
-import arrow from "../resources/images/arrow2.png"
+import arrow from "../resources/images/arrow2.png";
 import BoardBox1 from "./BoardBox1";
 
 import { Placeholders } from "../custom/data";
@@ -53,8 +53,8 @@ function DragDrop() {
   const history = useHistory();
   const authCtx = useContext(AuthContext);
   const [score, setScore] = useState(0);
-  const time = new Date();
-  time.setSeconds(time.getSeconds() + 600);
+  // const time = new Date();
+  // time.setSeconds(time.getSeconds() + 600);
   const [micMuted, setMicMuted] = useState(true);
   const [isHandRaised, setisHandRaised] = useState(false);
   const [items, setItems] = useState(["", "", "", ""]);
@@ -95,6 +95,7 @@ function DragDrop() {
     //   id: 4,
     // },
   ]);
+
   const [attempts, setAttempts] = useState(1);
 
   const [currQuestionPointer, setcurrQuestionPointer] = useState(0);
@@ -120,6 +121,8 @@ function DragDrop() {
     { id: "six", item: { id: "", name: "" }, canDrop: "" },
     { id: "seven", item: { id: "", name: "" }, canDrop: "" },
   ]);
+
+  const [remainingPlaceHoldersIds, setremainingPlaceHolderIds] = useState([]);
 
   const [filteredFinalList, setFilteredFinalList] = useState([]);
 
@@ -380,6 +383,7 @@ function DragDrop() {
     email: authCtx.emailid,
     photoURL: authCtx.photoURL,
     teamID: authCtx.teamID,
+    type: "member",
   });
   // "https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions"
 
@@ -425,7 +429,7 @@ function DragDrop() {
   //useEffect for sockets
   useEffect(() => {
     socket.on("roomUsers", (data) => {
-      // console.log(data.users);
+      console.log("roomUsers", data);
       setRoomUsers(data.users);
     });
     socket.emit("joinRoom", roomData);
@@ -437,13 +441,17 @@ function DragDrop() {
           return prevPointer;
         } else {
           // console.log(prevPointer);
+          socket.emit('round1',{teamID:authCtx.teamID});
           history.replace("/Submission");
           return prevPointer;
         }
       });
     });
+    socket.on("receivedAttempts", (attempts) => {
+      setAttempts(attempts.attempt);
+    });
   }, [roomData]);
-
+  // console.log(roomUsers)
   //useEffect for canDrop property to finalList
   useEffect(() => {
     setFinalList((finalList) =>
@@ -471,6 +479,9 @@ function DragDrop() {
       .then((response) => response.json())
       .then((data) => {
         setcurrQuestionPointer(data.RoundOneAttemptedQuestions.length);
+      })
+      .catch((err) => {
+        history.replace("/error");
       });
   }, []);
 
@@ -530,12 +541,13 @@ function DragDrop() {
     setFinalList(deletedFinalList);
     socket.emit("update", deletedFinalList);
   };
+
   // {questionID:,teamID:,attempts:,responseEnvironment:{Zones:[{index:"",option:""}]}}
 
   const nextQuestionHandler = () => {
     socket.emit("nextQuestion", "nextques");
     setcurrQuestionPointer((prevPointer) => {
-      if (prevPointer < 6) {
+      if (prevPointer < 5) {
         prevPointer = prevPointer + 1;
         setAttempts((prevAttempt) => 1);
         console.log("prevPointer", prevPointer);
@@ -544,6 +556,23 @@ function DragDrop() {
         history.replace("/Submission");
         return prevPointer;
       }
+    });
+  };
+
+  const remainingPlaceHolderIds = (remainingPlaceHolderId) => {
+    setremainingPlaceHolderIds(remainingPlaceHolderId);
+  };
+
+  const setremainingPlaceHolderIdsMember = (remainingPlaceHolderId) => {
+    remainingPlaceHolderId.forEach((element) => {
+      const deletedFinalList = finalList.map((list) => {
+        if (list.id === element) {
+          list.item = { ...list.item, name: "" };
+        }
+        return list;
+      });
+      setFinalList(deletedFinalList);
+      socket.emit("update", deletedFinalList);
     });
   };
 
@@ -575,6 +604,11 @@ function DragDrop() {
       .then((response) => response.json())
       .then((data) => {
         setAttempts((prevAttempt) => prevAttempt + 1);
+        socket.emit("attempts", {
+          attempt: attempts + 1,
+          currQuestion: currQuestionPointer,
+          teamID: authCtx.teamID
+        });
         if (data.isCorrect || attempts === 3) {
           nextQuestionHandler();
         }
@@ -583,7 +617,8 @@ function DragDrop() {
         });
       })
       .catch((err) => {
-        alert(err);
+        // alert(err);
+        history.replace("/Error");
       });
   };
 
@@ -601,7 +636,8 @@ function DragDrop() {
 
   return (
     <CardContext.Provider value={{}}>
-      <Nav expiryTimestamp={time} />
+      {/* <Nav expiryTimestamp={time} /> */}
+      <Nav />
       {isHandRaised ? (
         <img
           alt="handDown"
@@ -624,7 +660,7 @@ function DragDrop() {
       )}
       <div className="game-options">
         <span className="attempts-left">ATTEMPTS LEFT: {4 - attempts}</span>
-        <span className="score">SCORE: {score}</span>
+        {/* <span className="score">SCORE: {score}</span> */}
         {micMuted && (
           <button className="game-microphone" onClick={joinCall}>
             <svg
@@ -655,12 +691,14 @@ function DragDrop() {
             </svg>
           </button>
         )}
-        <button className="game-submit" onClick={submitAnswerHandler}>
-          SUBMIT
-        </button>
-        <button className="game-skip" onClick={nextQuestionHandler}>
+        {authCtx.id === localStorage.getItem("leaderID") ? (
+          <button className="game-submit" onClick={submitAnswerHandler}>
+            SUBMIT
+          </button>
+        ) : null}
+        {/* <button className="game-skip" onClick={nextQuestionHandler}>
           SKIP
-        </button>
+        </button> */}
       </div>
 
       <div className="dragdrop-main-container">
@@ -724,6 +762,11 @@ function DragDrop() {
               <BoardBox1
                 socket={socket}
                 // emitUpdate={emitUpdate}
+                remainingPlaceHoldersIds={remainingPlaceHoldersIds}
+                setremainingPlaceHolderIdsMember={
+                  setremainingPlaceHolderIdsMember
+                }
+                setremainingPlaceHolderIds={remainingPlaceHolderIds}
                 supermarketUpdated={supermarketUpdated}
                 deleteFinalPlaceHolder={deleteFinalPlaceHolder}
                 canDrop={placeholder.canDrop}

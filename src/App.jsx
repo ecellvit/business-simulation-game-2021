@@ -14,6 +14,7 @@ import "./App.css";
 
 /* Pages */
 import { Landing } from "./pages/Landing";
+import Errorpage from "./components/Errorpage.jsx";
 // import { useViewport } from "./store/use-viewport.js";
 // import { Nav } from "./components/nav/Nav.jsx";
 
@@ -57,6 +58,9 @@ function App() {
         )}
         <Route path="/Submission" exact>
           <SubmissionPage />
+        </Route>
+        <Route path="/Error" exact>
+          <Errorpage />
         </Route>
         {/* <Route path="*">
           <Redirect to="/" />

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Route, Switch, useLocation } from "react-router-dom";
+import { Route, Switch, useLocation, useHistory } from "react-router-dom";
 
 import AuthContext from "../../store/auth-context";
 import CreateTeamForm from "./CreateTeamForm";
@@ -15,6 +15,7 @@ import ellipse from "../../resources/images/Ellipse7.svg";
 
 function DashBoard() {
   const location = useLocation();
+  const history = useHistory();
   const [hasStarted1, sethasStarted1] = useState(false);
   const [hasCompleted1, sethasCompleted1] = useState(false);
   const [hasCompleted2, sethasCompleted2] = useState(false);
@@ -45,7 +46,7 @@ function DashBoard() {
     }
   };
   const roundTwoCompleted = (hasCompleted) => {
-    console.log("in",hasCompleted)
+    console.log("in", hasCompleted);
     if (hasCompleted) {
       sethasCompleted2(true);
     }
@@ -60,36 +61,57 @@ function DashBoard() {
         setHasTeam(data);
         setShowTeam(true);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        // alert(err);
+        history.replace("/Error");
+      });
   }, []);
 
   return (
     <div>
       <Nav />
-      
-        <div style={{ color: "black" }} className="Dashboard__main--div">
-          <div class="teamDetails">
-            <p class="startTime">Starting In</p>
-            <p class="time">12:60:49</p>
-            <hr class="hr" />
 
-            <TeamDisplay
-              roundOneStarted={roundOneStarted}
-              roundOneCompleted={roundOneCompleted}
-              roundTwoCompleted={roundTwoCompleted}
-            />
+      <div style={{ color: "black" }} className="Dashboard__main--div">
+        <div class="teamDetails">
+          <p class="startTime">Starting In</p>
+          <p class="time">12:60:49</p>
+          <hr class="hr" />
 
-            {!hasCompleted2?<div class="tbox">
+          <TeamDisplay
+            roundOneStarted={roundOneStarted}
+            roundOneCompleted={roundOneCompleted}
+            roundTwoCompleted={roundTwoCompleted}
+          />
+
+          {!hasCompleted2 ? (
+            <div class="tbox">
               <p class="rhead">{hasCompleted1 ? "Round 1.2" : "Round 1.1"}</p>
               <p class="inst">Instructions</p>
               <p class="content">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
+                <p>
+                  You can see the floor-plan of the supermarket that you are
+                  managing. On the right you are given a list of sections that
+                  you have to arrange in the supermarket. You have to decide at
+                  which position a particular section will go, and place it
+                  there in order to achieve your target.
+                </p>
+                <p>
+                  1. You have to manually drag and drop a particular section in
+                  the empty slots on the map in the way you see fit.
+                </p>
+                <p>
+                  2. Be very careful about your moves because the number of
+                  attempts matter.
+                </p>
+                <p>
+                  3. Only the team leader can submit , others can see the
+                  proceedings in real time.
+                </p>
+                <p>4. You have 6 questions and 15 mins in total.</p>
+                <p>
+                  5. Once Submitted/skipped , you can not go back to previous
+                  question.
+                </p>
               </p>
               <p class="min">30 Mins</p>
               <Link to={hasCompleted1 ? "/Round2" : "/Round1"}>
@@ -97,34 +119,35 @@ function DashBoard() {
                   {hasStarted1 ? "Continue" : "Start"}
                 </button>
               </Link>
-              <input
+              {/* <input
                 class="elp"
                 type="image"
                 name="eli"
                 src={ellipse}
                 alt="text"
               ></input>
-              <img class="aro" src={arrow} alt=""></img>
-            </div>:null}
-          </div>
-          {/* <li className="">UserName: {authCtx.name}</li>
+              <img class="aro" src={arrow} alt=""></img> */}
+            </div>
+          ) : null}
+        </div>
+        {/* <li className="">UserName: {authCtx.name}</li>
       <li>Email: {authCtx.emailid}</li> */}
-          {/* <TeamDisplay /> */}
+        {/* <TeamDisplay /> */}
 
-          {/* <button
+        {/* <button
         onClick={checkTeamHandler}
         style={{ margin: "3% 50%", fontSize: "30px" }}
       >
         hasTeam
       </button> */}
-          {/* {!hasTeam && (
+        {/* {!hasTeam && (
         <div className="TeamListAndForm">
           <TeamList />
           <CreateTeamForm />
         </div>
       )} */}
-          {/* {hasTeam && showTeam && <TeamDisplay />} */}
-        </div>
+        {/* {hasTeam && showTeam && <TeamDisplay />} */}
+      </div>
     </div>
   );
 }

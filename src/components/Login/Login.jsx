@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import GoogleLogin from "react-google-login";
+import { useHistory } from "react-router-dom";
+
 // import { GoogleLogout } from "react-google-login";
 import { Link } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
@@ -7,9 +9,11 @@ import illus from "../../resources/images/Group.svg";
 import useMeasure from "react-use-measure";
 import "./Login.css";
 
+
 import { Nav } from "../nav";
 
 function Login() {
+  const history = useHistory();
   const [isLoggedInGoogle, setisLoggedInGoogle] = useState(false);
   const [showLoggedIn, setShowLoggedIn] = useState(true);
   const [showLoggedOut, setShowLoggedOut] = useState(false);
@@ -88,7 +92,8 @@ function Login() {
         );
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
+        history.replace('/Error')
       });
   };
 
