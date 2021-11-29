@@ -231,7 +231,8 @@
 }
 .question-item-set2 {
   position: relative;
-  height: 300px;
+  top: 15px;
+  height: 150px;
   overflow-y: scroll;
 }
 
@@ -391,7 +392,7 @@
   position: absolute;
   border-radius: 5px;
   left: 52%;
-  top: 380px;
+  top: 385px;
   width: 45%;
   height: 60px;
   /* padding: 1px 0; */
@@ -499,6 +500,6 @@
 .hand2 {
   width: 40px;
   position: absolute;
-  top: 125px;
-  right: 13%;
+  top: 175px;
+  left:4.5%;
 }

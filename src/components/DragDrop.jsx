@@ -493,6 +493,7 @@ function DragDrop() {
         return response.json();
       })
       .then((data) => {
+        authCtx.roundHandler(data.RoundOneAttempted,data.RoundTwoAttempted)
         setcurrQuestionPointer(data.RoundOneAttemptedQuestions.length);
       })
       .catch((err) => {
@@ -800,7 +801,7 @@ function DragDrop() {
           <div className="question-container">
             <h2>Question {currQuestionPointer + 1}:</h2>
             <p className="question-instruction">{question.instruction}</p>
-            <p className="question-rules">
+            <p className="question-rules scrollable-content-question">
               <p>
                 1. Be very careful about your moves because the number of
                 attempts matter.

@@ -12,6 +12,9 @@ const AuthContext = React.createContext({
   setTeam: (teamID) => {},
   teamID: "",
   locationChange: false,
+  round1Completed: false,
+  round2Completed: false,
+  roundHandler: (round1status, round2status) => {},
 });
 
 export const AuthContextProvider = (props) => {
@@ -29,6 +32,8 @@ export const AuthContextProvider = (props) => {
   const [userPhotoURL, setUserPhotoURL] = useState(initialPhotoURL);
   const [userTeamId, setTeamEmailId] = useState(initialTeamID);
   const [location, setLocation] = useState(false);
+  const [round1Completed, setround1Completed] = useState(false);
+  const [round2Completed, setround2Completed] = useState(false);
 
   const userIsLoggedIn = !!id;
   //note to myself(palani)---> !!id means converting the truthy or falsy value to a true or false boolean value
@@ -44,6 +49,12 @@ export const AuthContextProvider = (props) => {
     localStorage.setItem("email", userEmailId);
     localStorage.setItem("photoURL", userPhotoURL);
   };
+
+  const roundHandler = (round1status, round2status) => {
+    setround1Completed(round1status);
+    setround2Completed(round2status);
+  };
+
   const logoutHandler = () => {
     setId(null);
     // localStorage.removeItem("id");
@@ -68,6 +79,9 @@ export const AuthContextProvider = (props) => {
     teamID: userTeamId,
     photoURL: userPhotoURL,
     locationChange: location,
+    roundHandler: roundHandler,
+    round1Completed: round1Completed,
+    round2Completed: round2Completed,
   };
 
   return (

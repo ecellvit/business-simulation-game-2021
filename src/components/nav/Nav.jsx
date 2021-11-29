@@ -48,7 +48,13 @@ export function Nav(props) {
             className="logosSection-item1"
             justifyContent="flex-start"
           >
-            <Link to="/"><img style={{width:"80%"}} src={fpLogo} alt={"FuturePreneurs Logo"} /></Link>
+            <Link to="/">
+              <img
+                style={{ width: "80%" }}
+                src={fpLogo}
+                alt={"FuturePreneurs Logo"}
+              />
+            </Link>
           </Grid>
           <Grid
             item
@@ -82,9 +88,9 @@ export function Nav(props) {
               Business Simulation Game
             </Grid>
           </Grid>
-          <div style={{fontSize: '100px'}}>
-        {/* <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span> */}
-      </div>
+          <div style={{ fontSize: "100px" }}>
+            {/* <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span> */}
+          </div>
           <Grid
             container
             spacing={2}
@@ -114,7 +120,8 @@ export function Nav(props) {
                 </Link>
               </Grid>
             ) : null}
-            {authCtx.isLoggedIn && (
+            {(authCtx.isLoggedIn ||
+              localStorage.getItem("isGoogleLogin") === "yes") && (
               <Grid item>
                 <Grid
                   item

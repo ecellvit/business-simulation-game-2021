@@ -154,11 +154,12 @@
 
 .question-item-set {
   position: relative;
-  top: 50px;
+  top: 20px;
 }
 
 .question-item0 {
   position: absolute;
+  top: 0px;
   border-radius: 5px;
   width: 85%;
   left: 30px;
@@ -305,6 +306,10 @@
   background-color: grey;
   border: 0.01px solid black;
 }
+.scrollable-content-question{
+  height: 150px;
+  overflow-y: scroll;
+}
 .wall3 {
   position: absolute;
   bottom: 0%;
@@ -318,8 +323,8 @@
 .hand {
   width: 40px;
   position: absolute;
-  top: 125px;
-  right: 13%;
+  top: 175px;
+  left:4.5%;
 }
 
 .cashCounter {

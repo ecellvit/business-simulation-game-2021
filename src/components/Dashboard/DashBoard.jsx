@@ -3,16 +3,14 @@ import { Route, Switch, useLocation, useHistory } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import CreateTeamForm from "./CreateTeamForm";
 import { Link } from "react-router-dom";
-
+import fplogo from "../../resources/images/fpLogo.svg";
+import ecellLogo from "../../resources/images/ecellLogo.svg";
 import TeamList from "./TeamList";
 import TeamDisplay from "./TeamDisplay";
 import { Nav } from "../nav";
 import "./DashBoard.css";
 
-import arrow from "../../resources/images/arrow.svg";
-import ellipse from "../../resources/images/Ellipse7.svg";
-
-function DashBoard() {
+function DashBoard(props) {
   // const location = useLocation();
   const history = useHistory();
   const [hasStarted1, sethasStarted1] = useState(false);
@@ -44,28 +42,32 @@ function DashBoard() {
       sethasCompleted1(true);
     }
   };
+
+  // const justRoundOneCompleted = (hasCompleted)=>{
+  //   console.log("in1", hasCompleted);
+  //   if (hasCompleted) {
+  //     props.round1CompletedHandler(true);
+  //   }
+  // }
   const roundTwoCompleted = (hasCompleted) => {
-    console.log("in", hasCompleted);
+    console.log("in2", hasCompleted);
     if (hasCompleted) {
       sethasCompleted2(true);
+      // props.round2CompletedHandler(true);
     }
   };
-  
-  console.log("is authCtx.id null?",authCtx.id===null);
+
   // ?userID=${authCtx.id}
   useEffect(() => {
-    fetch(
-      `https://futurepreneursbackend.herokuapp.com/api/public/hasTeam`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          userID: authCtx.id === null ? "61a3f2eeb151d2972b2ad1e7" : authCtx.id,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch(`https://futurepreneursbackend.herokuapp.com/api/public/hasTeam`, {
+      method: "POST",
+      body: JSON.stringify({
+        userID: authCtx.id === null ? "61a3f2eeb151d2972b2ad1e7" : authCtx.id,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => {
         if (response.status === 400) {
           history.replace("/Error");
@@ -106,32 +108,60 @@ function DashBoard() {
               </p>
               <p className="inst">Instructions</p>
               <p className="content">
-                <div className="scrollable-content">
-                  <p>
-                    You can see the floor-plan of the supermarket that you are
-                    managing. On the right you are given a list of sections that
-                    you have to arrange in the supermarket. You have to decide
-                    at which position a particular section will go, and place it
-                    there in order to achieve your target.
-                  </p>
-                  <p>
-                    1. You have to manually drag and drop a particular section
-                    in the empty slots on the map in the way you see fit.
-                  </p>
-                  <p>
-                    2. Be very careful about your moves because the number of
-                    attempts matter.
-                  </p>
-                  <p>
-                    3. Only the team leader can submit , others can see the
-                    proceedings in real time.
-                  </p>
-                  <p>4. You have 6 questions and 15 mins in total.</p>
-                  <p>
-                    5. Once Submitted/skipped , you can not go back to previous
-                    question.
-                  </p>
-                </div>
+                {hasCompleted1 ? (
+                  <div className="scrollable-content">
+                    <p>
+                      Intelligent placement of products in the shelves is a
+                      determining factor. Now in your supermarket, There's a
+                      certain group of products which is left to be placed in
+                      the shelves.
+                    </p>
+                    <p>
+                      You have to arrange these products optimally on the
+                      shelves while considering various psychological and
+                      behavioural factors and maximising your profits.
+                    </p>
+                    <p>Some Instructions :</p>
+                    <p>
+                      1. One of these shelves is a 200 cm height (5 X 2 rack )
+                    </p>
+                    <p>2. Another one is a 200 cm (5 X 1 rack)</p>
+                    <p>3. They are placed 1 m apart from each other</p>
+                    <p>Demographics of town:</p>
+                    <p>
+                      Average Height of a 5 year old in the town is 70cm.
+                      Average height of women in the town is 150cm. Average
+                      height of men in the is 180cm.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="scrollable-content">
+                    <p>
+                      You can see the floor-plan of the supermarket that you are
+                      managing. On the right you are given a list of sections
+                      that you have to arrange in the supermarket. You have to
+                      decide at which position a particular section will go, and
+                      place it there in order to achieve your target.
+                    </p>
+                    <p>
+                      1. You have to manually drag and drop a particular section
+                      in the empty slots on the map in the way you see fit.
+                    </p>
+                    <p>
+                      2. Be very careful about your moves because the number of
+                      attempts matter.
+                    </p>
+                    <p>
+                      3. Only the team leader can submit , others can see the
+                      proceedings in real time.
+                    </p>
+                    <p>4. You have 6 questions and 15 mins in total.</p>
+                    <p>
+                      5. Once Submitted/skipped , you can not go back to
+                      previous question.
+                    </p>
+                  </div>
+                )}
               </p>
               <p className="min">30 Mins</p>
               <Link to={hasCompleted1 ? "/Round2" : "/Round1"}>
@@ -148,7 +178,19 @@ function DashBoard() {
               ></input>
               <img className="aro" src={arrow} alt=""></img> */}
             </div>
-          ) : null}
+          ) : (
+            <div className="tbox">
+              <p className="rhead">
+                <img className="fp__logo--dashboard" src={fplogo} alt="" />
+                <p className="thankyou">Thank you</p>
+                <p className="final__submission--dashboard">
+                  We are glad to have you today at FuturePreneurs 7.0, See you
+                  next time, you can logout now
+                </p>
+                <img className="ecell__logo--dashboard" src={ecellLogo} alt="" />
+              </p>
+            </div>
+          )}
         </div>
         {/* <li className="">UserName: {authCtx.name}</li>
       <li>Email: {authCtx.emailid}</li> */}
