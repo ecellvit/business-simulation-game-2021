@@ -83,7 +83,7 @@ function TeamDisplay(props) {
           data.RoundOneAttempted && !data.RoundTwoAttempted
         );
         // console.log(data.RoundOneAttempted,data.RoundTwoAttempted)
-        authCtx.roundHandler(data.RoundOneAttempted,data.RoundTwoAttempted)
+        authCtx.roundHandler(data.RoundOneAttempted, data.RoundTwoAttempted);
         // console.log(data.RoundOneAttempted);
         props.roundTwoCompleted(data.RoundTwoAttempted);
         setNumOfMembers(data.Members.length);
@@ -127,9 +127,7 @@ function TeamDisplay(props) {
               <MemberPhoto teamData={teamData} name={3} />
               <Member teamData={teamData} name={3} />
             </div>
-          ) : (
-            <div>IIII</div>
-          )}
+          ) : null}
         </div>
       )}
 
