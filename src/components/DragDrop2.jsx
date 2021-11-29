@@ -315,7 +315,38 @@ function DragDrop() {
       setRoomUsers(data.users);
     });
     socket.emit("joinRoom", roomData);
+    socket.on("roundTwoCompletion", (data) => {
+      history.replace("/Submission");
+    });
   }, [roomData]);
+
+  useEffect(() => {
+    fetch(
+      `https://futurepreneursbackend.herokuapp.com/api/public/getUserTeam`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          userID: authCtx.id === null ? "61a3f2eeb151d2972b2ad1e7" : authCtx.id,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    )
+      .then((response) => {
+        if (response.status === 400) {
+          history.replace("/Error");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        authCtx.roundHandler(data.RoundOneAttempted, data.RoundTwoAttempted);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const updateFinalPlaceHolder = (placeHolderID, itemList) => {
     if (placeHolderID === "one") {
@@ -425,20 +456,23 @@ function DragDrop() {
 
   const submitAnswerHandler = (event) => {
     event.preventDefault();
-    fetch("https://futurepreneursbackend.herokuapp.com/api/roundTwo/submitResponse", {
-      method: "POST",
-      body: JSON.stringify({
-        teamID: authCtx.teamID,
+    fetch(
+      "https://futurepreneursbackend.herokuapp.com/api/roundTwo/submitResponse",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          teamID: authCtx.teamID,
 
-        Zones: finalList.map((element) => {
-          console.log({ option: element.item.name, index: element.id });
-          return { option: element.item.name, index: element.id };
+          Zones: finalList.map((element) => {
+            console.log({ option: element.item.name, index: element.id });
+            return { option: element.item.name, index: element.id };
+          }),
         }),
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         setScore((prevScore) => {
@@ -597,11 +631,16 @@ function DragDrop() {
           <div className="question-container">
             {/* <p className="question-instruction">{question.instruction}</p> */}
             <p className="question-instruction2">Rules</p>
-            <p className="questions-rules2">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Itaque
-              odio distinctio, non ab iusto nesciunt officiis voluptatibus
-              officia ex veniam aperiam eaque voluptas omnis consequatur
-              perspiciatis quidem natus error dolore.
+            <p className="questions-rules2" style={{height:"180px",overflowY:"scroll"}}>
+              <p>
+                Your parents have given you some tips based their experience.
+              </p>
+              <p>1. Chocolate has good sales among both Adults and Kids.</p>
+              <p>2. Pencils and Board Games have least sales.</p>
+              <p>
+                3. Kitchen knives should not be placed in last 3 rows due to
+                safety concerns.
+              </p>
             </p>
           </div>
           <div className="question-item-set2">

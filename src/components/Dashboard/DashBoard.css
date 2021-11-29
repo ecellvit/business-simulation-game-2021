@@ -115,9 +115,9 @@
 .tbox {
   position: relative;
   width: 300%;
-  height: 75vh;
+  height: 90%;
   left: 140%;
-  bottom: 45%;
+  bottom: 52%;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(30px);
   /* Note: backdrop-filter has minimal browser support */
@@ -143,6 +143,51 @@
   /* identical to box height */
 
   color: #000000;
+}
+
+.thankyou {
+  color: rgba(0, 0, 0, 1);
+  font-family: Roboto;
+  font-size: 50px;
+  font-style: bold;
+  font-weight: 400;
+  line-height: 47px;
+  letter-spacing: 0.2em;
+  text-align: center;
+  margin: 20px 10px 10px 10px;
+}
+.fp__logo--dashboard {
+  height: 300px;
+  width: 250px;
+  left: 495px;
+  top: 176px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+.final__submission--dashboard {
+  color: rgba(129, 123, 123, 1);
+  font-family: Roboto;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 29px;
+  letter-spacing: 0em;
+  text-align: center;
+  margin-top: 7%;
+  width: 90%;
+}
+.ecell__logo--dashboard{
+  position: relative;
+  right: 10px;
+  height: 50px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
 }
 .inst {
   position: absolute;

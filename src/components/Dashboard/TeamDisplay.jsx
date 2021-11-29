@@ -82,7 +82,9 @@ function TeamDisplay(props) {
         props.roundOneCompleted(
           data.RoundOneAttempted && !data.RoundTwoAttempted
         );
-        console.log(data.RoundOneAttempted);
+        // console.log(data.RoundOneAttempted,data.RoundTwoAttempted)
+        authCtx.roundHandler(data.RoundOneAttempted,data.RoundTwoAttempted)
+        // console.log(data.RoundOneAttempted);
         props.roundTwoCompleted(data.RoundTwoAttempted);
         setNumOfMembers(data.Members.length);
         // console.log(data.Members.length);
