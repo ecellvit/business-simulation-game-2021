@@ -113,11 +113,11 @@
 }
 
 .tbox {
-  position: relative;
+  position: absolute;
   width: 300%;
   height: 90%;
   left: 140%;
-  bottom: 52%;
+  bottom: 5%;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(30px);
   /* Note: backdrop-filter has minimal browser support */
