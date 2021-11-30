@@ -119,7 +119,7 @@ function MyTimer({ expiryTimestamp ,nextQuestionHandler}) {
 function DragDrop() {
   const [isTimerOVer, setisTimerOVer] = useState(false);
   const time = new Date();
-  time.setSeconds(time.getSeconds() + 300); // 10 minutes timer
+  time.setSeconds(time.getSeconds() + 900); // 10 minutes timer
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const correctAnswer = () => {
