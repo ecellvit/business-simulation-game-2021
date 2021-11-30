@@ -22,7 +22,7 @@ const BoardBox1 = (props) => {
       id: 3,
     },
     {
-      name: "Tooth Pastes",
+      name: "Eyeliner",
       id: 4,
     },
     {
@@ -46,11 +46,11 @@ const BoardBox1 = (props) => {
       id: 9,
     },
     {
-      name: "Tooth Brushes",
+      name: "Eye Shadow",
       id: 10,
     },
     {
-      name: "Dark Chocolates",
+      name: "Chocolates",
       id: 11,
     },
     {
@@ -149,6 +149,7 @@ const BoardBox1 = (props) => {
         setCurrItem(item);
         sethasDropped(true);
         addItemToBoard(item.id);
+        props.setItemcantDrag(item.id);
       },
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
@@ -169,6 +170,7 @@ const BoardBox1 = (props) => {
     sethasDropped(false);
     setBoard([]);
     props.deleteFinalPlaceHolder(props.id);
+    props.setItemcanDrag(props.id)
   };
 
   return (
@@ -187,7 +189,9 @@ const BoardBox1 = (props) => {
       {hasDropped && board[0] ? (
         <div style={{ position: "absolute", right: "2px", bottom: "0px" }}>
           <IconButton
-            onClick={removeItemFromBoard}
+            onClick={() => {
+              removeItemFromBoard();
+            }}
             aria-label="delete"
             size="small"
             color="error"
@@ -200,13 +204,21 @@ const BoardBox1 = (props) => {
       {/* leader side */}
       {board.map((boardItem) => {
         return (
+          <p id={currItem.id} key={currItem.id}>
+            {currItem.name}
+          </p>
+        );
+      })}
+
+      {/* {board.map((boardItem) => {
+        return (
           <SupermarketDrag
             name={currItem.name}
             id={currItem.id}
             key={currItem.id}
           />
         );
-      })}
+      })} */}
 
       {/* members side */}
       {props.id === "one" ? (

@@ -142,6 +142,10 @@ const BoardBox1 = (props) => {
     setBoard([]);
     props.deleteFinalPlaceHolder(id);
   };
+
+  useEffect(() => {
+    removeItemFromBoard(props.id)
+  }, [props.currQuestionPointer])
   // console.log("board", board, props.id);
 
   return (

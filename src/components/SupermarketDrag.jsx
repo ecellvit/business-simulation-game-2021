@@ -1,4 +1,4 @@
-import React,{useState,useContext,useEffect} from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useDrag } from "react-dnd";
 import AuthContext from "../store/auth-context";
 
@@ -11,18 +11,31 @@ function SupermarketDrag(props) {
     }
   }, []);
 
-  const [{ isDragging }, drag] = useDrag({
+  const [{ isDragging, canDrag }, drag] = useDrag({
     type: type,
     item: { name: props.name, id: props.id },
+    canDrag: props.thisCanBeDragged,
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
+      canDrag: !!monitor.canDrag(),
     }),
   });
   return (
-    <div className="question-div">
+    <div
+      className="question-div"
+      style={{
+        color: props.color,
+      }}
+    >
       {!isDragging ? (
         <div ref={drag} style={{ cursor: "pointer" }}>
-          <p style={{color:props.color}}>{props.name}</p>
+          <p
+            style={{
+              color: props.color,
+            }}
+          >
+            {props.name}
+          </p>
         </div>
       ) : null}
     </div>

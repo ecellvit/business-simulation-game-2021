@@ -1,10 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Route, Switch, useLocation, useHistory } from "react-router-dom";
+import {
+  Route,
+  Switch,
+  useLocation,
+  Prompt,
+  useHistory,
+} from "react-router-dom";
+import { useTimer } from "react-timer-hook";
+import { useSnackbar } from "notistack";
 import { io } from "socket.io-client";
-import AgoraRTC from "agora-rtc-react";
 import AuthContext from "../store/auth-context";
-import handImg from "../resources/images/hand.png";
-import handDownImg from "../resources/images/handDown.jpeg";
 import cashCounter from "../resources/images/cashCounter.jpg";
 import SupermarketDrag from "./SupermarketDrag";
 import arrow from "../resources/images/arrow2.png";
@@ -22,37 +27,143 @@ export const CardContext = React.createContext({
 });
 
 // const socket = io("http://127.0.0.1:2000/");
-const socket = io("https://futurepreneursbackend.herokuapp.com");
 // const socket = io("https://127.0.0.1:2000/",{transports: ['websocket']});
 
-let rtc = {
-  localAudioTrack: null,
-  client: null,
-};
+const socket = io("https://futurepreneursbackend.herokuapp.com");
 
-async function startBasicCall() {
-  rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+// let rtc = {
+//   localAudioTrack: null,
+//   client: null,
+// };
 
-  rtc.client.on("user-published", async (user, mediaType) => {
-    await rtc.client.subscribe(user, mediaType);
-    console.log("subscribe success");
+// async function startBasicCall() {
+//   rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
-    if (mediaType === "audio") {
-      const remoteAudioTrack = user.audioTrack;
-      // Play the remote audio track.
-      remoteAudioTrack.play();
-    }
-    rtc.client.on("user-unpublished", async (user) => {
-      await rtc.client.unsubscribe(user);
+//   rtc.client.on("user-published", async (user, mediaType) => {
+//     await rtc.client.subscribe(user, mediaType);
+//     console.log("subscribe success");
+
+//     if (mediaType === "audio") {
+//       const remoteAudioTrack = user.audioTrack;
+//       // Play the remote audio track.
+//       remoteAudioTrack.play();
+//     }
+//     rtc.client.on("user-unpublished", async (user) => {
+//       await rtc.client.unsubscribe(user);
+//     });
+//   });
+// }
+// startBasicCall();
+
+function MyTimer({ expiryTimestamp ,nextQuestionHandler}) {
+  const authCtx = useContext(AuthContext);
+  const history = useHistory();
+  const { seconds, minutes, isRunning, start, pause, resume, restart } =
+    useTimer({
+      expiryTimestamp,
+      onExpire: () => {
+        fetch(
+          `https://futurepreneursbackend.herokuapp.com/api/RoundOne/finishRoundOne`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              teamID: authCtx.teamID,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          }
+        )
+          .then((response) => {
+            if (response.status === 400) {
+              history.replace("/Error");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+            if (data) {
+              history.replace("/Submission")
+              socket.emit('timerOver','sdfaf')
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      },
     });
-  });
+  return (
+    <div style={{ textAlign: "center", position: "absolute", left: "600px" }}>
+      <div style={{ fontSize: "30px" }} className="timer">
+        <span>{minutes}</span>:<span>{seconds}</span>
+      </div>
+      {/* <p>{isRunning ? "Running" : "Not running"}</p> */}
+      {/* <button onClick={start}>Start</button>
+      <button onClick={pause}>Pause</button>
+      <button onClick={resume}>Resume</button> */}
+      {/* <button
+        onClick={() => {
+          // Restarts to 5 minutes timer
+          const time = new Date();
+          time.setSeconds(time.getSeconds() + 300);
+          restart(time);
+        }}
+      >
+        Restart
+      </button> */}
+    </div>
+  );
 }
-startBasicCall();
 
 function DragDrop() {
+  const [isTimerOVer, setisTimerOVer] = useState(false);
+  const time = new Date();
+  time.setSeconds(time.getSeconds() + 300); // 10 minutes timer
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const correctAnswer = () => {
+    enqueueSnackbar("Bingo, you got it!", {
+      variant: "success",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
+      },
+    });
+  };
+
+  const wrongAttempt = () => {
+    enqueueSnackbar("Oops, wrong one!", {
+      variant: "error",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
+      },
+    });
+  };
+  const userJoined = (user) => {
+    enqueueSnackbar(`${user.username} has joined the game!`, {
+      variant: "info",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
+      },
+    });
+  };
+  const timeOver = (user) => {
+    enqueueSnackbar(`Time Over`, {
+      variant: "error",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
+      },
+    });
+  };
+
   const history = useHistory();
   const authCtx = useContext(AuthContext);
   const [score, setScore] = useState(0);
+  const [sockets, setSockets] = useState(false);
   // const time = new Date();
   // time.setSeconds(time.getSeconds() + 600);
   const [micMuted, setMicMuted] = useState(true);
@@ -64,7 +175,6 @@ function DragDrop() {
     instruction: "",
     options: [],
   });
-
   const [options, setOptions] = useState({
     // Pass your App ID here.
     appId: "583e53c6739745739d20fbb11ac8f0ef",
@@ -131,58 +241,58 @@ function DragDrop() {
   });
 
   //token generation
-  useEffect(() => {
-    // console.log("token details", authCtx.teamID, authCtx.uID);
-    fetch(
-      `https://futurepreneursbackend.herokuapp.com/api/voice/token?channel=${authCtx.teamID}&uid=${authCtx.uID}&role=publisher`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setOptions((prevOptions) => ({
-          ...prevOptions,
-          channel: authCtx.teamID,
-          token: data.token,
-        }));
-        // console.log("token", data.token);
-      });
-  }, []);
+  // useEffect(() => {
+  //   // console.log("token details", authCtx.teamID, authCtx.uID);
+  //   fetch(
+  //     `https://futurepreneursbackend.herokuapp.com/api/voice/token?channel=${authCtx.teamID}&uid=${authCtx.uID}&role=publisher`
+  //   )
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setOptions((prevOptions) => ({
+  //         ...prevOptions,
+  //         channel: authCtx.teamID,
+  //         token: data.token,
+  //       }));
+  //       // console.log("token", data.token);
+  //     });
+  // }, []);
 
-  const joinCall = async function () {
-    // Join an RTC channel.
-    // console.log("object", options.token);
-    await rtc.client.join(
-      options.appId,
-      options.channel,
-      options.token,
-      options.uid
-    );
-    // Create a local audio track from the audio sampled by a microphone.
-    rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-    // Publish the local audio tracks to the RTC channel.
-    await rtc.client.publish([rtc.localAudioTrack]);
-    setMicMuted(false);
-    console.log("publish success!");
-  };
+  // const joinCall = async function () {
+  //   // Join an RTC channel.
+  //   // console.log("object", options.token);
+  //   await rtc.client.join(
+  //     options.appId,
+  //     options.channel,
+  //     options.token,
+  //     options.uid
+  //   );
+  //   // Create a local audio track from the audio sampled by a microphone.
+  //   rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+  //   // Publish the local audio tracks to the RTC channel.
+  //   await rtc.client.publish([rtc.localAudioTrack]);
+  //   setMicMuted(false);
+  //   console.log("publish success!");
+  // };
 
-  const leaveCall = async function () {
-    // Destroy the local audio track.
-    rtc.localAudioTrack.close();
+  // const leaveCall = async function () {
+  //   // Destroy the local audio track.
+  //   rtc.localAudioTrack.close();
 
-    // Leave the channel.
-    await rtc.client.leave();
-    setMicMuted(true);
-    console.log("leave Success");
-  };
+  //   // Leave the channel.
+  //   await rtc.client.leave();
+  //   setMicMuted(true);
+  //   console.log("leave Success");
+  // };
 
-  const handRaise = () => {
-    socket.emit("handraise", "fp");
-    setisHandRaised(true);
-  };
+  // const handRaise = () => {
+  //   socket.emit("handraise", "fp");
+  //   setisHandRaised(true);
+  // };
 
-  const handDown = () => {
-    socket.emit("handdown", "fp");
-    setisHandRaised(false);
-  };
+  // const handDown = () => {
+  //   socket.emit("handdown", "fp");
+  //   setisHandRaised(false);
+  // };
 
   const addToCanDrop = (blocked, unblocked, { Zones }) => {
     console.log("object", blocked, unblocked, Zones);
@@ -431,7 +541,10 @@ function DragDrop() {
     socket.on("roomUsers", (data) => {
       console.log("roomUsers", data);
       setRoomUsers(data.users);
+      const len = data.users.length;
+      userJoined(data.users[len - 1]);
     });
+
     socket.emit("joinRoom", roomData);
     socket.on("goNext", () => {
       setcurrQuestionPointer((prevPointer) => {
@@ -447,11 +560,15 @@ function DragDrop() {
         }
       });
     });
+    socket.on('timerCompleted',()=>{
+      history.replace('/Submission')
+    })
     socket.on("receivedAttempts", (attempts) => {
       setAttempts(attempts.attempt);
     });
   }, [roomData]);
   // console.log(roomUsers)
+
   //useEffect for canDrop property to finalList
   useEffect(() => {
     setFinalList((finalList) =>
@@ -471,6 +588,31 @@ function DragDrop() {
     });
   }, [finalList]);
 
+  //disconnecting socket
+  // useEffect(
+  //   () =>
+  //     history.listen(() => {
+  //       const disconnect = async () => {
+  //         socket.disconnect();
+  //       };
+  //       disconnect();
+  //     }),
+  //   []
+  // );
+
+  // useEffect(() => {
+  //   const disconnect = async () => {
+  //     await socket.disconnect();
+  //   };
+  //   console.log("sockets",sockets,history)
+  //   if(sockets){
+  //     disconnect();
+  //   }else{
+  //     setSockets(true);
+  //   }
+  //   // console.log("history",history)
+  // }, [history.location.pathname]);
+
   //useEffect to check for user's current question
   useEffect(() => {
     fetch(
@@ -478,7 +620,7 @@ function DragDrop() {
       {
         method: "POST",
         body: JSON.stringify({
-          userID: authCtx.id === null ? "61a3f2eeb151d2972b2ad1e7" : authCtx.id,
+          userID: authCtx.id ? authCtx.id : "61a3f2eeb151d2972b2ad1e7",
         }),
         headers: {
           "Content-Type": "application/json",
@@ -493,7 +635,7 @@ function DragDrop() {
         return response.json();
       })
       .then((data) => {
-        authCtx.roundHandler(data.RoundOneAttempted,data.RoundTwoAttempted)
+        authCtx.roundHandler(data.RoundOneAttempted, data.RoundTwoAttempted);
         setcurrQuestionPointer(data.RoundOneAttemptedQuestions.length);
       })
       .catch((err) => {
@@ -545,6 +687,11 @@ function DragDrop() {
       setFinalList(() => [...newList]);
       socket.emit("update", newList);
     }
+    // const newList = finalList.map((x) =>
+    //   x.id === placeHolderID ? { ...x, item: itemList } : x
+    // );
+    // setFinalList(() => [...newList]);
+    // socket.emit("update", newList);
   };
 
   const deleteFinalPlaceHolder = (placeholderID) => {
@@ -557,6 +704,11 @@ function DragDrop() {
     setFinalList(deletedFinalList);
     socket.emit("update", deletedFinalList);
   };
+
+  useEffect(() => {
+    const set = ["one", "two", "three", "four", "five", "six", "seven"];
+    set.forEach((element) => {});
+  }, [currQuestionPointer]);
 
   // {questionID:,teamID:,attempts:,responseEnvironment:{Zones:[{index:"",option:""}]}}
 
@@ -592,8 +744,7 @@ function DragDrop() {
     });
   };
 
-  const submitAnswerHandler = (event) => {
-    event.preventDefault();
+  const submitAnswerHandler = () => {
     fetch(
       "https://futurepreneursbackend.herokuapp.com/api/RoundOne/submitResponse",
       {
@@ -626,7 +777,10 @@ function DragDrop() {
           teamID: authCtx.teamID,
         });
         if (data.isCorrect || attempts === 3) {
+          correctAnswer();
           nextQuestionHandler();
+        } else if (!data.isCorrect) {
+          wrongAttempt();
         }
         setScore((prevScore) => {
           return data.currentPoints;
@@ -637,7 +791,7 @@ function DragDrop() {
         history.replace("/Error");
       });
   };
-
+  console.log("timerOver", isTimerOVer);
   // console.log("finalList", finalList);
   // console.log("newfinalList", filteredFinalList);
 
@@ -649,12 +803,31 @@ function DragDrop() {
   //iscorrect false in 1st attempt-->give msg/prompt you are incorrect and attempt++
   //3rd attempt false-->answer wrong and setcurrQues++
   //3rd attempt true-->answer correct and setcurrQues++
+  const [dontgoback, setDontgoback] = useState(true);
+  useEffect(() => {
+    console.log(currQuestionPointer,"curr")
+    if(currQuestionPointer===3){
+      setDontgoback(false)
+    }
+  }, [currQuestionPointer])
 
   return (
     <CardContext.Provider value={{}}>
       {/* <Nav expiryTimestamp={time} /> */}
       <Nav />
-      {isHandRaised ? (
+      {/* <button onClick={handleClick}>Click</button> */}
+      <Prompt message="Don't Navigate Away" when={dontgoback} />
+      <div>
+        {authCtx.id === localStorage.getItem("leaderID") && (
+          <MyTimer
+            setisTimerOVer={setisTimerOVer}
+            nextQuestionHandler={nextQuestionHandler}
+            expiryTimestamp={time}
+            submitAnswerHandler={submitAnswerHandler}
+          />
+        )}
+      </div>
+      {/* {isHandRaised ? (
         <img
           alt="handDown"
           onClick={handDown}
@@ -673,40 +846,30 @@ function DragDrop() {
           className="hand"
           src={handDownImg}
         />
-      )}
+      )} */}
+      {/* <Button onClick={}>Open simple snackbar</Button>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={}
+        message="Note archived"
+        action={action}
+      /> */}
       <div className="game-options">
         <span className="attempts-left">ATTEMPTS LEFT: {4 - attempts}</span>
         {/* <span className="score">SCORE: {score}</span> */}
-        {micMuted && (
+
+        {/* {micMuted && (
           <button className="game-microphone" onClick={joinCall}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              fill="currentColor"
-              class="bi bi-mic-mute-fill"
-              viewBox="0 0 16 16"
-            >
-              <path d="M13 8c0 .564-.094 1.107-.266 1.613l-.814-.814A4.02 4.02 0 0 0 12 8V7a.5.5 0 0 1 1 0v1zm-5 4c.818 0 1.578-.245 2.212-.667l.718.719a4.973 4.973 0 0 1-2.43.923V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 1 0v1a4 4 0 0 0 4 4zm3-9v4.879L5.158 2.037A3.001 3.001 0 0 1 11 3z" />
-              <path d="M9.486 10.607 5 6.12V8a3 3 0 0 0 4.486 2.607zm-7.84-9.253 12 12 .708-.708-12-12-.708.708z" />
-            </svg>
+            Join Call
           </button>
         )}
         {!micMuted && (
           <button className="game-microphone" onClick={leaveCall}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              fill="currentColor"
-              class="bi bi-mic"
-              viewBox="0 0 16 16"
-            >
-              <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
-              <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
-            </svg>
+            End Call
           </button>
-        )}
+        )} */}
+
         {authCtx.id === localStorage.getItem("leaderID") ? (
           <button className="game-submit" onClick={submitAnswerHandler}>
             SUBMIT
@@ -763,6 +926,9 @@ function DragDrop() {
         <img src={arrow} alt="arrow1" className="arrow1" />
         <img src={arrow} alt="arrow2" className="arrow2" />
         <img src={arrow} alt="arrow3" className="arrow3" />
+        <p className="entry__text">Entry</p>
+        <p className="exit__text">Exit</p>
+        <p className="movieExit__text">Movie Exit</p>
         <div className="placeholders-main-container">
           <img src={cashCounter} alt="cashCounter" className="cashCounter" />
           <img
@@ -782,6 +948,7 @@ function DragDrop() {
                 setremainingPlaceHolderIdsMember={
                   setremainingPlaceHolderIdsMember
                 }
+                currQuestionPointer={currQuestionPointer}
                 setremainingPlaceHolderIds={remainingPlaceHolderIds}
                 supermarketUpdated={supermarketUpdated}
                 deleteFinalPlaceHolder={deleteFinalPlaceHolder}

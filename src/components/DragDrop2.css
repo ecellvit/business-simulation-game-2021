@@ -475,16 +475,15 @@
   left: 0.2vw;
   height: 30px;
   /* width: 7vw; */
-  border-radius: 100%;
   background: white;
   border: 2px solid rgba(76, 255, 116, 0.8);
   transition: 0.3s;
 }
-.game-submit {
-  position: absolute;
+.game-submit2 {
+  position: relative;
   font-weight: bold;
   top: 0.1vh;
-  right: 4.2%;
+  left: 89%;
   height: 6vh;
   width: 7vw;
   border-radius: 10px;
@@ -493,7 +492,7 @@
   /* transition: 0.4s; */
   color: white;
 }
-.game-submit:hover {
+.game-submit2:hover {
   background: black;
   color: white;
 }

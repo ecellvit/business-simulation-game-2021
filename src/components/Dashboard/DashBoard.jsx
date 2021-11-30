@@ -50,10 +50,8 @@ function DashBoard(props) {
   //   }
   // }
   const roundTwoCompleted = (hasCompleted) => {
-    console.log("in2", hasCompleted);
     if (hasCompleted) {
       sethasCompleted2(true);
-      // props.round2CompletedHandler(true);
     }
   };
 
