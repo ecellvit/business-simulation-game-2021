@@ -14,6 +14,7 @@ import "./DragDrop2.css";
 import { Nav } from "./nav";
 
 import supermarketBG2 from "../resources/images/bgImg2.png";
+import { ElevenMpSharp } from "@mui/icons-material";
 export const CardContext = React.createContext({
   finalList: [],
 });
@@ -49,66 +50,82 @@ function DragDrop() {
   const history = useHistory();
   const board = Placeholders2;
 
+  const [thisCanBeDragged, setThisCanBeDragged] = useState(true);
   const [supermarketUpdated, setSupermarketReceived] = useState([
     {
       name: "Erasers",
       id: 1,
+      thisItemCanBeDragged: thisCanBeDragged,
     },
     {
       name: "Shampoos",
       id: 2,
+      thisItemCanBeDragged: thisCanBeDragged,
     },
     {
       name: "Shaving Kits",
       id: 3,
+      thisItemCanBeDragged: thisCanBeDragged,
     },
     {
-      name: "Tooth Pastes",
+      name: "Eyeliner",
       id: 4,
+      thisItemCanBeDragged: thisCanBeDragged,
     },
     {
       name: "Crayons",
       id: 5,
+      thisItemCanBeDragged: thisCanBeDragged,
     },
     {
       name: "After Shave Kits",
       id: 6,
+      thisItemCanBeDragged: thisCanBeDragged,
     },
     {
       name: "Pencils",
       id: 7,
+      thisItemCanBeDragged: thisCanBeDragged,
     },
     {
       name: "Conditioners",
       id: 8,
+      thisItemCanBeDragged: thisCanBeDragged,
     },
     {
       name: "Sketch Books",
       id: 9,
+      thisItemCanBeDragged: thisCanBeDragged,
     },
     {
-      name: "Tooth Brushes",
+      name: "Eye Shadow",
       id: 10,
+      thisItemCanBeDragged: thisCanBeDragged,
     },
     {
-      name: "Dark Chocolates",
+      name: "Chocolates",
       id: 11,
+      thisItemCanBeDragged: thisCanBeDragged,
     },
     {
       name: "Barbie Dolls",
       id: 12,
+      thisItemCanBeDragged: thisCanBeDragged,
     },
     {
       name: "Kitchen Tools",
       id: 13,
+      thisItemCanBeDragged: thisCanBeDragged,
     },
     {
       name: "Trimmer",
       id: 14,
+      thisItemCanBeDragged: thisCanBeDragged,
     },
     {
       name: "Board Games",
       id: 15,
+      thisItemCanBeDragged: thisCanBeDragged,
     },
   ]);
   const authCtx = useContext(AuthContext);
@@ -205,21 +222,21 @@ function DragDrop() {
   const [currQuestionPointer, setcurrQuestionPointer] = useState(0);
 
   const [finalList, setFinalList] = useState([
-    { id: "one", item: { id: "", name: "" } },
-    { id: "two", item: { id: "", name: "" } },
-    { id: "three", item: { id: "", name: "" } },
-    { id: "four", item: { id: "", name: "" } },
-    { id: "five", item: { id: "", name: "" } },
-    { id: "six", item: { id: "", name: "" } },
-    { id: "seven", item: { id: "", name: "" } },
-    { id: "eight", item: { id: "", name: "" } },
-    { id: "nine", item: { id: "", name: "" } },
-    { id: "ten", item: { id: "", name: "" } },
-    { id: "eleven", item: { id: "", name: "" } },
-    { id: "twelve", item: { id: "", name: "" } },
-    { id: "thirteen", item: { id: "", name: "" } },
-    { id: "fourteen", item: { id: "", name: "" } },
-    { id: "fifteen", item: { id: "", name: "" } },
+    { id: "one", item: { id: "", name: "", thisItemCanBeDragged: true } },
+    { id: "two", item: { id: "", name: "", thisItemCanBeDragged: true } },
+    { id: "three", item: { id: "", name: "", thisItemCanBeDragged: true } },
+    { id: "four", item: { id: "", name: "", thisItemCanBeDragged: true } },
+    { id: "five", item: { id: "", name: "", thisItemCanBeDragged: true } },
+    { id: "six", item: { id: "", name: "", thisItemCanBeDragged: true } },
+    { id: "seven", item: { id: "", name: "", thisItemCanBeDragged: true } },
+    { id: "eight", item: { id: "", name: "", thisItemCanBeDragged: true } },
+    { id: "nine", item: { id: "", name: "", thisItemCanBeDragged: true } },
+    { id: "ten", item: { id: "", name: "", thisItemCanBeDragged: true } },
+    { id: "eleven", item: { id: "", name: "", thisItemCanBeDragged: true } },
+    { id: "twelve", item: { id: "", name: "", thisItemCanBeDragged: true } },
+    { id: "thirteen", item: { id: "", name: "", thisItemCanBeDragged: true } },
+    { id: "fourteen", item: { id: "", name: "", thisItemCanBeDragged: true } },
+    { id: "fifteen", item: { id: "", name: "", thisItemCanBeDragged: true } },
   ]);
 
   const [filteredFinalList, setFilteredFinalList] = useState([]);
@@ -249,6 +266,67 @@ function DragDrop() {
         }));
       });
   }, []);
+
+  useEffect(() => {
+    fetch(
+      `https://futurepreneursbackend.herokuapp.com/api/public/getUserTeam`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          userID: authCtx.id ? authCtx.id : "61a3f2eeb151d2972b2ad1e7",
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    )
+      .then((response) => {
+        if (response.status === 400) {
+          history.replace("/Error");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        authCtx.roundHandler(data.RoundOneAttempted, data.RoundTwoAttempted);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const setItemcantDrag = (id) => {
+    const newSuperMarketUpdated = supermarketUpdated.map((item) => {
+      if (item.id === id) {
+        // console.log("1",item.thisItemCanBeDragged);
+        return { ...item, thisItemCanBeDragged: false };
+      }
+    });
+    setSupermarketReceived((prevSupermarketUpdated) => {
+      prevSupermarketUpdated[id-1] = newSuperMarketUpdated[id - 1]
+      return prevSupermarketUpdated;
+    });
+  };
+  console.log(supermarketUpdated);
+  const setItemcanDrag = (id) => {
+    let redqID;
+    const deletedFinalListCanDrag = finalList.map((list) => {
+      if (list.id === id) {
+        redqID = list.item.id;
+      }
+      const newSuperMarketUpdated = supermarketUpdated.map((item) => {
+        if (item.id === redqID) {
+          return { ...item, thisItemCanBeDragged: true };
+        } else {
+          return item;
+        }
+      });
+      setSupermarketReceived(newSuperMarketUpdated);
+      return list;
+    });
+
+    setFinalList(deletedFinalListCanDrag);
+  };
 
   const joinCall = async function () {
     // Join an RTC channel.
@@ -486,8 +564,8 @@ function DragDrop() {
         history.replace("/Error");
       });
   };
-  console.log("finalList", finalList);
-  console.log("newfinalList", filteredFinalList);
+  // console.log("finalList", finalList);
+  // console.log("newfinalList", filteredFinalList);
 
   // const emitUpdate = () => {
   //   socket.emit("update", finalList);
@@ -502,7 +580,7 @@ function DragDrop() {
     <CardContext.Provider value={{}}>
       {/* <Nav expiryTimestamp={time} /> */}
       <Nav />
-      {isHandRaised ? (
+      {/* {isHandRaised ? (
         <img
           alt="handDown"
           onClick={handDown}
@@ -521,9 +599,9 @@ function DragDrop() {
           className="hand"
           src={handDownImg}
         />
-      )}
+      )} */}
       <div className="game-options">
-        {micMuted && (
+        {/* {micMuted && (
           <button className="game-microphone2" onClick={joinCall}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -552,9 +630,9 @@ function DragDrop() {
               <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
             </svg>
           </button>
-        )}
+        )} */}
         {localStorage.getItem("leaderID") === authCtx.id ? (
-          <button className="game-submit" onClick={submitAnswerHandler}>
+          <button className="game-submit2" onClick={submitAnswerHandler}>
             SUBMIT
           </button>
         ) : null}
@@ -612,7 +690,9 @@ function DragDrop() {
           {board.map((placeholder) => {
             return (
               <BoardBox2
+                setItemcantDrag={setItemcantDrag}
                 socket={socket}
+                setItemcanDrag={setItemcanDrag}
                 // emitUpdate={emitUpdate}
                 supermarketUpdated={supermarketUpdated}
                 deleteFinalPlaceHolder={deleteFinalPlaceHolder}
@@ -631,7 +711,10 @@ function DragDrop() {
           <div className="question-container">
             {/* <p className="question-instruction">{question.instruction}</p> */}
             <p className="question-instruction2">Rules</p>
-            <p className="questions-rules2" style={{height:"180px",overflowY:"scroll"}}>
+            <p
+              className="questions-rules2"
+              style={{ height: "180px", overflowY: "scroll" }}
+            >
               <p>
                 Your parents have given you some tips based their experience.
               </p>
@@ -648,6 +731,7 @@ function DragDrop() {
               return (
                 <div className={`question-item2${index}`}>
                   <SupermarketDrag
+                    thisCanBeDragged={item.thisItemCanBeDragged}
                     name={item.name}
                     id={item.id}
                     key={item.id}

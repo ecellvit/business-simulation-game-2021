@@ -51,8 +51,7 @@ function App() {
 
         {authCtx.isLoggedIn &&
           authCtx.teamID &&
-          authCtx.round2Completed === false &&
-          authCtx.round1Completed === true && (
+          authCtx.round2Completed === false && (
             <Route path="/Round2">
               <DndProvider backend={HTML5Backend}>
                 <div>

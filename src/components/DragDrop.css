@@ -267,13 +267,13 @@
 }
 .game-microphone {
   position: absolute;
+  padding: 0px 30px;
   font-weight: bold;
-  top: 10vh;
-  left: 0.5vw;
-
-  height: 30px;
+  top: 8%;
+  left: 1vw;
+  border-radius: 6px;
+  height: 40px;
   /* width: 7vw; */
-  border-radius: 100%;
   background: white;
   border: 2px solid rgba(76, 255, 116, 0.8);
   transition: 0.3s;
@@ -326,6 +326,35 @@
   top: 175px;
   left:4.5%;
 }
+.timer{
+  position: absolute;
+  font-weight: bold;
+  bottom: 10px;
+  left: 89%;
+  height: 6vh;
+  width: 7vw;
+  border-radius: 10px;
+  color: white;
+  background: #40444c;
+  border: 2px solid #40444c;
+}
+.game-submit {
+  position: absolute;
+  font-weight: bold;
+  top: 0.1vh;
+  left: 89%;
+  height: 6vh;
+  width: 7vw;
+  border-radius: 10px;
+  background: #40444c;
+  border: 2px solid #40444c;
+  /* transition: 0.4s; */
+  color: white;
+}
+.game-submit:hover {
+  background: black;
+  color: white;
+}
 
 .cashCounter {
   width: 20%;
@@ -362,4 +391,38 @@
   left: 48%;
   top: 82%;
   z-index: 1;
+}
+
+
+.entry__text{
+  position: absolute;
+  z-index: 1;
+  left: 295px;
+  bottom : 3%;
+  font-style: italic;
+  font-size: 20px;
+  color:  red;
+  font-weight: 800;
+  
+}
+.exit__text{
+  position: absolute;
+  z-index : 1;
+  font-style: italic;
+  font-size: 20px;
+  top : 88%;
+  color:  red;
+  font-weight: 800;
+  left: 49%;
+  
+}
+.movieExit__text{
+  position: absolute;
+  z-index : 1;
+  left : 340px;
+  top : 120px;
+  font-style: italic;
+  font-size: 20px;
+  color:  red;
+  font-weight: 800;
 }
