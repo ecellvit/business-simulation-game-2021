@@ -3,28 +3,27 @@ import fplogo from "../resources/images/fpLogo.svg";
 import ecellLogo from "../resources/images/ecellLogo.svg";
 import { Nav } from "./nav";
 import "./SubmissionPage.css";
+import { Link } from "react-router-dom";
 
-function Errorpage(props) {
+function ErrorPage() {
   return (
     <div>
       <Nav />
       <img className="fp__logo" src={fplogo} alt="" />
-      <p className="final__submission">
-        {props.error}
-      </p>
       <p className="thankyou__submission">Error!</p>
+      <div className="container">
+        <div className="back__dashboard--container">
+          <Link to="/Dashboard">
+            <button className="back__to--dashboard">Back to Dashboard</button>
+          </Link>
+        </div>
+      </div>
       <p className="final__submission">
-        Please click on the button to Login back
-      </p>
-      <p className="final__submission">
-        Please click on the button to go back to Dashboard
-      </p>
-      <p className="final__submission">
-        Please click on the button below to login back
+        Please try logging out and logging back in!
       </p>
       <img className="ecell__logo" src={ecellLogo} alt="" />
     </div>
   );
 }
 
-export default Errorpage;
+export default ErrorPage;

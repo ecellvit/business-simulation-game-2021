@@ -68,3 +68,9 @@
   background: black;
   color: white;
 }
+
+.containerError{
+  position: absolute;
+  bottom: 22vh;
+  left: 42.5%;
+}

@@ -3,8 +3,7 @@ import { Route, Switch, useLocation, useHistory } from "react-router-dom";
 import { io } from "socket.io-client";
 import AgoraRTC from "agora-rtc-react";
 import AuthContext from "../store/auth-context";
-import handImg from "../resources/images/hand.png";
-import handDownImg from "../resources/images/handDown.jpeg";
+import { useSnackbar } from "notistack";
 import SupermarketDrag from "./SupermarketDrag";
 import BoardBox2 from "./BoardBox2";
 
@@ -20,7 +19,7 @@ export const CardContext = React.createContext({
 });
 
 // const socket = io("http://127.0.0.1:2000/");
-const socket = io("https://futurepreneursbackend.herokuapp.com");
+let socket = io("https://futurepreneursbackend.herokuapp.com");
 
 let rtc = {
   localAudioTrack: null,
@@ -47,8 +46,19 @@ async function startBasicCall() {
 startBasicCall();
 
 function DragDrop() {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const history = useHistory();
   const board = Placeholders2;
+
+  const roundHasntStarted = () => {
+    enqueueSnackbar(`We haven't started now, please wait`, {
+      variant: "warning",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
+      },
+    });
+  };
 
   const [thisCanBeDragged, setThisCanBeDragged] = useState(true);
   const [supermarketUpdated, setSupermarketReceived] = useState([
@@ -135,23 +145,10 @@ function DragDrop() {
   const [micMuted, setMicMuted] = useState(true);
   const [isHandRaised, setisHandRaised] = useState(false);
   const [items, setItems] = useState(["", "", "", ""]);
-  // const {pathname} = useLocation();
   const [question, setQuestion] = useState({
     id: "",
     instruction: "",
     options: [],
-  });
-
-  const [options, setOptions] = useState({
-    // Pass your App ID here.
-    appId: "583e53c6739745739d20fbb11ac8f0ef",
-    // Set the channel name.
-    channel: "", //teamID
-    // Pass your temp token here.
-    token: "",
-    // "006583e53c6739745739d20fbb11ac8f0efIACLjOSOWphoCPS9d8v+ZvoU5wMg1G9yOwRcB/TUgN/RQAx+f9gAAAAAEACdnafAgkufYQEAAQCCS59h",
-    // Set the user ID.
-    uid: authCtx.uID,
   });
 
   // const [supermarketUpdated, setsupermarketUpdated] = useState([
@@ -217,9 +214,9 @@ function DragDrop() {
   //   },
   // ]);
 
-  const [attempts, setAttempts] = useState(1);
+  // const [attempts, setAttempts] = useState(1);
 
-  const [currQuestionPointer, setcurrQuestionPointer] = useState(0);
+  // const [currQuestionPointer, setcurrQuestionPointer] = useState(0);
 
   const [finalList, setFinalList] = useState([
     { id: "one", item: { id: "", name: "", thisItemCanBeDragged: true } },
@@ -239,7 +236,7 @@ function DragDrop() {
     { id: "fifteen", item: { id: "", name: "", thisItemCanBeDragged: true } },
   ]);
 
-  const [filteredFinalList, setFilteredFinalList] = useState([]);
+  // const [filteredFinalList, setFilteredFinalList] = useState([]);
 
   const [roomUsers, setRoomUsers] = useState([
     { id: "", username: "", room: "", email: "", photoURL: "" },
@@ -253,19 +250,19 @@ function DragDrop() {
   });
 
   // "https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions"
-  useEffect(() => {
-    fetch(
-      `https://futurepreneursbackend.herokuapp.com/api/voice/token?channel=${authCtx.teamID}&uid=${authCtx.uID}&role=publisher`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setOptions((prevOptions) => ({
-          ...prevOptions,
-          channel: authCtx.teamID,
-          token: data.token,
-        }));
-      });
-  }, []);
+  // useEffect(() => {
+  //   fetch(
+  //     `https://futurepreneursbackend.herokuapp.com/api/voice/token?channel=${authCtx.teamID}&uid=${authCtx.uID}&role=publisher`
+  //   )
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setOptions((prevOptions) => ({
+  //         ...prevOptions,
+  //         channel: authCtx.teamID,
+  //         token: data.token,
+  //       }));
+  //     });
+  // }, []);
 
   useEffect(() => {
     fetch(
@@ -328,68 +325,37 @@ function DragDrop() {
     setFinalList(deletedFinalListCanDrag);
   };
 
-  const joinCall = async function () {
-    // Join an RTC channel.
-    await rtc.client.join(
-      options.appId,
-      options.channel,
-      options.token,
-      options.uid
-    );
-    // Create a local audio track from the audio sampled by a microphone.
-    rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-    // Publish the local audio tracks to the RTC channel.
-    await rtc.client.publish([rtc.localAudioTrack]);
-    setMicMuted(false);
-    console.log("publish success!");
-  };
-
-  const leaveCall = async function () {
-    // Destroy the local audio track.
-    rtc.localAudioTrack.close();
-
-    // Leave the channel.
-    await rtc.client.leave();
-    setMicMuted(true);
-    console.log("leave Success");
-  };
-
-  const handRaise = () => {
-    socket.emit("handraise", "fp");
-    setisHandRaised(true);
-  };
-
-  const handDown = () => {
-    socket.emit("handdown", "fp");
-    setisHandRaised(false);
-  };
-
-  useEffect(() => {
-    fetch(
-      `https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions?question=${
-        currQuestionPointer + 1
-      }`
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setItems((preItem) => {
-          return data.Options;
-        });
-        setQuestion((prevQuestion) => {
-          return {
-            id: data._id,
-            instruction: data.Instruction,
-            options: data.Options,
-          };
-        });
-      });
-  }, [currQuestionPointer]);
+  // useEffect(() => {
+  //   fetch(
+  //     `https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions?question=${
+  //       currQuestionPointer + 1
+  //     }&teamID=${authCtx.teamID}`
+  //   )
+  //     .then((res) => {
+  //       return res.json();
+  //     })
+  //     .then((data) => {
+  //       setItems((preItem) => {
+  //         return data.Options;
+  //       });
+  //       setQuestion((prevQuestion) => {
+  //         return {
+  //           id: data._id,
+  //           instruction: data.Instruction,
+  //           options: data.Options,
+  //         };
+  //       });
+  //     });
+  // }, [currQuestionPointer]);
 
   //useEffect for sockets
   useEffect(() => {
+    if (socket.connected) {
+      socket.disconnect();
+      socket = io("https://futurepreneursbackend.herokuapp.com");
+    }
     socket.on("roomUsers", (data) => {
+      // console.log("roomUsers", data);
       setRoomUsers(data.users);
     });
     socket.emit("joinRoom", roomData);
@@ -425,6 +391,26 @@ function DragDrop() {
         console.log(err);
       });
   }, []);
+
+  useEffect(() => {
+    fetch(`https://futurepreneursbackend.herokuapp.com/`)
+      .then((response) => {
+        if (response.status === 400) {
+          history.replace("/Error");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if(!data.isRoundTwoOn){
+          roundHasntStarted("Round 1.2 hasn't started yet, try again soon!")
+          history.replace("/Dashboard");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
 
   const updateFinalPlaceHolder = (placeHolderID, itemList) => {
     if (placeHolderID === "one") {

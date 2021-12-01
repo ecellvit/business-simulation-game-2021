@@ -91,19 +91,35 @@ export function Nav(props) {
   const joinCall = async function () {
     // Join an RTC channel.
     // console.log("object", options.token);
-    await rtc.client.join(
-      options.appId,
-      options.channel,
-      options.token,
-      options.uid
-    );
-    // Create a local audio track from the audio sampled by a microphone.
-    rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-    // Publish the local audio tracks to the RTC channel.
-    await rtc.client.publish([rtc.localAudioTrack]);
-    setMicMuted(false);
-    localStorage.setItem("call", "connected");
-    console.log("publish success!");
+    // rtc.client.leaveCall();
+    try {
+      await rtc.client.join(
+        options.appId,
+        options.channel,
+        options.token,
+        options.uid
+      ).catch((e) => {
+        console.log(e);
+        console.log("Joining error");
+      });
+      // Create a local audio track from the audio sampled by a microphone.
+      rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack().catch((e) => {
+        console.log(e);
+        console.log("Mic error");
+      });
+      // Publish the local audio tracks to the RTC channel.
+      await rtc.client.publish([rtc.localAudioTrack]).catch((e) => {
+        console.log(e);
+        console.log("Publishing error");
+      });
+      setMicMuted(false);
+      localStorage.setItem("call", "connected");
+      console.log("publish success!");
+    }
+    catch(e){
+      console.log("Agora Error");
+      throw e;
+    }
   };
 
   const leaveCall = async function () {

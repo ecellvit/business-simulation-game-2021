@@ -90,12 +90,14 @@ function TeamDisplay(props) {
         // console.log(data.Members.length);
         setShowTeamDetails(true);
         authCtx.setTeam(data._id);
+        props.changeIsLoading();
       })
       .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("leaderID", teamData.Leader.User._id);
+    authCtx.leaderHandler(teamData.Leader.User._id)
+    // localStorage.setItem("leaderID", teamData.Leader.User._id);
   }, [teamData]);
 
   return (

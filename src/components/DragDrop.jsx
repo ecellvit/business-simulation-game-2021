@@ -14,13 +14,14 @@ import cashCounter from "../resources/images/cashCounter.jpg";
 import SupermarketDrag from "./SupermarketDrag";
 import arrow from "../resources/images/arrow2.png";
 import BoardBox1 from "./BoardBox1";
-
+import CountDown from "./Dashboard/CountDown";
 import { Placeholders } from "../custom/data";
 
 import "./DragDrop.css";
 import { Nav } from "./nav";
 
 import supermarketBG from "../resources/images/bgImg1.jpg";
+import { Calculate, MailOutlineSharp } from "@mui/icons-material";
 // import SubmissionPage from "./SubmissionPage";
 export const CardContext = React.createContext({
   finalList: [],
@@ -29,70 +30,63 @@ export const CardContext = React.createContext({
 // const socket = io("http://127.0.0.1:2000/");
 // const socket = io("https://127.0.0.1:2000/",{transports: ['websocket']});
 
-const socket = io("https://futurepreneursbackend.herokuapp.com");
+var socket = io("https://futurepreneursbackend.herokuapp.com");
 
-// let rtc = {
-//   localAudioTrack: null,
-//   client: null,
-// };
 
-// async function startBasicCall() {
-//   rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+function MyTimer({ expiryTimestamp, nextQuestionHandler }) {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-//   rtc.client.on("user-published", async (user, mediaType) => {
-//     await rtc.client.subscribe(user, mediaType);
-//     console.log("subscribe success");
-
-//     if (mediaType === "audio") {
-//       const remoteAudioTrack = user.audioTrack;
-//       // Play the remote audio track.
-//       remoteAudioTrack.play();
-//     }
-//     rtc.client.on("user-unpublished", async (user) => {
-//       await rtc.client.unsubscribe(user);
-//     });
-//   });
-// }
-// startBasicCall();
-
-function MyTimer({ expiryTimestamp ,nextQuestionHandler}) {
-  const authCtx = useContext(AuthContext);
-  const history = useHistory();
-  const { seconds, minutes, isRunning, start, pause, resume, restart } =
-    useTimer({
-      expiryTimestamp,
-      onExpire: () => {
-        fetch(
-          `https://futurepreneursbackend.herokuapp.com/api/RoundOne/finishRoundOne`,
-          {
-            method: "POST",
-            body: JSON.stringify({
-              teamID: authCtx.teamID,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-            },
-          }
-        )
-          .then((response) => {
-            if (response.status === 400) {
-              history.replace("/Error");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data);
-            if (data) {
-              history.replace("/Submission")
-              socket.emit('timerOver','sdfaf')
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+  const timeOver = (user) => {
+    enqueueSnackbar(`Time Over`, {
+      variant: "error",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
       },
     });
+  };
+  // console.log(expiryTimestamp,"in timer")
+  const authCtx = useContext(AuthContext);
+  const history = useHistory();
+  // useEffect(() => {
+  //   console.log(expiryTimestamp, "in timer");
+  // }, [expiryTimestamp]);
+
+  const { seconds, minutes } = useTimer({
+    expiryTimestamp,
+    onExpire: () => {
+      fetch(
+        `https://futurepreneursbackend.herokuapp.com/api/RoundOne/finishRoundOne`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            teamID: authCtx.teamID,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      )
+        .then((response) => {
+          if (response.status === 400) {
+            history.replace("/Error");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          if (data) {
+            timeOver();
+            history.replace("/Submission");
+            socket.emit("timerOver", "sdfaf");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  });
   return (
     <div style={{ textAlign: "center", position: "absolute", left: "600px" }}>
       <div style={{ fontSize: "30px" }} className="timer">
@@ -118,8 +112,54 @@ function MyTimer({ expiryTimestamp ,nextQuestionHandler}) {
 
 function DragDrop() {
   const [isTimerOVer, setisTimerOVer] = useState(false);
-  const time = new Date();
+  const authCtx = useContext(AuthContext);
+  const [expiryTimeStamp, setExpiryTimeStamp] = useState();
+  // const [currTime, setcurrTime] = useState(new Date());
+  const [isSubmitting, setisSubmitting] = useState(false);
+  const [newAttempt, setnewAttempt] = useState(() => {
+    fetch("");
+  });
+  // const [time, setTime] = useState(new Date().setSeconds(this.get));
+  let time = new Date();
   time.setSeconds(time.getSeconds() + 900); // 10 minutes timer
+  // console.log(time, "oldtime");
+
+  // useEffect(() => {
+  //   console.log(expiryTimeStamp, "expire");
+  // }, [expiryTimeStamp]);
+
+  // time = time.setSeconds(time.getSeconds() + 900); // This is the time allowed
+  // let saved_countdown = localStorage.getItem("saved_countdown");
+  // useEffect(() => {
+  //   if (saved_countdown == null) {
+  //     // Set the time we're counting down to using the time allowed
+  //     let new_countdown = new Date().getTime() + (time + 2) * 1000;
+
+  //     console.log(time,"new")
+  //     localStorage.setItem("saved_countdown", new_countdown);
+  //   } else {
+  //     time = saved_countdown;
+  //   }
+  // }, [input])
+
+  // // Update the count down every 1 second
+  // useEffect(() => {
+  //   const x = setInterval(() => {
+  //     let now = new Date().getTime();
+  //     // Find the distance between now and the allowed time
+  //     let distance = time - now;
+
+  //     // Time counter
+  //     let counter = Math.floor((distance % (1000 * 60)) / 1000);
+  //     console.log(counter)
+  //     // If the count down is over, write some text
+  //     if (counter <= 0) {
+  //       clearInterval(x);
+  //       localStorage.removeItem("saved_countdown");
+  //     }
+  //   }, 1000);
+  //   return () => clearInterval(x);
+  // }, []);
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const correctAnswer = () => {
@@ -150,9 +190,9 @@ function DragDrop() {
       },
     });
   };
-  const timeOver = (user) => {
-    enqueueSnackbar(`Time Over`, {
-      variant: "error",
+  const alreadySubmitted = (user) => {
+    enqueueSnackbar(`Wait,this question is already submitted!`, {
+      variant: "warning",
       anchorOrigin: {
         vertical: "bottom",
         horizontal: "right",
@@ -161,30 +201,17 @@ function DragDrop() {
   };
 
   const history = useHistory();
-  const authCtx = useContext(AuthContext);
   const [score, setScore] = useState(0);
   const [sockets, setSockets] = useState(false);
-  // const time = new Date();
-  // time.setSeconds(time.getSeconds() + 600);
   const [micMuted, setMicMuted] = useState(true);
+  const [minutes,setMinutes] = useState(1);
+  const [seconds,setSeconds] = useState(0);
   const [isHandRaised, setisHandRaised] = useState(false);
   const [items, setItems] = useState(["", "", "", ""]);
-  // const {pathname} = useLocation();
   const [question, setQuestion] = useState({
     id: "",
     instruction: "",
     options: [],
-  });
-  const [options, setOptions] = useState({
-    // Pass your App ID here.
-    appId: "583e53c6739745739d20fbb11ac8f0ef",
-    // Set the channel name.
-    channel: "", //teamID
-    // Pass your temp token here.
-    token: "",
-    // "006583e53c6739745739d20fbb11ac8f0efIACLjOSOWphoCPS9d8v+ZvoU5wMg1G9yOwRcB/TUgN/RQAx+f9gAAAAAEACdnafAgkufYQEAAQCCS59h",
-    // Set the user ID.
-    uid: authCtx.uID,
   });
 
   const [supermarketUpdated, setsupermarketUpdated] = useState([
@@ -222,6 +249,20 @@ function DragDrop() {
     },
   ]);
 
+  useEffect(() => {
+    setCanDrop([
+      {
+        0: { isDroppable: "yes", element: "" },
+        1: { isDroppable: "yes", element: "" },
+        2: { isDroppable: "yes", element: "" },
+        3: { isDroppable: "yes", element: "" },
+        4: { isDroppable: "yes", element: "" },
+        5: { isDroppable: "yes", element: "" },
+        6: { isDroppable: "yes", element: "" },
+      },
+    ]);
+  }, [currQuestionPointer]);
+
   const [finalList, setFinalList] = useState([
     { id: "one", item: { id: "", name: "" }, canDrop: "" },
     { id: "two", item: { id: "", name: "" }, canDrop: "" },
@@ -240,62 +281,8 @@ function DragDrop() {
     return { ...placeholder, canDrop: canDrop[0][i].isDroppable };
   });
 
-  //token generation
-  // useEffect(() => {
-  //   // console.log("token details", authCtx.teamID, authCtx.uID);
-  //   fetch(
-  //     `https://futurepreneursbackend.herokuapp.com/api/voice/token?channel=${authCtx.teamID}&uid=${authCtx.uID}&role=publisher`
-  //   )
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setOptions((prevOptions) => ({
-  //         ...prevOptions,
-  //         channel: authCtx.teamID,
-  //         token: data.token,
-  //       }));
-  //       // console.log("token", data.token);
-  //     });
-  // }, []);
-
-  // const joinCall = async function () {
-  //   // Join an RTC channel.
-  //   // console.log("object", options.token);
-  //   await rtc.client.join(
-  //     options.appId,
-  //     options.channel,
-  //     options.token,
-  //     options.uid
-  //   );
-  //   // Create a local audio track from the audio sampled by a microphone.
-  //   rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-  //   // Publish the local audio tracks to the RTC channel.
-  //   await rtc.client.publish([rtc.localAudioTrack]);
-  //   setMicMuted(false);
-  //   console.log("publish success!");
-  // };
-
-  // const leaveCall = async function () {
-  //   // Destroy the local audio track.
-  //   rtc.localAudioTrack.close();
-
-  //   // Leave the channel.
-  //   await rtc.client.leave();
-  //   setMicMuted(true);
-  //   console.log("leave Success");
-  // };
-
-  // const handRaise = () => {
-  //   socket.emit("handraise", "fp");
-  //   setisHandRaised(true);
-  // };
-
-  // const handDown = () => {
-  //   socket.emit("handdown", "fp");
-  //   setisHandRaised(false);
-  // };
-
   const addToCanDrop = (blocked, unblocked, { Zones }) => {
-    console.log("object", blocked, unblocked, Zones);
+    // console.log("object", blocked, unblocked, Zones);
 
     blocked.forEach((blockedPlaceHolder) => {
       if (blockedPlaceHolder === "one") {
@@ -495,49 +482,66 @@ function DragDrop() {
     teamID: authCtx.teamID,
     type: "member",
   });
-  // "https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions"
 
+  // "https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions"
   //useEffect to fetch questions
   useEffect(() => {
     fetch(
       `https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions?question=${
         currQuestionPointer + 1
-      }`
+      }&teamID=${authCtx.teamID}`
     )
       .then((res) => {
         return res.json();
       })
-      .then((data) => {
+      .then(({ question, timeStamp, attemptsLeft }) => {
         addToCanDrop(
-          data.BlockedZones,
-          data.UnblockedZones,
-          data.PrefixEnvironment
+          question.BlockedZones,
+          question.UnblockedZones,
+          question.PrefixEnvironment
         );
+        console.log(attemptsLeft, "att");
+        setnewAttempt(3 - attemptsLeft);
         setItems((preItem) => {
-          return data.Options;
+          return question.Options;
         });
-        // console.log("data", data.Options);
         setsupermarketUpdated((prevSupermarketUpdated) => {
           return prevSupermarketUpdated.map((SupermarketItem) => {
             return {
               ...SupermarketItem,
-              name: data.Options[0].name,
-              id: data.Options[0].id,
+              name: question.Options[0].name,
+              id: question.Options[0].id,
             };
           });
         });
         setQuestion((prevQuestion) => {
           return {
-            id: data._id,
-            instruction: data.Instruction,
-            options: data.Options,
+            id: question._id,
+            instruction: question.Instruction,
+            options: question.Options,
           };
         });
+        setExpiryTimeStamp(Date(timeStamp));
+        // console.log("from backend", timeStamp);
       });
   }, [currQuestionPointer]);
 
+  // useEffect(() => {
+  //   setcurrTime(Math.floor(Date.now()/1000))
+  // }, [])
+
+  // console.log(Number(expiryTimeStamp)-Math.floor(Date.now()/1000),"time rem")
+  // console.log(expiryTimeStamp,"time from backend")
+  // console.log(expiryTimeStamp.getTime()/1000 - Math.floor(Date.now()/1000),"time rem")
+
   //useEffect for sockets
+
   useEffect(() => {
+    console.log("Socket status", socket.connected);
+    if (socket.connected) {
+      socket.disconnect();
+      socket = io("https://futurepreneursbackend.herokuapp.com");
+    }
     socket.on("roomUsers", (data) => {
       console.log("roomUsers", data);
       setRoomUsers(data.users);
@@ -560,11 +564,13 @@ function DragDrop() {
         }
       });
     });
-    socket.on('timerCompleted',()=>{
-      history.replace('/Submission')
-    })
+    socket.on("timerCompleted", () => {
+      history.replace("/Submission");
+    });
     socket.on("receivedAttempts", (attempts) => {
-      setAttempts(attempts.attempt);
+      // setAttempts(attempts.attempt);
+      console.log(attempts.attempt, "hey");
+      setnewAttempt(attempts.attempt);
     });
   }, [roomData]);
   // console.log(roomUsers)
@@ -643,6 +649,24 @@ function DragDrop() {
       });
   }, []);
 
+  // useEffect(() => {
+  //   fetch(`https://futurepreneursbackend.herokuapp.com/`)
+  //     .then((response) => {
+  //       if (response.status === 400) {
+  //         history.replace("/Error");
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       if(data.isRoundOneOn){
+  //         history.replace("/Dashboard");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
+
   const updateFinalPlaceHolder = (placeHolderID, itemList) => {
     if (placeHolderID === "one") {
       const newList = finalList.map((x) =>
@@ -705,12 +729,13 @@ function DragDrop() {
     socket.emit("update", deletedFinalList);
   };
 
-  useEffect(() => {
-    const set = ["one", "two", "three", "four", "five", "six", "seven"];
-    set.forEach((element) => {});
-  }, [currQuestionPointer]);
-
-  // {questionID:,teamID:,attempts:,responseEnvironment:{Zones:[{index:"",option:""}]}}
+  // useEffect(() => {
+  //   finalList.map((item) => {
+  //     return { ...item, canDrop: { isDroppable: "yes", element: "" } };
+  //   });
+  //   // const set = ["one", "two", "three", "four", "five", "six", "seven"];
+  //   // set.forEach((element) => {});
+  // }, [currQuestionPointer]);
 
   const nextQuestionHandler = () => {
     socket.emit("nextQuestion", "nextques");
@@ -745,6 +770,7 @@ function DragDrop() {
   };
 
   const submitAnswerHandler = () => {
+    setisSubmitting(true);
     fetch(
       "https://futurepreneursbackend.herokuapp.com/api/RoundOne/submitResponse",
       {
@@ -768,15 +794,21 @@ function DragDrop() {
         },
       }
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 400) {
+          alreadySubmitted();
+        }
+        return response.json();
+      })
       .then((data) => {
         setAttempts((prevAttempt) => prevAttempt + 1);
+        setnewAttempt((prevAttempt) => prevAttempt - 1);
         socket.emit("attempts", {
-          attempt: attempts + 1,
+          attempt: newAttempt - 1,
           currQuestion: currQuestionPointer,
           teamID: authCtx.teamID,
         });
-        if (data.isCorrect || attempts === 3) {
+        if (data.isCorrect || newAttempt === 1) {
           correctAnswer();
           nextQuestionHandler();
         } else if (!data.isCorrect) {
@@ -785,14 +817,49 @@ function DragDrop() {
         setScore((prevScore) => {
           return data.currentPoints;
         });
+        setMinutes(2);
+        setSeconds(20);
       })
       .catch((err) => {
-        // alert(err);
-        history.replace("/Error");
+        console.log(err);
+      })
+      .finally(() => {
+        setisSubmitting(false);
       });
   };
-  console.log("timerOver", isTimerOVer);
-  // console.log("finalList", finalList);
+  
+  const submitRound1Timer = ()=>{
+    fetch(
+      `https://futurepreneursbackend.herokuapp.com/api/RoundOne/finishRoundOne`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          teamID: authCtx.teamID,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    )
+      .then((response) => {
+        if (response.status === 400) {
+          history.replace("/Error");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        if (data) {
+          history.replace("/Submission");
+          socket.emit("timerOver", "sdfaf");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  console.log("finalList", finalList);
   // console.log("newfinalList", filteredFinalList);
 
   // const emitUpdate = () => {
@@ -805,79 +872,43 @@ function DragDrop() {
   //3rd attempt true-->answer correct and setcurrQues++
   const [dontgoback, setDontgoback] = useState(true);
   useEffect(() => {
-    console.log(currQuestionPointer,"curr")
-    if(currQuestionPointer===3){
-      setDontgoback(false)
+    console.log(currQuestionPointer, "curr");
+    if (currQuestionPointer === 3) {
+      setDontgoback(false);
     }
-  }, [currQuestionPointer])
+  }, [currQuestionPointer]);
 
   return (
     <CardContext.Provider value={{}}>
       {/* <Nav expiryTimestamp={time} /> */}
       <Nav />
+      {/* <CountDown endtime={expiryTimeStamp} hoursMinSecs={{minutes: minutes, seconds: seconds}} submit={submitRound1Timer}/> */}
       {/* <button onClick={handleClick}>Click</button> */}
-      <Prompt message="Don't Navigate Away" when={dontgoback} />
+      {/* <Prompt message="Don't Navigate Away" when={dontgoback} /> */}
       <div>
         {authCtx.id === localStorage.getItem("leaderID") && (
           <MyTimer
             setisTimerOVer={setisTimerOVer}
             nextQuestionHandler={nextQuestionHandler}
-            expiryTimestamp={time}
+            // expiryTimestamp={Number(expiryTimeStamp) - Math.floor(Date.now()/1000)}
+            expiryTimestamp1={time}
             submitAnswerHandler={submitAnswerHandler}
           />
         )}
       </div>
-      {/* {isHandRaised ? (
-        <img
-          alt="handDown"
-          onClick={handDown}
-          className="hand"
-          src={handDownImg}
-        />
-      ) : (
-        <img alt="hand" onClick={handRaise} className="hand" src={handImg} />
-      )}
-      {!isHandRaised ? (
-        <img alt="hand" onClick={handRaise} className="hand" src={handImg} />
-      ) : (
-        <img
-          alt="handDown"
-          onClick={handDown}
-          className="hand"
-          src={handDownImg}
-        />
-      )} */}
-      {/* <Button onClick={}>Open simple snackbar</Button>
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={}
-        message="Note archived"
-        action={action}
-      /> */}
+      {/* ATTEMPTS LEFT: {4 - attempts > 1 ? 4 - attempts : 1} */}
       <div className="game-options">
-        <span className="attempts-left">ATTEMPTS LEFT: {4 - attempts}</span>
-        {/* <span className="score">SCORE: {score}</span> */}
-
-        {/* {micMuted && (
-          <button className="game-microphone" onClick={joinCall}>
-            Join Call
-          </button>
-        )}
-        {!micMuted && (
-          <button className="game-microphone" onClick={leaveCall}>
-            End Call
-          </button>
-        )} */}
-
+        <span className="attempts-left">ATTEMPTS LEFT: {newAttempt}</span>
         {authCtx.id === localStorage.getItem("leaderID") ? (
-          <button className="game-submit" onClick={submitAnswerHandler}>
+          <button
+            className="game-submit"
+            style={{ backgroundColor: isSubmitting === true ? "gray" : null }}
+            onClick={submitAnswerHandler}
+            disabled={isSubmitting}
+          >
             SUBMIT
           </button>
         ) : null}
-        {/* <button className="game-skip" onClick={nextQuestionHandler}>
-          SKIP
-        </button> */}
       </div>
 
       <div className="dragdrop-main-container">
@@ -943,7 +974,6 @@ function DragDrop() {
             return (
               <BoardBox1
                 socket={socket}
-                // emitUpdate={emitUpdate}
                 remainingPlaceHoldersIds={remainingPlaceHoldersIds}
                 setremainingPlaceHolderIdsMember={
                   setremainingPlaceHolderIdsMember
@@ -987,11 +1017,15 @@ function DragDrop() {
               {supermarketUpdated.map((item, index) => {
                 return (
                   <div className={`question-item${index}`}>
-                    <SupermarketDrag
-                      name={item.name}
-                      id={item.id}
-                      key={item.id}
-                    />
+                    {authCtx.id === localStorage.getItem("leaderID") ? (
+                      <SupermarketDrag
+                        name={item.name}
+                        id={item.id}
+                        key={item.id}
+                      />
+                    ) : (
+                      <p id={item.id}>{item.name}</p>
+                    )}
                   </div>
                 );
               })}
