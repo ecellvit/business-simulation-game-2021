@@ -7,19 +7,90 @@ import fplogo from "../../resources/images/fpLogo.svg";
 import ecellLogo from "../../resources/images/ecellLogo.svg";
 import TeamList from "./TeamList";
 import TeamDisplay from "./TeamDisplay";
+import { useSnackbar } from "notistack";
 import { Nav } from "../nav";
+import { useTimer } from "react-timer-hook";
 import "./DashBoard.css";
+import ClipLoader from "react-spinners/ClipLoader";
+
+function MyTimer({ expiryTimestamp, nextQuestionHandler }) {
+  const authCtx = useContext(AuthContext);
+  const history = useHistory();
+  const { hour, seconds, minutes, isRunning, start, pause, resume, restart } =
+    useTimer({
+      expiryTimestamp,
+      onExpire: () => {
+        fetch(
+          `https://futurepreneursbackend.herokuapp.com/api/RoundOne/finishRoundOne`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              teamID: authCtx.teamID,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          }
+        )
+          .then((response) => {
+            if (response.status === 400) {
+              history.replace("/Error");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+            if (data) {
+              history.replace("/Submission");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      },
+    });
+  return (
+    <div style={{ textAlign: "center", position: "absolute", left: "600px" }}>
+      <div style={{ fontSize: "30px" }} className="timer">
+        <span>{hour}</span>:<span>{minutes}</span>:<span>{seconds}</span>
+      </div>
+    </div>
+  );
+}
 
 function DashBoard(props) {
   // const location = useLocation();
+  // const time = new Date();
+  // const [time, settime] = useState(new Date());
+
+  // useEffect(() => {
+  //   effect
+  //   return () => {
+  //     cleanup
+  //   }
+  // }, [input])
+  const [Round2State, setRound2State] = useState(true);
+  const [Round1State, setRound1State] = useState(true);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const history = useHistory();
   const [hasStarted1, sethasStarted1] = useState(false);
   const [hasCompleted1, sethasCompleted1] = useState(false);
   const [hasCompleted2, sethasCompleted2] = useState(false);
-
+  const [isLoading, setisLoading] = useState(false);
   const authCtx = useContext(AuthContext);
   const [hasTeam, setHasTeam] = useState(true);
   const [showTeam, setShowTeam] = useState(false);
+
+  const roundHasntStarted = (data) => {
+    enqueueSnackbar(`We haven't started now, please wait`, {
+      variant: "warning",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
+      },
+    });
+  };
   // const [updateTeamList, setUpdateTeamList] = useState(1);
 
   // const updateList = () => {
@@ -49,14 +120,41 @@ function DashBoard(props) {
   //     props.round1CompletedHandler(true);
   //   }
   // }
+  useEffect(() => {
+    fetch(`https://futurepreneursbackend.herokuapp.com/`)
+      .then((response) => {
+        if (response.status === 400) {
+          history.replace("/Error");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (!data.isRoundOneOn) {
+          roundHasntStarted(1);
+          setRound1State(false);
+        }
+        if (!data.isRoundTwoOn) {
+          roundHasntStarted(2);
+          setRound2State(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   const roundTwoCompleted = (hasCompleted) => {
     if (hasCompleted) {
       sethasCompleted2(true);
     }
   };
 
+  const changeIsLoading = (bool) => {
+    setisLoading(false);
+  };
   // ?userID=${authCtx.id}
   useEffect(() => {
+    setisLoading(true);
     fetch(`https://futurepreneursbackend.herokuapp.com/api/public/hasTeam`, {
       method: "POST",
       body: JSON.stringify({
@@ -85,6 +183,9 @@ function DashBoard(props) {
   return (
     <div>
       <Nav />
+      <div style={{ position: "relative", left: "50%" }}>
+        <ClipLoader color={"green"} loading={isLoading} size={60} />
+      </div>
       <div style={{ color: "black" }} className="Dashboard__main--div">
         <div className="teamDetails">
           <p className="startTime">Starting In</p>
@@ -97,8 +198,8 @@ function DashBoard(props) {
             roundOneStarted={roundOneStarted}
             roundOneCompleted={roundOneCompleted}
             roundTwoCompleted={roundTwoCompleted}
+            changeIsLoading={changeIsLoading}
           />
-
           {!hasCompleted2 ? (
             <div className="tbox">
               <p className="rhead">
@@ -162,11 +263,16 @@ function DashBoard(props) {
                 )}
               </p>
               <p className="min">30 Mins</p>
-              <Link to={hasCompleted1 ? "/Round2" : "/Round1"}>
-                <button className="stbtn button">
-                  {hasStarted1 ? "Continue" : "Start"}
-                </button>
-              </Link>
+              {!isLoading ? (
+                <Link to={hasCompleted1 ? "/Round2" : "/Round1"}>
+                  <button
+                    className="stbtn button"
+                    disabled={!Round2State || !Round1State}
+                  >
+                    {hasStarted1 ? "Continue" : "Start"}
+                  </button>
+                </Link>
+              ) : null}
               {/* <input
                 className="elp"
                 type="image"
@@ -185,7 +291,11 @@ function DashBoard(props) {
                   We are glad to have you today at FuturePreneurs 7.0, See you
                   next time, you can logout now
                 </p>
-                <img className="ecell__logo--dashboard" src={ecellLogo} alt="" />
+                <img
+                  className="ecell__logo--dashboard"
+                  src={ecellLogo}
+                  alt=""
+                />
               </p>
             </div>
           )}

@@ -15,6 +15,8 @@ const AuthContext = React.createContext({
   round1Completed: false,
   round2Completed: false,
   roundHandler: (round1status, round2status) => {},
+  leaderID: "",
+  leaderHandler:()=>{}
 });
 
 export const AuthContextProvider = (props) => {
@@ -24,6 +26,7 @@ export const AuthContextProvider = (props) => {
   const initialEmail = localStorage.getItem("email");
   const initialTeamID = localStorage.getItem("teamID");
   const initialPhotoURL = localStorage.getItem("photoURL");
+  const initialLeaderID = localStorage.getItem("leaderID");
 
   const [id, setId] = useState(initialId);
   const [uID, setuID] = useState(initialUId);
@@ -34,6 +37,7 @@ export const AuthContextProvider = (props) => {
   const [location, setLocation] = useState(false);
   const [round1Completed, setround1Completed] = useState(false);
   const [round2Completed, setround2Completed] = useState(false);
+  const [leaderID, setLeaderID] = useState(initialLeaderID);
 
   const userIsLoggedIn = !!id;
   //note to myself(palani)---> !!id means converting the truthy or falsy value to a true or false boolean value
@@ -50,6 +54,11 @@ export const AuthContextProvider = (props) => {
     localStorage.setItem("photoURL", userPhotoURL);
   };
 
+  const leaderHandler = (leaderID)=>{
+    setLeaderID(leaderID);
+    localStorage.setItem("leaderID",leaderID)
+  }
+
   const roundHandler = (round1status, round2status) => {
     setround1Completed(round1status);
     setround2Completed(round2status);
@@ -57,9 +66,6 @@ export const AuthContextProvider = (props) => {
 
   const logoutHandler = () => {
     setId(null);
-    // localStorage.removeItem("id");
-    // localStorage.removeItem("name");
-    // localStorage.removeItem("email");
     localStorage.clear();
   };
   const teamHandler = (teamID) => {
@@ -82,6 +88,7 @@ export const AuthContextProvider = (props) => {
     roundHandler: roundHandler,
     round1Completed: round1Completed,
     round2Completed: round2Completed,
+    leaderHandler: leaderHandler,
   };
 
   return (

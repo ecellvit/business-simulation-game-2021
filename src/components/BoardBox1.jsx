@@ -124,7 +124,7 @@ const BoardBox1 = (props) => {
       (id) => id !== props.id
     );
     props.setremainingPlaceHolderIds(remainingPlaceHolders);
-    props.setremainingPlaceHolderIdsMember(remainingPlaceHolders)
+    props.setremainingPlaceHolderIdsMember(remainingPlaceHolders);
   };
 
   const addItemToBoard = (id) => {
@@ -144,8 +144,8 @@ const BoardBox1 = (props) => {
   };
 
   useEffect(() => {
-    removeItemFromBoard(props.id)
-  }, [props.currQuestionPointer])
+    removeItemFromBoard(props.id);
+  }, [props.currQuestionPointer]);
   // console.log("board", board, props.id);
 
   return (
@@ -179,16 +179,15 @@ const BoardBox1 = (props) => {
       {/* both sides i.e for prefixed env*/}
       {props.finalList.map((listItem) => {
         if (props.id === listItem.id) {
-          return (
-            <SupermarketDrag
+          return <p key={listItem.item.id}>{listItem.canDrop.element}</p>;
+        }
+      })}
+      {/* <SupermarketDrag
               color="white"
               name={listItem.canDrop.element}
               id={listItem.item.id}
               key={listItem.item.id}
-            />
-          );
-        }
-      })}
+            /> */}
 
       {/* leader side */}
       {board.map((boardItem) => {
@@ -202,50 +201,22 @@ const BoardBox1 = (props) => {
       })}
 
       {/* members side */}
-      {props.id === "one" ? (
-        <SupermarketDrag
-          name={returnedItem[0].item.name}
-          id={returnedItem[0].item.id}
-        />
-      ) : null}
-      {props.id === "two" ? (
-        <SupermarketDrag
-          name={returnedItem[1].item.name}
-          id={returnedItem[1].item.id}
-        />
-      ) : null}
-      {props.id === "three" ? (
-        <SupermarketDrag
-          name={returnedItem[2].item.name}
-          id={returnedItem[2].item.id}
-        />
-      ) : null}
-      {props.id === "four" ? (
-        <SupermarketDrag
-          name={returnedItem[3].item.name}
-          id={returnedItem[3].item.id}
-        />
-      ) : null}
-      {props.id === "five" ? (
-        <SupermarketDrag
-          name={returnedItem[4].item.name}
-          id={returnedItem[4].item.id}
-        />
-      ) : null}
-      {props.id === "six" ? (
-        <SupermarketDrag
-          name={returnedItem[5].item.name}
-          id={returnedItem[5].item.id}
-        />
-      ) : null}
-      {props.id === "seven" ? (
-        <SupermarketDrag
-          name={returnedItem[6].item.name}
-          id={returnedItem[6].item.id}
-        />
-      ) : null}
+      {props.id === "one" ? <p>{returnedItem[0].item.name}</p> : null}
+      {props.id === "two" ? <p>{returnedItem[1].item.name}</p> : null}
+      {props.id === "three" ? <p>{returnedItem[2].item.name}</p> : null}
+      {props.id === "four" ? <p>{returnedItem[3].item.name}</p> : null}
+      {props.id === "five" ? <p>{returnedItem[4].item.name}</p> : null}
+      {props.id === "six" ? <p>{returnedItem[5].item.name}</p> : null}
+      {props.id === "seven" ? <p>{returnedItem[6].item.name}</p> : null}
     </div>
   );
 };
 
 export default BoardBox1;
+
+{
+  /* <SupermarketDrag
+          name={returnedItem[5].item.name}
+          id={returnedItem[5].item.id}
+        /> */
+}
