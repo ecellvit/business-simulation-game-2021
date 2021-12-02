@@ -4,6 +4,7 @@ import SupermarketDrag from "./SupermarketDrag";
 import { Supermarket } from "../custom/data";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import dropSound from "../resources/Audiofiles/drop.mpeg"
 
 const BoardBox1 = (props) => {
   const [board, setBoard] = useState([]);
@@ -76,7 +77,7 @@ const BoardBox1 = (props) => {
   ]);
 
   const [currItem, setCurrItem] = useState({ name: "", id: "" });
-
+  const dropAudio = new Audio(dropSound)
   useEffect(() => {
     props.socket.on("change", (data) => {
       setReturnedItem(data);
@@ -94,9 +95,10 @@ const BoardBox1 = (props) => {
     () => ({
       accept: props.canDrop,
       drop: (item) => {
+        dropAudio.play();
         setCurrItem(item);
         sethasDropped(true);
-        console.log(item.id);
+        // console.log(item.id);
         // props.socket.emit("update1", props.id);
         clearRemainingBoards(props.id);
         addItemToBoard(item.id);
@@ -213,10 +215,3 @@ const BoardBox1 = (props) => {
 };
 
 export default BoardBox1;
-
-{
-  /* <SupermarketDrag
-          name={returnedItem[5].item.name}
-          id={returnedItem[5].item.id}
-        /> */
-}

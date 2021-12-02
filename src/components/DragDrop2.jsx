@@ -6,7 +6,7 @@ import AuthContext from "../store/auth-context";
 import { useSnackbar } from "notistack";
 import SupermarketDrag from "./SupermarketDrag";
 import BoardBox2 from "./BoardBox2";
-
+import infoSound from "../resources/Audiofiles/info.mpeg";
 import { Placeholders2 } from "../custom/data2";
 
 import "./DragDrop2.css";
@@ -14,6 +14,7 @@ import { Nav } from "./nav";
 
 import supermarketBG2 from "../resources/images/bgImg2.png";
 import { ElevenMpSharp } from "@mui/icons-material";
+import CountDown from "./Dashboard/CountDown";
 export const CardContext = React.createContext({
   finalList: [],
 });
@@ -21,34 +22,39 @@ export const CardContext = React.createContext({
 // const socket = io("http://127.0.0.1:2000/");
 let socket = io("https://futurepreneursbackend.herokuapp.com");
 
-let rtc = {
-  localAudioTrack: null,
-  client: null,
-};
+// let rtc = {
+//   localAudioTrack: null,
+//   client: null,
+// };
 
-async function startBasicCall() {
-  rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+// async function startBasicCall() {
+//   rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
-  rtc.client.on("user-published", async (user, mediaType) => {
-    await rtc.client.subscribe(user, mediaType);
-    console.log("subscribe success");
+//   rtc.client.on("user-published", async (user, mediaType) => {
+//     await rtc.client.subscribe(user, mediaType);
+//     console.log("subscribe success");
 
-    if (mediaType === "audio") {
-      const remoteAudioTrack = user.audioTrack;
-      // Play the remote audio track.
-      remoteAudioTrack.play();
-    }
-    rtc.client.on("user-unpublished", async (user) => {
-      await rtc.client.unsubscribe(user);
-    });
-  });
-}
-startBasicCall();
+//     if (mediaType === "audio") {
+//       const remoteAudioTrack = user.audioTrack;
+//       // Play the remote audio track.
+//       remoteAudioTrack.play();
+//     }
+//     rtc.client.on("user-unpublished", async (user) => {
+//       await rtc.client.unsubscribe(user);
+//     });
+//   });
+// }
+// startBasicCall();
 
 function DragDrop() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const history = useHistory();
   const board = Placeholders2;
+  const [minutes, setMinutes] = useState(15);
+  const [seconds, setSeconds] = useState(0);
+  const [hasTimeChanged, setHasTimeChanged] = useState(false);
+  const [expiryTimeStamp, setExpiryTimeStamp] = useState();
+  const infoAudio = new Audio(infoSound);
 
   const roundHasntStarted = () => {
     enqueueSnackbar(`We haven't started now, please wait`, {
@@ -60,6 +66,26 @@ function DragDrop() {
     });
   };
 
+  const timeOver = (user) => {
+    enqueueSnackbar(`Time Over`, {
+      variant: "error",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
+      },
+    });
+  };
+
+  const userJoined = (user) => {
+    infoAudio.play();
+    enqueueSnackbar(`${user.username} has joined the game!`, {
+      variant: "info",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
+      },
+    });
+  };
   const [thisCanBeDragged, setThisCanBeDragged] = useState(true);
   const [supermarketUpdated, setSupermarketReceived] = useState([
     {
@@ -138,12 +164,14 @@ function DragDrop() {
       thisItemCanBeDragged: thisCanBeDragged,
     },
   ]);
+
   const authCtx = useContext(AuthContext);
   const [score, setScore] = useState(0);
   // const time = new Date();
   // time.setSeconds(time.getSeconds() + 600);
   const [micMuted, setMicMuted] = useState(true);
   const [isHandRaised, setisHandRaised] = useState(false);
+  const [isTimeLoading, setisTimeLoading] = useState(false);
   const [items, setItems] = useState(["", "", "", ""]);
   const [question, setQuestion] = useState({
     id: "",
@@ -300,11 +328,11 @@ function DragDrop() {
       }
     });
     setSupermarketReceived((prevSupermarketUpdated) => {
-      prevSupermarketUpdated[id-1] = newSuperMarketUpdated[id - 1]
+      prevSupermarketUpdated[id - 1] = newSuperMarketUpdated[id - 1];
       return prevSupermarketUpdated;
     });
   };
-  console.log(supermarketUpdated);
+  // console.log(supermarketUpdated);
   const setItemcanDrag = (id) => {
     let redqID;
     const deletedFinalListCanDrag = finalList.map((list) => {
@@ -360,6 +388,7 @@ function DragDrop() {
     });
     socket.emit("joinRoom", roomData);
     socket.on("roundTwoCompletion", (data) => {
+      timeOver();
       history.replace("/Submission");
     });
   }, [roomData]);
@@ -393,7 +422,7 @@ function DragDrop() {
   }, []);
 
   useEffect(() => {
-    fetch(`https://futurepreneursbackend.herokuapp.com/`)
+    fetch(`https://futurepreneursbackend.herokuapp.com/?teamID=${authCtx.teamID}`)
       .then((response) => {
         if (response.status === 400) {
           history.replace("/Error");
@@ -401,8 +430,8 @@ function DragDrop() {
         return response.json();
       })
       .then((data) => {
-        if(!data.isRoundTwoOn){
-          roundHasntStarted("Round 1.2 hasn't started yet, try again soon!")
+        if (!data.event.isRoundTwoOn) {
+          roundHasntStarted("Round 1.2 hasn't started yet, try again soon!");
           history.replace("/Dashboard");
         }
       })
@@ -410,7 +439,6 @@ function DragDrop() {
         console.log(err);
       });
   }, []);
-
 
   const updateFinalPlaceHolder = (placeHolderID, itemList) => {
     if (placeHolderID === "one") {
@@ -518,8 +546,32 @@ function DragDrop() {
   };
   // {questionID:,teamID:,attempts:,responseEnvironment:{Zones:[{index:"",option:""}]}}
 
-  const submitAnswerHandler = (event) => {
-    event.preventDefault();
+  useEffect(() => {
+    // console.log("teamIDDD", authCtx.teamID);
+    setisTimeLoading(true);
+    fetch(
+      `https://futurepreneursbackend.herokuapp.com/api/RoundTwo/start?teamID=${authCtx.teamID}`
+    )
+      .then((response) => {
+        if (response.status === 400) {
+          history.replace("/Error");
+        }
+        return response.json();
+      })
+      .then(({ timeStamp }) => {
+        console.log(timeStamp);
+        setTimeout(function () {
+          setExpiryTimeStamp(timeStamp);
+          setHasTimeChanged(true);
+        }, 500);
+        setisTimeLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const submitAnswerHandler = () => {
     fetch(
       "https://futurepreneursbackend.herokuapp.com/api/roundTwo/submitResponse",
       {
@@ -528,7 +580,7 @@ function DragDrop() {
           teamID: authCtx.teamID,
 
           Zones: finalList.map((element) => {
-            console.log({ option: element.item.name, index: element.id });
+            // console.log({ option: element.item.name, index: element.id });
             return { option: element.item.name, index: element.id };
           }),
         }),
@@ -542,6 +594,7 @@ function DragDrop() {
         setScore((prevScore) => {
           return data.currentPoints;
         });
+        timeOver();
         socket.emit("round2", { teamID: authCtx.teamID });
         history.replace("/Submission");
       })
@@ -550,6 +603,7 @@ function DragDrop() {
         history.replace("/Error");
       });
   };
+
   // console.log("finalList", finalList);
   // console.log("newfinalList", filteredFinalList);
 
@@ -566,6 +620,17 @@ function DragDrop() {
     <CardContext.Provider value={{}}>
       {/* <Nav expiryTimestamp={time} /> */}
       <Nav />
+      {expiryTimeStamp && (
+        <CountDown
+          endtime={expiryTimeStamp}
+          hoursMinSecs={{ minutes: minutes, seconds: seconds }}
+          submit={submitAnswerHandler}
+          minutes1={minutes}
+          seconds1={seconds}
+          hasTimeChanged={hasTimeChanged}
+        />
+      )}
+      {isTimeLoading && <p>Loading...</p>}
       {/* {isHandRaised ? (
         <img
           alt="handDown"
@@ -623,6 +688,17 @@ function DragDrop() {
           </button>
         ) : null}
       </div>
+      <p
+        style={{
+          color: "gray",
+          position: "absolute",
+          zIndex: "1",
+          top: "130px",
+          left: "550px",
+        }}
+      >
+        No item should be placed more than once
+      </p>
 
       <div className="dragdrop-main-container2">
         <div className="roomUsersDiv">

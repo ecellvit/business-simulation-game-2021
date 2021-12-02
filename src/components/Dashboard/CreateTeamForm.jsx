@@ -23,8 +23,8 @@ function CreateTeamForm(props) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-        console.log(teamNameValue, authCtx.id);
+        // console.log(data);
+        // console.log(teamNameValue, authCtx.id);
       })
       .catch((err) => {
         // alert(err);

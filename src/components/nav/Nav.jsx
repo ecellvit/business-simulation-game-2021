@@ -11,6 +11,9 @@ import fpLogo from "../../resources/images/futurepreneursLogo.svg";
 import ecellLogo from "../../resources/images/ecellLogoBlack.png";
 import AgoraRTC from "agora-rtc-react";
 import AuthContext from "../../store/auth-context";
+import { useSnackbar } from "notistack";
+import errorSound from "../../resources/Audiofiles/error.mpeg";
+import successSound from "../../resources/Audiofiles/success.mpeg"
 
 let rtc = {
   localAudioTrack: null,
@@ -37,27 +40,39 @@ async function startBasicCall() {
 startBasicCall();
 
 export function Nav(props) {
-  // const time = new Date();
-  // time.setSeconds(time.getSeconds() + 600);
-  // const {
-  //   seconds,
-  //   minutes,
-  //   hours,
-  //   days,
-  //   isRunning,
-  //   start,
-  //   pause,
-  //   resume,
-  //   restart,
-  // } = useTimer({time, onExpire: () => console.warn('onExpire called') });
   const history = useHistory();
   const authCtx = useContext(AuthContext);
   const [micMuted, setMicMuted] = useState(true);
   const [firstTry, setfirstTry] = useState(false);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const errorAudio = new Audio(errorSound);
+  const successAudio = new Audio(successSound);
 
-  useEffect(() => {
-    localStorage.setItem("call","disconnected")
-  }, [])
+  const callConnectionError = (data) => {
+    errorAudio.play();
+    enqueueSnackbar(data, {
+      variant: "error",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
+      },
+    });
+  };
+
+  const callConnectionSuccessful = (data) => {
+    successAudio.play();
+    enqueueSnackbar(data, {
+      variant: "success",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
+      },
+    });
+  };
+
+  // useEffect(() => {
+  //   localStorage.setItem("call", "disconnected");
+  // }, []);
 
   const [options, setOptions] = useState({
     // Pass your App ID here.
@@ -72,7 +87,7 @@ export function Nav(props) {
   });
   useEffect(() => {
     // console.log("token details", authCtx.teamID, authCtx.uID);
-    if (authCtx.id) {
+    if (authCtx.id && authCtx.teamID) {
       fetch(
         `https://futurepreneursbackend.herokuapp.com/api/voice/token?channel=${authCtx.teamID}&uid=${authCtx.uID}&role=publisher`
       )
@@ -93,30 +108,33 @@ export function Nav(props) {
     // console.log("object", options.token);
     // rtc.client.leaveCall();
     try {
-      await rtc.client.join(
-        options.appId,
-        options.channel,
-        options.token,
-        options.uid
-      ).catch((e) => {
-        console.log(e);
-        console.log("Joining error");
-      });
+      await rtc.client
+        .join(options.appId, options.channel, options.token, options.uid)
+        .catch((e) => {
+          // console.log(e);
+          console.log("Joining error");
+          callConnectionError("Joining Error")
+        });
       // Create a local audio track from the audio sampled by a microphone.
-      rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack().catch((e) => {
-        console.log(e);
-        console.log("Mic error");
-      });
+      rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack().catch(
+        (e) => {
+          console.log(e);
+          console.log("Mic error");
+          callConnectionError("Couldn't access Microphone!")
+        }
+      );
       // Publish the local audio tracks to the RTC channel.
       await rtc.client.publish([rtc.localAudioTrack]).catch((e) => {
         console.log(e);
         console.log("Publishing error");
+        callConnectionError("Couldn't connect, try again!")
       });
-      setMicMuted(false);
-      localStorage.setItem("call", "connected");
+      // setMicMuted(false);
+      // localStorage.setItem("call", "connected");
       console.log("publish success!");
-    }
-    catch(e){
+      authCtx.callConnectHandler(true)
+      callConnectionSuccessful("Sucessfully connected!");
+    } catch (e) {
       console.log("Agora Error");
       throw e;
     }
@@ -127,17 +145,21 @@ export function Nav(props) {
     rtc.localAudioTrack.close();
 
     // Leave the channel.
-    await rtc.client.leave();
-    setMicMuted(true);
-    localStorage.setItem("call","disconnected");
+    await rtc.client.leave().catch((e)=>{
+      callConnectionError("Couldn't disconnect call,refresh your page to disconnect")
+    });
+    // setMicMuted(true);
+    // localStorage.setItem("call", "disconnected");
     console.log("leave Success");
+    authCtx.callConnectHandler(false)
+    callConnectionSuccessful("Sucessfully disconnected call")
   };
   const logoutHandler = () => {
-    authCtx.logout();
-    history.replace("/");
-    if (!micMuted) {
+    if (authCtx.callConnected) {
       leaveCall();
     }
+    authCtx.logout();
+    history.replace("/");
   };
 
   return (
@@ -161,7 +183,31 @@ export function Nav(props) {
                 src={fpLogo}
                 alt={"FuturePreneurs Logo"}
               />
-              {micMuted &&
+              {authCtx.isLoggedIn &&
+                authCtx.teamID &&
+                authCtx.callConnected === false && (
+                  <button
+                    className="game-microphone"
+                    onClick={() => {
+                      joinCall();
+                    }}
+                  >
+                    Start Call
+                  </button>
+                )}
+              {authCtx.isLoggedIn &&
+                authCtx.teamID &&
+                authCtx.callConnected === true && (
+                  <button
+                    className="game-microphone"
+                    onClick={() => {
+                      leaveCall();
+                    }}
+                  >
+                    Leave Call
+                  </button>
+                )}
+              {/* {micMuted &&
                 authCtx.isLoggedIn &&
                 localStorage.getItem("call")==="disconnected" && (
                   <button
@@ -196,7 +242,7 @@ export function Nav(props) {
                 >
                   End Call
                 </button>
-              )}
+              )} */}
             </div>
           </Grid>
           <Grid
