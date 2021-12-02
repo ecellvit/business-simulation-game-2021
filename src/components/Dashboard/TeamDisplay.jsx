@@ -6,8 +6,8 @@ import crown from "../../resources/images/crown.svg";
 import Thanks from "./Thanks";
 
 function Member(props) {
-  console.log(props.name);
-  console.log(props.teamData);
+  // console.log(props.name);
+  // console.log(props.teamData);
   return (
     <p className="tname">{`${TrimName(
       props.teamData.Members[props.name].User.name
@@ -73,7 +73,7 @@ function TeamDisplay(props) {
         return response.json();
       })
       .then((data) => {
-        console.log("teamData", data);
+        // console.log("teamData", data);
         setTeamData(data);
         props.roundOneStarted(
           data.RoundOneAttemptedQuestions.length > 0 &&

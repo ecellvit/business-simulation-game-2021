@@ -6,7 +6,7 @@ import {
   Prompt,
   useHistory,
 } from "react-router-dom";
-import { useTimer } from "react-timer-hook";
+// import { useTimer } from "react-timer-hook";
 import { useSnackbar } from "notistack";
 import { io } from "socket.io-client";
 import AuthContext from "../store/auth-context";
@@ -16,12 +16,15 @@ import arrow from "../resources/images/arrow2.png";
 import BoardBox1 from "./BoardBox1";
 import CountDown from "./Dashboard/CountDown";
 import { Placeholders } from "../custom/data";
-
+import errorSound from "../resources/Audiofiles/error.mpeg";
+import infoSound from "../resources/Audiofiles/info.mpeg";
+import successSound from "../resources/Audiofiles/success.mpeg";
 import "./DragDrop.css";
 import { Nav } from "./nav";
-
+import warningSound from "../resources/Audiofiles/warning.mpeg";
+import ClipLoader from "react-spinners/ClipLoader";
 import supermarketBG from "../resources/images/bgImg1.jpg";
-import { Calculate, MailOutlineSharp } from "@mui/icons-material";
+
 // import SubmissionPage from "./SubmissionPage";
 export const CardContext = React.createContext({
   finalList: [],
@@ -32,10 +35,95 @@ export const CardContext = React.createContext({
 
 var socket = io("https://futurepreneursbackend.herokuapp.com");
 
+// function MyTimer({ expiryTimestamp, nextQuestionHandler }) {
+//   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-function MyTimer({ expiryTimestamp, nextQuestionHandler }) {
+//   const timeOver = (user) => {
+//     enqueueSnackbar(`Time Over`, {
+//       variant: "error",
+//       anchorOrigin: {
+//         vertical: "bottom",
+//         horizontal: "right",
+//       },
+//     });
+//   };
+//   // console.log(expiryTimestamp,"in timer")
+//   const authCtx = useContext(AuthContext);
+//   const history = useHistory();
+//   // useEffect(() => {
+//   //   console.log(expiryTimestamp, "in timer");
+//   // }, [expiryTimestamp]);
+
+//   // const { seconds, minutes } = useTimer({
+//   //   expiryTimestamp,
+//   //   onExpire: () => {
+//   //     fetch(
+//   //       `https://futurepreneursbackend.herokuapp.com/api/RoundOne/finishRoundOne`,
+//   //       {
+//   //         method: "POST",
+//   //         body: JSON.stringify({
+//   //           teamID: authCtx.teamID,
+//   //         }),
+//   //         headers: {
+//   //           "Content-Type": "application/json",
+//   //           "Access-Control-Allow-Origin": "*",
+//   //         },
+//   //       }
+//   //     )
+//   //       .then((response) => {
+//   //         if (response.status === 400) {
+//   //           history.replace("/Error");
+//   //         }
+//   //         return response.json();
+//   //       })
+//   //       .then((data) => {
+//   //         console.log(data);
+//   //         if (data) {
+//   //           timeOver();
+//   //           history.replace("/Submission");
+//   //           socket.emit("timerOver", "sdfaf");
+//   //         }
+//   //       })
+//   //       .catch((err) => {
+//   //         console.log(err);
+//   //       });
+//   //   },
+//   // });
+//   return (
+//     <div style={{ textAlign: "center", position: "absolute", left: "600px" }}>
+//       {/* <p>{isRunning ? "Running" : "Not running"}</p> */}
+//       {/* <button onClick={start}>Start</button>
+//       <button onClick={pause}>Pause</button>
+//       <button onClick={resume}>Resume</button> */}
+//       {/* <button
+//         onClick={() => {
+//           // Restarts to 5 minutes timer
+//           const time = new Date();
+//           time.setSeconds(time.getSeconds() + 300);
+//           restart(time);
+//         }}
+//       >
+//         Restart
+//       </button> */}
+//     </div>
+//   );
+// }
+
+function DragDrop() {
+  const successAudio = new Audio(successSound);
+  const [isTimerOVer, setisTimerOVer] = useState(false);
+  const authCtx = useContext(AuthContext);
+  const [expiryTimeStamp, setExpiryTimeStamp] = useState();
+  const [isSubmitting, setisSubmitting] = useState(false);
+  const [newAttempt, setnewAttempt] = useState();
+  const errorAudio = new Audio(errorSound);
+  const infoAudio = new Audio(infoSound);
+  const warningAudio = new Audio(warningSound);
+
+  // const [time, setTime] = useState(new Date().setSeconds(this.get));
+
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
+  // const [time, setTime] = useState(new Date().setSeconds(this.get));
   const timeOver = (user) => {
     enqueueSnackbar(`Time Over`, {
       variant: "error",
@@ -45,124 +133,9 @@ function MyTimer({ expiryTimestamp, nextQuestionHandler }) {
       },
     });
   };
-  // console.log(expiryTimestamp,"in timer")
-  const authCtx = useContext(AuthContext);
-  const history = useHistory();
-  // useEffect(() => {
-  //   console.log(expiryTimestamp, "in timer");
-  // }, [expiryTimestamp]);
 
-  const { seconds, minutes } = useTimer({
-    expiryTimestamp,
-    onExpire: () => {
-      fetch(
-        `https://futurepreneursbackend.herokuapp.com/api/RoundOne/finishRoundOne`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            teamID: authCtx.teamID,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        }
-      )
-        .then((response) => {
-          if (response.status === 400) {
-            history.replace("/Error");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data);
-          if (data) {
-            timeOver();
-            history.replace("/Submission");
-            socket.emit("timerOver", "sdfaf");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-  });
-  return (
-    <div style={{ textAlign: "center", position: "absolute", left: "600px" }}>
-      <div style={{ fontSize: "30px" }} className="timer">
-        <span>{minutes}</span>:<span>{seconds}</span>
-      </div>
-      {/* <p>{isRunning ? "Running" : "Not running"}</p> */}
-      {/* <button onClick={start}>Start</button>
-      <button onClick={pause}>Pause</button>
-      <button onClick={resume}>Resume</button> */}
-      {/* <button
-        onClick={() => {
-          // Restarts to 5 minutes timer
-          const time = new Date();
-          time.setSeconds(time.getSeconds() + 300);
-          restart(time);
-        }}
-      >
-        Restart
-      </button> */}
-    </div>
-  );
-}
-
-function DragDrop() {
-  const [isTimerOVer, setisTimerOVer] = useState(false);
-  const authCtx = useContext(AuthContext);
-  const [expiryTimeStamp, setExpiryTimeStamp] = useState();
-  // const [currTime, setcurrTime] = useState(new Date());
-  const [isSubmitting, setisSubmitting] = useState(false);
-  const [newAttempt, setnewAttempt] = useState(() => {
-    fetch("");
-  });
-  // const [time, setTime] = useState(new Date().setSeconds(this.get));
-  let time = new Date();
-  time.setSeconds(time.getSeconds() + 900); // 10 minutes timer
-  // console.log(time, "oldtime");
-
-  // useEffect(() => {
-  //   console.log(expiryTimeStamp, "expire");
-  // }, [expiryTimeStamp]);
-
-  // time = time.setSeconds(time.getSeconds() + 900); // This is the time allowed
-  // let saved_countdown = localStorage.getItem("saved_countdown");
-  // useEffect(() => {
-  //   if (saved_countdown == null) {
-  //     // Set the time we're counting down to using the time allowed
-  //     let new_countdown = new Date().getTime() + (time + 2) * 1000;
-
-  //     console.log(time,"new")
-  //     localStorage.setItem("saved_countdown", new_countdown);
-  //   } else {
-  //     time = saved_countdown;
-  //   }
-  // }, [input])
-
-  // // Update the count down every 1 second
-  // useEffect(() => {
-  //   const x = setInterval(() => {
-  //     let now = new Date().getTime();
-  //     // Find the distance between now and the allowed time
-  //     let distance = time - now;
-
-  //     // Time counter
-  //     let counter = Math.floor((distance % (1000 * 60)) / 1000);
-  //     console.log(counter)
-  //     // If the count down is over, write some text
-  //     if (counter <= 0) {
-  //       clearInterval(x);
-  //       localStorage.removeItem("saved_countdown");
-  //     }
-  //   }, 1000);
-  //   return () => clearInterval(x);
-  // }, []);
-
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const correctAnswer = () => {
+    successAudio.play();
     enqueueSnackbar("Bingo, you got it!", {
       variant: "success",
       anchorOrigin: {
@@ -173,6 +146,7 @@ function DragDrop() {
   };
 
   const wrongAttempt = () => {
+    errorAudio.play();
     enqueueSnackbar("Oops, wrong one!", {
       variant: "error",
       anchorOrigin: {
@@ -181,7 +155,9 @@ function DragDrop() {
       },
     });
   };
+
   const userJoined = (user) => {
+    infoAudio.play();
     enqueueSnackbar(`${user.username} has joined the game!`, {
       variant: "info",
       anchorOrigin: {
@@ -191,6 +167,7 @@ function DragDrop() {
     });
   };
   const alreadySubmitted = (user) => {
+    warningAudio.play();
     enqueueSnackbar(`Wait,this question is already submitted!`, {
       variant: "warning",
       anchorOrigin: {
@@ -204,8 +181,12 @@ function DragDrop() {
   const [score, setScore] = useState(0);
   const [sockets, setSockets] = useState(false);
   const [micMuted, setMicMuted] = useState(true);
-  const [minutes,setMinutes] = useState(1);
-  const [seconds,setSeconds] = useState(0);
+  const [minutes, setMinutes] = useState(15);
+  const [seconds, setSeconds] = useState(0);
+
+  const [isTimeLoading, setisTimeLoading] = useState(false);
+
+  const [hasTimeChanged, setHasTimeChanged] = useState(false);
   const [isHandRaised, setisHandRaised] = useState(false);
   const [items, setItems] = useState(["", "", "", ""]);
   const [question, setQuestion] = useState({
@@ -486,6 +467,7 @@ function DragDrop() {
   // "https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions"
   //useEffect to fetch questions
   useEffect(() => {
+    setisTimeLoading(true);
     fetch(
       `https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions?question=${
         currQuestionPointer + 1
@@ -495,12 +477,13 @@ function DragDrop() {
         return res.json();
       })
       .then(({ question, timeStamp, attemptsLeft }) => {
+        console.log(question, currQuestionPointer, "question");
         addToCanDrop(
           question.BlockedZones,
           question.UnblockedZones,
           question.PrefixEnvironment
         );
-        console.log(attemptsLeft, "att");
+        // console.log(attemptsLeft, "att");
         setnewAttempt(3 - attemptsLeft);
         setItems((preItem) => {
           return question.Options;
@@ -521,11 +504,15 @@ function DragDrop() {
             options: question.Options,
           };
         });
-        setExpiryTimeStamp(Date(timeStamp));
+        setTimeout(function () {
+          setExpiryTimeStamp(timeStamp);
+          setHasTimeChanged(true);
+        }, 500);
+        setisTimeLoading(false);
         // console.log("from backend", timeStamp);
       });
   }, [currQuestionPointer]);
-
+  // console.log("from backend 2", expiryTimeStamp);
   // useEffect(() => {
   //   setcurrTime(Math.floor(Date.now()/1000))
   // }, [])
@@ -537,13 +524,12 @@ function DragDrop() {
   //useEffect for sockets
 
   useEffect(() => {
-    console.log("Socket status", socket.connected);
     if (socket.connected) {
       socket.disconnect();
       socket = io("https://futurepreneursbackend.herokuapp.com");
     }
     socket.on("roomUsers", (data) => {
-      console.log("roomUsers", data);
+      // console.log("roomUsers", data);
       setRoomUsers(data.users);
       const len = data.users.length;
       userJoined(data.users[len - 1]);
@@ -564,12 +550,19 @@ function DragDrop() {
         }
       });
     });
+    socket.on("correctAnswerAttempted", () => {
+      correctAnswer();
+    });
+    socket.on("wrongAnswerAttempted", () => {
+      wrongAttempt();
+    });
+
     socket.on("timerCompleted", () => {
       history.replace("/Submission");
     });
     socket.on("receivedAttempts", (attempts) => {
       // setAttempts(attempts.attempt);
-      console.log(attempts.attempt, "hey");
+      // console.log(attempts.attempt, "hey");
       setnewAttempt(attempts.attempt);
     });
   }, [roomData]);
@@ -743,7 +736,7 @@ function DragDrop() {
       if (prevPointer < 5) {
         prevPointer = prevPointer + 1;
         setAttempts((prevAttempt) => 1);
-        console.log("prevPointer", prevPointer);
+        // console.log("prevPointer", prevPointer);
         return prevPointer;
       } else {
         history.replace("/Submission");
@@ -809,16 +802,23 @@ function DragDrop() {
           teamID: authCtx.teamID,
         });
         if (data.isCorrect || newAttempt === 1) {
-          correctAnswer();
+          if (data.isCorrect) {
+            socket.emit("correctAnswer", "afasf");
+            correctAnswer();
+          } else {
+            socket.emit("wrongAnswer", "afassf");
+            wrongAttempt();
+          }
           nextQuestionHandler();
         } else if (!data.isCorrect) {
+          socket.emit("wrongAnswer", "afassf");
           wrongAttempt();
         }
         setScore((prevScore) => {
           return data.currentPoints;
         });
-        setMinutes(2);
-        setSeconds(20);
+        // setMinutes(2);
+        // setSeconds(20);
       })
       .catch((err) => {
         console.log(err);
@@ -827,8 +827,9 @@ function DragDrop() {
         setisSubmitting(false);
       });
   };
-  
-  const submitRound1Timer = ()=>{
+
+  //is Round One Completed becoming true here?
+  const submitRound1Timer = () => {
     fetch(
       `https://futurepreneursbackend.herokuapp.com/api/RoundOne/finishRoundOne`,
       {
@@ -849,8 +850,9 @@ function DragDrop() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         if (data) {
+          timeOver();
           history.replace("/Submission");
           socket.emit("timerOver", "sdfaf");
         }
@@ -858,8 +860,8 @@ function DragDrop() {
       .catch((err) => {
         console.log(err);
       });
-  }
-  console.log("finalList", finalList);
+  };
+  // console.log("finalList", finalList);
   // console.log("newfinalList", filteredFinalList);
 
   // const emitUpdate = () => {
@@ -872,7 +874,7 @@ function DragDrop() {
   //3rd attempt true-->answer correct and setcurrQues++
   const [dontgoback, setDontgoback] = useState(true);
   useEffect(() => {
-    console.log(currQuestionPointer, "curr");
+    // console.log(currQuestionPointer, "curr");
     if (currQuestionPointer === 3) {
       setDontgoback(false);
     }
@@ -882,10 +884,21 @@ function DragDrop() {
     <CardContext.Provider value={{}}>
       {/* <Nav expiryTimestamp={time} /> */}
       <Nav />
-      {/* <CountDown endtime={expiryTimeStamp} hoursMinSecs={{minutes: minutes, seconds: seconds}} submit={submitRound1Timer}/> */}
+
+      {expiryTimeStamp && (
+        <CountDown
+          endtime={expiryTimeStamp}
+          hoursMinSecs={{ minutes: minutes, seconds: seconds }}
+          submit={submitRound1Timer}
+          minutes1={minutes}
+          seconds1={seconds}
+          hasTimeChanged={hasTimeChanged}
+        />
+      )}
+
       {/* <button onClick={handleClick}>Click</button> */}
       {/* <Prompt message="Don't Navigate Away" when={dontgoback} /> */}
-      <div>
+      {/* <div>
         {authCtx.id === localStorage.getItem("leaderID") && (
           <MyTimer
             setisTimerOVer={setisTimerOVer}
@@ -895,7 +908,7 @@ function DragDrop() {
             submitAnswerHandler={submitAnswerHandler}
           />
         )}
-      </div>
+      </div> */}
       {/* ATTEMPTS LEFT: {4 - attempts > 1 ? 4 - attempts : 1} */}
       <div className="game-options">
         <span className="attempts-left">ATTEMPTS LEFT: {newAttempt}</span>
@@ -954,84 +967,108 @@ function DragDrop() {
             </div>
           )}
         </div>
-        <img src={arrow} alt="arrow1" className="arrow1" />
-        <img src={arrow} alt="arrow2" className="arrow2" />
-        <img src={arrow} alt="arrow3" className="arrow3" />
-        <p className="entry__text">Entry</p>
-        <p className="exit__text">Exit</p>
-        <p className="movieExit__text">Movie Exit</p>
-        <div className="placeholders-main-container">
-          <img src={cashCounter} alt="cashCounter" className="cashCounter" />
-          <img
-            className="supermarketImg"
-            src={supermarketBG}
-            alt="supermarket"
-          />
-          <div className="wall1"></div>
-          <div className="wall2"></div>
-          <div className="wall3"></div>
-          {board.map((placeholder) => {
-            return (
-              <BoardBox1
-                socket={socket}
-                remainingPlaceHoldersIds={remainingPlaceHoldersIds}
-                setremainingPlaceHolderIdsMember={
-                  setremainingPlaceHolderIdsMember
-                }
-                currQuestionPointer={currQuestionPointer}
-                setremainingPlaceHolderIds={remainingPlaceHolderIds}
-                supermarketUpdated={supermarketUpdated}
-                deleteFinalPlaceHolder={deleteFinalPlaceHolder}
-                canDrop={placeholder.canDrop}
-                roomData={roomData}
-                finalList={finalList}
-                updateFinalPlaceHolder={updateFinalPlaceHolder}
-                index={board.indexOf(placeholder)}
-                id={placeholder.id}
-                droppedItem={placeholder.droppedItem}
-                key={placeholder.id}
+        <p
+          style={{
+            color: "gray",
+            position: "absolute",
+            zIndex: "1",
+            top: "120px",
+            left: "550px",
+          }}
+        >
+          Every question is a new one and has no relevance to the last one
+        </p>
+
+        {!isTimeLoading ? (
+          <>
+            <img src={arrow} alt="arrow1" className="arrow1" />
+            <img src={arrow} alt="arrow2" className="arrow2" />
+            <img src={arrow} alt="arrow3" className="arrow3" />
+            <p className="entry__text">Entry</p>
+            <p className="exit__text">Exit</p>
+            <p className="movieExit__text">Movie Exit</p>
+            <div className="placeholders-main-container">
+              <img
+                src={cashCounter}
+                alt="cashCounter"
+                className="cashCounter"
               />
-            );
-          })}
-        </div>
-        <div className="supermarket-main-container">
-          <div className="question-container">
-            <h2>Question {currQuestionPointer + 1}:</h2>
-            <p className="question-instruction">{question.instruction}</p>
-            <p className="question-rules scrollable-content-question">
-              <p>
-                1. Be very careful about your moves because the number of
-                attempts matter.
-              </p>
-              <p>
-                2. Only the team leader can submit , others can see the
-                proceedings in real time.
-              </p>
-              <p>3. You have 6 questions and 15 mins in total. </p>
-              <p style={{ margin: "0" }}>
-                4. Once Submitted/skipped , you can not go back to previous
-                question.
-              </p>
-            </p>
-            <div className="question-item-set">
-              {supermarketUpdated.map((item, index) => {
+              <img
+                className="supermarketImg"
+                src={supermarketBG}
+                alt="supermarket"
+              />
+              <div className="wall1"></div>
+              <div className="wall2"></div>
+              <div className="wall3"></div>
+              {board.map((placeholder) => {
                 return (
-                  <div className={`question-item${index}`}>
-                    {authCtx.id === localStorage.getItem("leaderID") ? (
-                      <SupermarketDrag
-                        name={item.name}
-                        id={item.id}
-                        key={item.id}
-                      />
-                    ) : (
-                      <p id={item.id}>{item.name}</p>
-                    )}
-                  </div>
+                  <BoardBox1
+                    socket={socket}
+                    remainingPlaceHoldersIds={remainingPlaceHoldersIds}
+                    setremainingPlaceHolderIdsMember={
+                      setremainingPlaceHolderIdsMember
+                    }
+                    currQuestionPointer={currQuestionPointer}
+                    setremainingPlaceHolderIds={remainingPlaceHolderIds}
+                    supermarketUpdated={supermarketUpdated}
+                    deleteFinalPlaceHolder={deleteFinalPlaceHolder}
+                    canDrop={placeholder.canDrop}
+                    roomData={roomData}
+                    finalList={finalList}
+                    updateFinalPlaceHolder={updateFinalPlaceHolder}
+                    index={board.indexOf(placeholder)}
+                    id={placeholder.id}
+                    droppedItem={placeholder.droppedItem}
+                    key={placeholder.id}
+                  />
                 );
               })}
             </div>
+            <div className="supermarket-main-container">
+              <div className="question-container">
+                <h2>Question {currQuestionPointer + 1}:</h2>
+                <p className="question-instruction">{question.instruction}</p>
+                <p className="question-rules scrollable-content-question">
+                  <p>
+                    1. Be very careful about your moves because the number of
+                    attempts matter.
+                  </p>
+                  <p>
+                    2. Only the team leader can submit , others can see the
+                    proceedings in real time.
+                  </p>
+                  <p>3. You have 6 questions and 15 mins in total. </p>
+                  <p style={{ margin: "0" }}>
+                    4. Once Submitted/skipped , you can not go back to previous
+                    question.
+                  </p>
+                </p>
+                <div className="question-item-set">
+                  {supermarketUpdated.map((item, index) => {
+                    return (
+                      <div className={`question-item${index}`}>
+                        {authCtx.id === localStorage.getItem("leaderID") ? (
+                          <SupermarketDrag
+                            name={item.name}
+                            id={item.id}
+                            key={item.id}
+                          />
+                        ) : (
+                          <p id={item.id}>{item.name}</p>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div style={{ position: "relative", left: "50%", top: "50%" }}>
+            <ClipLoader color={"green"} loading={isTimeLoading} size={60} />
           </div>
-        </div>
+        )}
       </div>
     </CardContext.Provider>
   );

@@ -19,7 +19,7 @@ function DaysLeft() {
   const [today, setToday] = useState(new Date());
   const secondDate = new Date(2021, 11, 2);
   const [daysLeft, setDaysLeft] = useState(2);
-  console.log(today, secondDate);
+  // console.log(today, secondDate);
   useEffect(() => {
     setDaysLeft((prevDaysLeft) =>
       Math.round(Math.abs((today - secondDate) / oneDay))
@@ -28,9 +28,9 @@ function DaysLeft() {
   return (
     <>
       <Grid item container className="section1-text" xs>
-        Registrations closing in
-        <div class="daysLeftDate1">{daysLeft}</div>
-        <div class="daysLeftDate2">DAYS</div>
+        Registrations closed
+        {/* <div class="daysLeftDate1">{daysLeft}</div> */}
+        {/* <div class="daysLeftDate2">DAYS</div> */}
       </Grid>
     </>
   );

@@ -3,6 +3,7 @@ import { useDrop } from "react-dnd";
 import SupermarketDrag from "./SupermarketDrag";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import dropSound from "../resources/Audiofiles/drop.mpeg"
 
 const BoardBox1 = (props) => {
   const [board, setBoard] = useState([]);
@@ -135,6 +136,7 @@ const BoardBox1 = (props) => {
   ]);
 
   const [currItem, setCurrItem] = useState({ name: "", id: "" });
+  const dropAudio = new Audio(dropSound);
 
   useEffect(() => {
     props.socket.on("change", (data) => {
@@ -146,10 +148,11 @@ const BoardBox1 = (props) => {
     () => ({
       accept: "yes",
       drop: (item) => {
+        dropAudio.play();
         setCurrItem(item);
         sethasDropped(true);
         addItemToBoard(item.id);
-        props.setItemcantDrag(item.id);
+        // props.setItemcantDrag(item.id);
       },
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
@@ -170,7 +173,7 @@ const BoardBox1 = (props) => {
     sethasDropped(false);
     setBoard([]);
     props.deleteFinalPlaceHolder(props.id);
-    props.setItemcanDrag(props.id)
+    // props.setItemcanDrag(props.id)
   };
 
   return (

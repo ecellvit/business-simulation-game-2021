@@ -1,65 +1,76 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Route, Switch, useLocation, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
-import CreateTeamForm from "./CreateTeamForm";
+// import CreateTeamForm from "./CreateTeamForm";
 import { Link } from "react-router-dom";
 import fplogo from "../../resources/images/fpLogo.svg";
 import ecellLogo from "../../resources/images/ecellLogo.svg";
-import TeamList from "./TeamList";
+// import TeamList from "./TeamList";
 import TeamDisplay from "./TeamDisplay";
 import { useSnackbar } from "notistack";
+
+
 import { Nav } from "../nav";
-import { useTimer } from "react-timer-hook";
+
+// import { useTimer } from "react-timer-hook";
 import "./DashBoard.css";
 import ClipLoader from "react-spinners/ClipLoader";
+import warningSound from "../../resources/Audiofiles/warning.mpeg";
+import CountDownDashboard from "./CountDownDashboard";
 
-function MyTimer({ expiryTimestamp, nextQuestionHandler }) {
-  const authCtx = useContext(AuthContext);
-  const history = useHistory();
-  const { hour, seconds, minutes, isRunning, start, pause, resume, restart } =
-    useTimer({
-      expiryTimestamp,
-      onExpire: () => {
-        fetch(
-          `https://futurepreneursbackend.herokuapp.com/api/RoundOne/finishRoundOne`,
-          {
-            method: "POST",
-            body: JSON.stringify({
-              teamID: authCtx.teamID,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-            },
-          }
-        )
-          .then((response) => {
-            if (response.status === 400) {
-              history.replace("/Error");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data);
-            if (data) {
-              history.replace("/Submission");
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      },
-    });
-  return (
-    <div style={{ textAlign: "center", position: "absolute", left: "600px" }}>
-      <div style={{ fontSize: "30px" }} className="timer">
-        <span>{hour}</span>:<span>{minutes}</span>:<span>{seconds}</span>
-      </div>
-    </div>
-  );
-}
+// function MyTimer({ expiryTimestamp, nextQuestionHandler }) {
+//   const authCtx = useContext(AuthContext);
+//   const history = useHistory();
+//   const { hour, seconds, minutes, isRunning, start, pause, resume, restart } =
+//     useTimer({
+//       expiryTimestamp,
+//       onExpire: () => {
+//         fetch(
+//           `https://futurepreneursbackend.herokuapp.com/api/RoundOne/finishRoundOne`,
+//           {
+//             method: "POST",
+//             body: JSON.stringify({
+//               teamID: authCtx.teamID,
+//             }),
+//             headers: {
+//               "Content-Type": "application/json",
+//               "Access-Control-Allow-Origin": "*",
+//             },
+//           }
+//         )
+//           .then((response) => {
+//             if (response.status === 400) {
+//               history.replace("/Error");
+//             }
+//             return response.json();
+//           })
+//           .then((data) => {
+//             // console.log(data);
+//             if (data) {
+//               history.replace("/Submission");
+//             }
+//           })
+//           .catch((err) => {
+//             console.log(err);
+//           });
+//       },
+//     });
+//   return (
+//     <div style={{ textAlign: "center", position: "absolute", left: "600px" }}>
+//       <div style={{ fontSize: "30px" }} className="timer">
+//         <span>{hour}</span>:<span>{minutes}</span>:<span>{seconds}</span>
+//       </div>
+//     </div>
+//   );
+// }
 
 function DashBoard(props) {
+  const [hours, setHours] = useState(23);
+  const [minutes, setMinutes] = useState(59);
+  const [seconds, setSeconds] = useState(0);
+  const warningAudio = new Audio(warningSound);
+  const [expiryTimeStamp, setExpiryTimeStamp] = useState();
+  const [hasTimeChanged, setHasTimeChanged] = useState(false);
   // const location = useLocation();
   // const time = new Date();
   // const [time, settime] = useState(new Date());
@@ -83,7 +94,8 @@ function DashBoard(props) {
   const [showTeam, setShowTeam] = useState(false);
 
   const roundHasntStarted = (data) => {
-    enqueueSnackbar(`We haven't started now, please wait`, {
+    warningAudio.play();
+    enqueueSnackbar(`We haven't started round ${data} yet, please wait`, {
       variant: "warning",
       anchorOrigin: {
         vertical: "bottom",
@@ -120,8 +132,34 @@ function DashBoard(props) {
   //     props.round1CompletedHandler(true);
   //   }
   // }
+
+  // const checkRoundStarted = () => {
+  //   fetch(`https://futurepreneursbackend.herokuapp.com/`)
+  //     .then((response) => {
+  //       if (response.status === 400) {
+  //         history.replace("/Error");
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+
+  // useEffect(() => {
+  //   effect
+  //   return () => {
+  //     cleanup
+  //   }
+  // }, [input])
   useEffect(() => {
-    fetch(`https://futurepreneursbackend.herokuapp.com/`)
+    console.log(authCtx.teamID, "id");
+    fetch(
+      `https://futurepreneursbackend.herokuapp.com/?teamID=${authCtx.teamID}`
+    )
       .then((response) => {
         if (response.status === 400) {
           history.replace("/Error");
@@ -129,14 +167,20 @@ function DashBoard(props) {
         return response.json();
       })
       .then((data) => {
-        if (!data.isRoundOneOn) {
-          roundHasntStarted(1);
+        console.log("event data", data);
+        if (!data.event.isRoundOneOn) {
+          if (!data.hasCompletedRoundOne) {
+            roundHasntStarted(1);
+          }
           setRound1State(false);
         }
-        if (!data.isRoundTwoOn) {
-          roundHasntStarted(2);
+        if (!data.event.isRoundTwoOn) {
+          if (data.hasCompletedRoundOne) {
+            roundHasntStarted(2);
+          }
           setRound2State(false);
         }
+        setExpiryTimeStamp(data.event.timeOfEvent);
       })
       .catch((err) => {
         console.log(err);
@@ -190,7 +234,19 @@ function DashBoard(props) {
         <div className="teamDetails">
           <p className="startTime">Starting In</p>
           <div className="time__div">
-            <p className="time">12:60:49</p>
+            {expiryTimeStamp && (
+              <CountDownDashboard
+                endtime={expiryTimeStamp}
+                hoursMinSecs={{
+                  hours: hours,
+                  minutes: minutes,
+                  seconds: seconds,
+                }}
+                minutes1={minutes}
+                seconds1={seconds}
+                hasTimeChanged={hasTimeChanged}
+              />
+            )}
           </div>
           <hr className="hr" />
 
@@ -262,17 +318,19 @@ function DashBoard(props) {
                   </div>
                 )}
               </p>
-              <p className="min">30 Mins</p>
+              <p className="min">15 Mins</p>
               {!isLoading ? (
                 <Link to={hasCompleted1 ? "/Round2" : "/Round1"}>
                   <button
                     className="stbtn button"
-                    disabled={!Round2State || !Round1State}
+                    disabled={hasCompleted1 ? !Round2State : !Round1State}
                   >
                     {hasStarted1 ? "Continue" : "Start"}
                   </button>
                 </Link>
               ) : null}
+              {/* r1 true true false false
+              r2 false true false true */}
               {/* <input
                 className="elp"
                 type="image"

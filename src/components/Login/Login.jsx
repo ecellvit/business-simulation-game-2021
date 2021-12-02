@@ -87,7 +87,7 @@ function Login() {
         return response.json();
       })
       .then((data) => {
-        console.log("data",data)
+        // console.log("data",data)
         if(data===300){
           alert("Sorry, we can't find your registration")
           history.replace("/Error");

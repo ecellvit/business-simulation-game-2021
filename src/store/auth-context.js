@@ -16,7 +16,9 @@ const AuthContext = React.createContext({
   round2Completed: false,
   roundHandler: (round1status, round2status) => {},
   leaderID: "",
-  leaderHandler:()=>{}
+  leaderHandler: () => {},
+  callConnected: false,
+  callConnectHandler: () => {},
 });
 
 export const AuthContextProvider = (props) => {
@@ -27,6 +29,7 @@ export const AuthContextProvider = (props) => {
   const initialTeamID = localStorage.getItem("teamID");
   const initialPhotoURL = localStorage.getItem("photoURL");
   const initialLeaderID = localStorage.getItem("leaderID");
+  // const initiallyCallConnected = localStorage.getItem("callConnected");
 
   const [id, setId] = useState(initialId);
   const [uID, setuID] = useState(initialUId);
@@ -38,6 +41,7 @@ export const AuthContextProvider = (props) => {
   const [round1Completed, setround1Completed] = useState(false);
   const [round2Completed, setround2Completed] = useState(false);
   const [leaderID, setLeaderID] = useState(initialLeaderID);
+  const [callConnected, setcallConnected] = useState(false);
 
   const userIsLoggedIn = !!id;
   //note to myself(palani)---> !!id means converting the truthy or falsy value to a true or false boolean value
@@ -54,10 +58,10 @@ export const AuthContextProvider = (props) => {
     localStorage.setItem("photoURL", userPhotoURL);
   };
 
-  const leaderHandler = (leaderID)=>{
+  const leaderHandler = (leaderID) => {
     setLeaderID(leaderID);
-    localStorage.setItem("leaderID",leaderID)
-  }
+    localStorage.setItem("leaderID", leaderID);
+  };
 
   const roundHandler = (round1status, round2status) => {
     setround1Completed(round1status);
@@ -71,6 +75,10 @@ export const AuthContextProvider = (props) => {
   const teamHandler = (teamID) => {
     setTeamEmailId(teamID);
     localStorage.setItem("teamID", teamID);
+  };
+
+  const callConnectHandler = (bool) => {
+    setcallConnected(bool);
   };
 
   const contextValue = {
@@ -89,6 +97,8 @@ export const AuthContextProvider = (props) => {
     round1Completed: round1Completed,
     round2Completed: round2Completed,
     leaderHandler: leaderHandler,
+    callConnected: callConnected,
+    callConnectHandler: callConnectHandler,
   };
 
   return (

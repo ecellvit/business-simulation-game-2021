@@ -11,13 +11,13 @@ function SupermarketDrag(props) {
     }
   }, []);
 
-  const [{ isDragging, canDrag }, drag] = useDrag({
+  const [{ isDragging }, drag] = useDrag({
     type: type,
     item: { name: props.name, id: props.id },
-    canDrag: props.thisCanBeDragged,
+    // canDrag: props.thisCanBeDragged,
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
-      canDrag: !!monitor.canDrag(),
+      // canDrag: !!monitor.canDrag(),
     }),
   });
   return (
