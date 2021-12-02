@@ -155,40 +155,67 @@ function DashBoard(props) {
   //     cleanup
   //   }
   // }, [input])
-  useEffect(() => {
-    console.log(authCtx.teamID, "id");
-    if (authCtx.teamID) {
-      fetch(
-        `https://futurepreneursbackend.herokuapp.com/?teamID=${authCtx.teamID}`
-      )
-        .then((response) => {
-          if (response.status === 400) {
-            history.replace("/Error");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("event data", data);
-          if (!data.event.isRoundOneOn) {
-            if (!data.hasCompletedRoundOne) {
-              roundHasntStarted(1);
-            }
-            setRound1State(false);
-          }
-          if (!data.event.isRoundTwoOn) {
-            if (data.hasCompletedRoundOne) {
-              roundHasntStarted(2);
-            }
-            setRound2State(false);
-          }
-          setExpiryTimeStamp(data.event.timeOfEvent);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+
+  // useEffect(() => {
+  //   console.log(authCtx.teamID, "id");
+  //   if (authCtx.teamID) {
+  //     fetch(
+  //       `https://futurepreneursbackend.herokuapp.com/?teamID=${authCtx.teamID}`
+  //     )
+  //       .then((response) => {
+  //         if (response.status === 400) {
+  //           history.replace("/Error");
+  //         }
+  //         return response.json();
+  //       })
+  //       .then((data) => {
+  //         console.log("event data", data);
+  //         if (!data.event.isRoundOneOn) {
+  //           if (!data.hasCompletedRoundOne) {
+  //             roundHasntStarted(1);
+  //           }
+  //           setRound1State(false);
+  //         }
+  //         if (!data.event.isRoundTwoOn) {
+  //           if (data.hasCompletedRoundOne) {
+  //             roundHasntStarted(2);
+  //           }
+  //           setRound2State(false);
+  //         }
+  //         setExpiryTimeStamp(data.event.timeOfEvent);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
     
+  // }, []);
+
+  useEffect(() => {
+    fetch(`https://futurepreneursbackend.herokuapp.com/`)
+      .then((response) => {
+        if (response.status === 400) {
+          history.replace("/Error");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (!data.isRoundOneOn) {
+          roundHasntStarted(1);
+          setRound1State(false);
+        }
+        if (!data.isRoundTwoOn) {
+          roundHasntStarted(2);
+          setRound2State(false);
+        }
+        setExpiryTimeStamp(data.timeOfEvent);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
+
+
 
   const roundTwoCompleted = (hasCompleted) => {
     if (hasCompleted) {
