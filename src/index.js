@@ -16,7 +16,7 @@ require("dotenv").config();
 
 ReactDOM.render(
   <React.StrictMode>
-    <SnackbarProvider maxSnack={2} preventDuplicate>
+    <SnackbarProvider maxSnack={1} preventDuplicate>
       <AuthContextProvider>
         <BrowserRouter>
           <App />

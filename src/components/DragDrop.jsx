@@ -802,8 +802,13 @@ function DragDrop() {
           teamID: authCtx.teamID,
         });
         if (data.isCorrect || newAttempt === 1) {
-          socket.emit("correctAnswer", "afasf");
-          correctAnswer();
+          if (data.isCorrect) {
+            socket.emit("correctAnswer", "afasf");
+            correctAnswer();
+          } else {
+            socket.emit("wrongAnswer", "afassf");
+            wrongAttempt();
+          }
           nextQuestionHandler();
         } else if (!data.isCorrect) {
           socket.emit("wrongAnswer", "afassf");
@@ -1060,7 +1065,7 @@ function DragDrop() {
             </div>
           </>
         ) : (
-          <div style={{ position: "relative", left: "50%",top:"50%" }}>
+          <div style={{ position: "relative", left: "50%", top: "50%" }}>
             <ClipLoader color={"green"} loading={isTimeLoading} size={60} />
           </div>
         )}

@@ -152,7 +152,7 @@ const BoardBox1 = (props) => {
         setCurrItem(item);
         sethasDropped(true);
         addItemToBoard(item.id);
-        props.setItemcantDrag(item.id);
+        // props.setItemcantDrag(item.id);
       },
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
@@ -173,7 +173,7 @@ const BoardBox1 = (props) => {
     sethasDropped(false);
     setBoard([]);
     props.deleteFinalPlaceHolder(props.id);
-    props.setItemcanDrag(props.id)
+    // props.setItemcanDrag(props.id)
   };
 
   return (

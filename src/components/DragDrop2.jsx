@@ -67,7 +67,7 @@ function DragDrop() {
   };
 
   const timeOver = (user) => {
-    enqueueSnackbar(`Time Over`, {
+    enqueueSnackbar(`Round 1.2 is Over`, {
       variant: "error",
       anchorOrigin: {
         vertical: "bottom",
@@ -320,38 +320,40 @@ function DragDrop() {
       });
   }, []);
 
-  const setItemcantDrag = (id) => {
-    const newSuperMarketUpdated = supermarketUpdated.map((item) => {
-      if (item.id === id) {
-        // console.log("1",item.thisItemCanBeDragged);
-        return { ...item, thisItemCanBeDragged: false };
-      }
-    });
-    setSupermarketReceived((prevSupermarketUpdated) => {
-      prevSupermarketUpdated[id - 1] = newSuperMarketUpdated[id - 1];
-      return prevSupermarketUpdated;
-    });
-  };
-  // console.log(supermarketUpdated);
-  const setItemcanDrag = (id) => {
-    let redqID;
-    const deletedFinalListCanDrag = finalList.map((list) => {
-      if (list.id === id) {
-        redqID = list.item.id;
-      }
-      const newSuperMarketUpdated = supermarketUpdated.map((item) => {
-        if (item.id === redqID) {
-          return { ...item, thisItemCanBeDragged: true };
-        } else {
-          return item;
-        }
-      });
-      setSupermarketReceived(newSuperMarketUpdated);
-      return list;
-    });
+  // const setItemcantDrag = (id) => {
+  //   const newSuperMarketUpdated = supermarketUpdated.map((item) => {
+  //     if (item.id === id) {
+  //       // console.log("1",item.thisItemCanBeDragged);
+  //       return { ...item, thisItemCanBeDragged: false };
+  //     }
+  //   });
+  //   setSupermarketReceived((prevSupermarketUpdated) => {
+  //     prevSupermarketUpdated[id - 1] = newSuperMarketUpdated[id - 1];
+  //     return prevSupermarketUpdated;
+  //   });
+  // };
 
-    setFinalList(deletedFinalListCanDrag);
-  };
+  // console.log(supermarketUpdated);
+  
+  // const setItemcanDrag = (id) => {
+  //   let redqID;
+  //   const deletedFinalListCanDrag = finalList.map((list) => {
+  //     if (list.id === id) {
+  //       redqID = list.item.id;
+  //     }
+  //     const newSuperMarketUpdated = supermarketUpdated.map((item) => {
+  //       if (item.id === redqID) {
+  //         return { ...item, thisItemCanBeDragged: true };
+  //       } else {
+  //         return item;
+  //       }
+  //     });
+  //     setSupermarketReceived(newSuperMarketUpdated);
+  //     return list;
+  //   });
+
+  //   setFinalList(deletedFinalListCanDrag);
+  // };
 
   // useEffect(() => {
   //   fetch(
@@ -385,6 +387,8 @@ function DragDrop() {
     socket.on("roomUsers", (data) => {
       // console.log("roomUsers", data);
       setRoomUsers(data.users);
+      const len = data.users.length;
+      userJoined(data.users[len - 1]);
     });
     socket.emit("joinRoom", roomData);
     socket.on("roundTwoCompletion", (data) => {
@@ -548,7 +552,7 @@ function DragDrop() {
 
   useEffect(() => {
     // console.log("teamIDDD", authCtx.teamID);
-    setisTimeLoading(true);
+    // setisTimeLoading(true);
     fetch(
       `https://futurepreneursbackend.herokuapp.com/api/RoundTwo/start?teamID=${authCtx.teamID}`
     )
@@ -564,7 +568,7 @@ function DragDrop() {
           setExpiryTimeStamp(timeStamp);
           setHasTimeChanged(true);
         }, 500);
-        setisTimeLoading(false);
+        // setisTimeLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -630,7 +634,7 @@ function DragDrop() {
           hasTimeChanged={hasTimeChanged}
         />
       )}
-      {isTimeLoading && <p>Loading...</p>}
+      {/* {isTimeLoading && <p>Loading...</p>} */}
       {/* {isHandRaised ? (
         <img
           alt="handDown"
@@ -695,6 +699,7 @@ function DragDrop() {
           zIndex: "1",
           top: "130px",
           left: "550px",
+          fontStyle: "bolder"
         }}
       >
         No item should be placed more than once
@@ -752,9 +757,9 @@ function DragDrop() {
           {board.map((placeholder) => {
             return (
               <BoardBox2
-                setItemcantDrag={setItemcantDrag}
+                // setItemcantDrag={setItemcantDrag}
                 socket={socket}
-                setItemcanDrag={setItemcanDrag}
+                // setItemcanDrag={setItemcanDrag}
                 // emitUpdate={emitUpdate}
                 supermarketUpdated={supermarketUpdated}
                 deleteFinalPlaceHolder={deleteFinalPlaceHolder}
