@@ -426,7 +426,7 @@ function DragDrop() {
   }, []);
 
   useEffect(() => {
-    fetch(`https://futurepreneursbackend.herokuapp.com/?teamID=${authCtx.teamID}`)
+    fetch(`https://futurepreneursbackend.herokuapp.com/`)
       .then((response) => {
         if (response.status === 400) {
           history.replace("/Error");
@@ -434,7 +434,7 @@ function DragDrop() {
         return response.json();
       })
       .then((data) => {
-        if (!data.event.isRoundTwoOn) {
+        if (!data.isRoundTwoOn) {
           roundHasntStarted("Round 1.2 hasn't started yet, try again soon!");
           history.replace("/Dashboard");
         }
