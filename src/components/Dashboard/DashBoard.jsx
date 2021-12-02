@@ -157,34 +157,37 @@ function DashBoard(props) {
   // }, [input])
   useEffect(() => {
     console.log(authCtx.teamID, "id");
-    fetch(
-      `https://futurepreneursbackend.herokuapp.com/?teamID=${authCtx.teamID}`
-    )
-      .then((response) => {
-        if (response.status === 400) {
-          history.replace("/Error");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("event data", data);
-        if (!data.event.isRoundOneOn) {
-          if (!data.hasCompletedRoundOne) {
-            roundHasntStarted(1);
+    if (authCtx.teamID) {
+      fetch(
+        `https://futurepreneursbackend.herokuapp.com/?teamID=${authCtx.teamID}`
+      )
+        .then((response) => {
+          if (response.status === 400) {
+            history.replace("/Error");
           }
-          setRound1State(false);
-        }
-        if (!data.event.isRoundTwoOn) {
-          if (data.hasCompletedRoundOne) {
-            roundHasntStarted(2);
+          return response.json();
+        })
+        .then((data) => {
+          console.log("event data", data);
+          if (!data.event.isRoundOneOn) {
+            if (!data.hasCompletedRoundOne) {
+              roundHasntStarted(1);
+            }
+            setRound1State(false);
           }
-          setRound2State(false);
-        }
-        setExpiryTimeStamp(data.event.timeOfEvent);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+          if (!data.event.isRoundTwoOn) {
+            if (data.hasCompletedRoundOne) {
+              roundHasntStarted(2);
+            }
+            setRound2State(false);
+          }
+          setExpiryTimeStamp(data.event.timeOfEvent);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    
   }, []);
 
   const roundTwoCompleted = (hasCompleted) => {
