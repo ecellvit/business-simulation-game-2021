@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useDrop } from "react-dnd";
+
+// Components
 import SupermarketDrag from "./SupermarketDrag";
-import { Supermarket } from "../custom/data";
+
+// UI Utilities
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import dropSound from "../resources/Audiofiles/drop.mpeg"
@@ -102,6 +105,7 @@ const BoardBox1 = (props) => {
         // props.socket.emit("update1", props.id);
         clearRemainingBoards(props.id);
         addItemToBoard(item.id);
+        console.log(props.canDrop)
       },
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
@@ -148,7 +152,6 @@ const BoardBox1 = (props) => {
   useEffect(() => {
     removeItemFromBoard(props.id);
   }, [props.currQuestionPointer]);
-  // console.log("board", board, props.id);
 
   return (
     <div
@@ -156,9 +159,6 @@ const BoardBox1 = (props) => {
       ref={drop}
       style={{
         border: "0.01px solid black",
-        // height: "80px",
-        // margin: "65px",
-        // width: "80px",
         backgroundColor: props.canDrop === "yes" ? "#fff" : "grey",
       }}
       key={props.id}
@@ -184,12 +184,6 @@ const BoardBox1 = (props) => {
           return <p key={listItem.item.id}>{listItem.canDrop.element}</p>;
         }
       })}
-      {/* <SupermarketDrag
-              color="white"
-              name={listItem.canDrop.element}
-              id={listItem.item.id}
-              key={listItem.item.id}
-            /> */}
 
       {/* leader side */}
       {board.map((boardItem) => {

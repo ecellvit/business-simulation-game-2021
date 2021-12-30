@@ -1,3 +1,4 @@
+// NOT USED COMPONENT
 import React from 'react'
 import fpLogo from '../../resources/images/fpLogo.svg'
 import ecellLogo from '../../resources/images/ecellLogo.svg'

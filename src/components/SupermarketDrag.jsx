@@ -1,16 +1,22 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useDrag } from "react-dnd";
+
+//Contexts
 import AuthContext from "../store/auth-context";
 
 function SupermarketDrag(props) {
-  const [type, setType] = useState("yes");
   const authCtx = useContext(AuthContext);
+
+  const [type, setType] = useState("yes");
+
+  // for only allowing leader to drag
   useEffect(() => {
-    if (localStorage.getItem("leaderID") !== authCtx.id) {
+    if (authCtx.leaderID !== authCtx.id) {
       setType("no");
     }
   }, []);
 
+  //useDrag hook react DnD
   const [{ isDragging }, drag] = useDrag({
     type: type,
     item: { name: props.name, id: props.id },
@@ -20,6 +26,7 @@ function SupermarketDrag(props) {
       // canDrag: !!monitor.canDrag(),
     }),
   });
+
   return (
     <div
       className="question-div"

@@ -1,129 +1,116 @@
 import React, { useState, useContext, useEffect } from "react";
-import {
-  Route,
-  Switch,
-  useLocation,
-  Prompt,
-  useHistory,
-} from "react-router-dom";
-// import { useTimer } from "react-timer-hook";
-import { useSnackbar } from "notistack";
+import { useHistory } from "react-router-dom";
+
+//socket.io
 import { io } from "socket.io-client";
-import AuthContext from "../store/auth-context";
-import cashCounter from "../resources/images/cashCounter.jpg";
-import SupermarketDrag from "./SupermarketDrag";
-import arrow from "../resources/images/arrow2.png";
+
+// Components
+import { Nav } from "./nav";
 import BoardBox1 from "./BoardBox1";
+import SupermarketDrag from "./SupermarketDrag";
 import CountDown from "./Dashboard/CountDown";
-import { Placeholders } from "../custom/data";
+
+// Contexts
+import AuthContext from "../store/auth-context";
+
+// CSS
+import "./DragDrop.css";
+
+// Images
+import supermarketBG from "../resources/images/bgImg1.jpg";
+import arrow from "../resources/images/arrow2.png";
+import cashCounter from "../resources/images/cashCounter.jpg";
+
+// UI Utilities
+import { useSnackbar } from "notistack";
+import ClipLoader from "react-spinners/ClipLoader";
 import errorSound from "../resources/Audiofiles/error.mpeg";
 import infoSound from "../resources/Audiofiles/info.mpeg";
 import successSound from "../resources/Audiofiles/success.mpeg";
-import "./DragDrop.css";
-import { Nav } from "./nav";
 import warningSound from "../resources/Audiofiles/warning.mpeg";
-import ClipLoader from "react-spinners/ClipLoader";
-import supermarketBG from "../resources/images/bgImg1.jpg";
 
-// import SubmissionPage from "./SubmissionPage";
-export const CardContext = React.createContext({
-  finalList: [],
-});
+// Data
+import { Placeholders } from "../custom/data";
 
-// const socket = io("http://127.0.0.1:2000/");
-// const socket = io("https://127.0.0.1:2000/",{transports: ['websocket']});
-
+//connecting socket
 var socket = io("https://futurepreneursbackend.herokuapp.com");
 
-// function MyTimer({ expiryTimestamp, nextQuestionHandler }) {
-//   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
-//   const timeOver = (user) => {
-//     enqueueSnackbar(`Time Over`, {
-//       variant: "error",
-//       anchorOrigin: {
-//         vertical: "bottom",
-//         horizontal: "right",
-//       },
-//     });
-//   };
-//   // console.log(expiryTimestamp,"in timer")
-//   const authCtx = useContext(AuthContext);
-//   const history = useHistory();
-//   // useEffect(() => {
-//   //   console.log(expiryTimestamp, "in timer");
-//   // }, [expiryTimestamp]);
-
-//   // const { seconds, minutes } = useTimer({
-//   //   expiryTimestamp,
-//   //   onExpire: () => {
-//   //     fetch(
-//   //       `https://futurepreneursbackend.herokuapp.com/api/RoundOne/finishRoundOne`,
-//   //       {
-//   //         method: "POST",
-//   //         body: JSON.stringify({
-//   //           teamID: authCtx.teamID,
-//   //         }),
-//   //         headers: {
-//   //           "Content-Type": "application/json",
-//   //           "Access-Control-Allow-Origin": "*",
-//   //         },
-//   //       }
-//   //     )
-//   //       .then((response) => {
-//   //         if (response.status === 400) {
-//   //           history.replace("/Error");
-//   //         }
-//   //         return response.json();
-//   //       })
-//   //       .then((data) => {
-//   //         console.log(data);
-//   //         if (data) {
-//   //           timeOver();
-//   //           history.replace("/Submission");
-//   //           socket.emit("timerOver", "sdfaf");
-//   //         }
-//   //       })
-//   //       .catch((err) => {
-//   //         console.log(err);
-//   //       });
-//   //   },
-//   // });
-//   return (
-//     <div style={{ textAlign: "center", position: "absolute", left: "600px" }}>
-//       {/* <p>{isRunning ? "Running" : "Not running"}</p> */}
-//       {/* <button onClick={start}>Start</button>
-//       <button onClick={pause}>Pause</button>
-//       <button onClick={resume}>Resume</button> */}
-//       {/* <button
-//         onClick={() => {
-//           // Restarts to 5 minutes timer
-//           const time = new Date();
-//           time.setSeconds(time.getSeconds() + 300);
-//           restart(time);
-//         }}
-//       >
-//         Restart
-//       </button> */}
-//     </div>
-//   );
-// }
-
 function DragDrop() {
-  const successAudio = new Audio(successSound);
-  const [isTimerOVer, setisTimerOVer] = useState(false);
+  const history = useHistory();
   const authCtx = useContext(AuthContext);
-  const [expiryTimeStamp, setExpiryTimeStamp] = useState();
-  const [isSubmitting, setisSubmitting] = useState(false);
+
+  const [items, setItems] = useState(["", "", "", ""]);
+  const [question, setQuestion] = useState({
+    id: "",
+    instruction: "",
+    options: [],
+  });
+
+  //questions logic related states 
   const [newAttempt, setnewAttempt] = useState();
+  const [attempts, setAttempts] = useState(1);
+  const [currQuestionPointer, setcurrQuestionPointer] = useState(0);
+  const [score, setScore] = useState(0);
+
+   
+  const [finalList, setFinalList] = useState([
+    { id: "one", item: { id: "", name: "" }, canDrop: "" },
+    { id: "two", item: { id: "", name: "" }, canDrop: "" },
+    { id: "three", item: { id: "", name: "" }, canDrop: "" },
+    { id: "four", item: { id: "", name: "" }, canDrop: "" },
+    { id: "five", item: { id: "", name: "" }, canDrop: "" },
+    { id: "six", item: { id: "", name: "" }, canDrop: "" },
+    { id: "seven", item: { id: "", name: "" }, canDrop: "" },
+  ]);
+
+  console.log(finalList)
+  const [canDrop, setCanDrop] = useState([
+    {
+      0: { isDroppable: "yes", element: "" },
+      1: { isDroppable: "yes", element: "" },
+      2: { isDroppable: "yes", element: "" },
+      3: { isDroppable: "yes", element: "" },
+      4: { isDroppable: "yes", element: "" },
+      5: { isDroppable: "yes", element: "" },
+      6: { isDroppable: "yes", element: "" },
+    },
+  ]);
+
+  const board = Placeholders.map((placeholder, i) => {
+    return { ...placeholder, canDrop: canDrop[0][i].isDroppable };
+  });
+
+  const [remainingPlaceHoldersIds, setremainingPlaceHolderIds] = useState([]);
+  const [filteredFinalList, setFilteredFinalList] = useState([]);
+  
+  // time states
+  const [minutes, setMinutes] = useState(15);
+  const [seconds, setSeconds] = useState(0);
+
+  const [expiryTimeStamp, setExpiryTimeStamp] = useState();
+  const [isTimeLoading, setisTimeLoading] = useState(false);
+  const [hasTimeChanged, setHasTimeChanged] = useState(false);
+
+  const [supermarketUpdated, setsupermarketUpdated] = useState([
+    {
+      name: "",
+      id: 1,
+    },
+  ]);
+
+  // loading states
+  const [isSubmitting, setisSubmitting] = useState(false);
+
+  //Snackbar effects
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  //Sound effects
+  const successAudio = new Audio(successSound);
   const errorAudio = new Audio(errorSound);
   const infoAudio = new Audio(infoSound);
   const warningAudio = new Audio(warningSound);
 
-  // const [time, setTime] = useState(new Date().setSeconds(this.get));
-
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  // const [time, setTime] = useState(new Date().setSeconds(this.get));
+  // functions
   const timeOver = (user) => {
     enqueueSnackbar(`Time Over`, {
       variant: "error",
@@ -177,59 +164,6 @@ function DragDrop() {
     });
   };
 
-  const history = useHistory();
-  const [score, setScore] = useState(0);
-  const [sockets, setSockets] = useState(false);
-  const [micMuted, setMicMuted] = useState(true);
-  const [minutes, setMinutes] = useState(15);
-  const [seconds, setSeconds] = useState(0);
-
-  const [isTimeLoading, setisTimeLoading] = useState(false);
-
-  const [hasTimeChanged, setHasTimeChanged] = useState(false);
-  const [isHandRaised, setisHandRaised] = useState(false);
-  const [items, setItems] = useState(["", "", "", ""]);
-  const [question, setQuestion] = useState({
-    id: "",
-    instruction: "",
-    options: [],
-  });
-
-  const [supermarketUpdated, setsupermarketUpdated] = useState([
-    {
-      name: "",
-      id: 1,
-    },
-    // {
-    //   name: "",
-    //   id: 2,
-    // },
-    // {
-    //   name: "",
-    //   id: 3,
-    // },
-    // {
-    //   name: "",
-    //   id: 4,
-    // },
-  ]);
-
-  const [attempts, setAttempts] = useState(1);
-
-  const [currQuestionPointer, setcurrQuestionPointer] = useState(0);
-
-  const [canDrop, setCanDrop] = useState([
-    {
-      0: { isDroppable: "yes", element: "" },
-      1: { isDroppable: "yes", element: "" },
-      2: { isDroppable: "yes", element: "" },
-      3: { isDroppable: "yes", element: "" },
-      4: { isDroppable: "yes", element: "" },
-      5: { isDroppable: "yes", element: "" },
-      6: { isDroppable: "yes", element: "" },
-    },
-  ]);
-
   useEffect(() => {
     setCanDrop([
       {
@@ -244,27 +178,8 @@ function DragDrop() {
     ]);
   }, [currQuestionPointer]);
 
-  const [finalList, setFinalList] = useState([
-    { id: "one", item: { id: "", name: "" }, canDrop: "" },
-    { id: "two", item: { id: "", name: "" }, canDrop: "" },
-    { id: "three", item: { id: "", name: "" }, canDrop: "" },
-    { id: "four", item: { id: "", name: "" }, canDrop: "" },
-    { id: "five", item: { id: "", name: "" }, canDrop: "" },
-    { id: "six", item: { id: "", name: "" }, canDrop: "" },
-    { id: "seven", item: { id: "", name: "" }, canDrop: "" },
-  ]);
-
-  const [remainingPlaceHoldersIds, setremainingPlaceHolderIds] = useState([]);
-
-  const [filteredFinalList, setFilteredFinalList] = useState([]);
-
-  const board = Placeholders.map((placeholder, i) => {
-    return { ...placeholder, canDrop: canDrop[0][i].isDroppable };
-  });
 
   const addToCanDrop = (blocked, unblocked, { Zones }) => {
-    // console.log("object", blocked, unblocked, Zones);
-
     blocked.forEach((blockedPlaceHolder) => {
       if (blockedPlaceHolder === "one") {
         setCanDrop((prevCanDrop) => [
@@ -464,7 +379,6 @@ function DragDrop() {
     type: "member",
   });
 
-  // "https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions"
   //useEffect to fetch questions
   useEffect(() => {
     setisTimeLoading(true);
@@ -477,13 +391,11 @@ function DragDrop() {
         return res.json();
       })
       .then(({ question, timeStamp, attemptsLeft }) => {
-        console.log(question, currQuestionPointer, "question");
         addToCanDrop(
           question.BlockedZones,
           question.UnblockedZones,
           question.PrefixEnvironment
         );
-        // console.log(attemptsLeft, "att");
         setnewAttempt(3 - attemptsLeft);
         setItems((preItem) => {
           return question.Options;
@@ -509,27 +421,16 @@ function DragDrop() {
           setHasTimeChanged(true);
         }, 500);
         setisTimeLoading(false);
-        // console.log("from backend", timeStamp);
       });
   }, [currQuestionPointer]);
-  // console.log("from backend 2", expiryTimeStamp);
-  // useEffect(() => {
-  //   setcurrTime(Math.floor(Date.now()/1000))
-  // }, [])
-
-  // console.log(Number(expiryTimeStamp)-Math.floor(Date.now()/1000),"time rem")
-  // console.log(expiryTimeStamp,"time from backend")
-  // console.log(expiryTimeStamp.getTime()/1000 - Math.floor(Date.now()/1000),"time rem")
 
   //useEffect for sockets
-
   useEffect(() => {
     if (socket.connected) {
       socket.disconnect();
       socket = io("https://futurepreneursbackend.herokuapp.com");
     }
     socket.on("roomUsers", (data) => {
-      // console.log("roomUsers", data);
       setRoomUsers(data.users);
       const len = data.users.length;
       userJoined(data.users[len - 1]);
@@ -543,7 +444,6 @@ function DragDrop() {
           setAttempts((prevAttempt) => 1);
           return prevPointer;
         } else {
-          // console.log(prevPointer);
           socket.emit("round1", { teamID: authCtx.teamID });
           history.replace("/Submission");
           return prevPointer;
@@ -561,12 +461,9 @@ function DragDrop() {
       history.replace("/Submission");
     });
     socket.on("receivedAttempts", (attempts) => {
-      // setAttempts(attempts.attempt);
-      // console.log(attempts.attempt, "hey");
       setnewAttempt(attempts.attempt);
     });
   }, [roomData]);
-  // console.log(roomUsers)
 
   //useEffect for canDrop property to finalList
   useEffect(() => {
@@ -586,31 +483,6 @@ function DragDrop() {
       });
     });
   }, [finalList]);
-
-  //disconnecting socket
-  // useEffect(
-  //   () =>
-  //     history.listen(() => {
-  //       const disconnect = async () => {
-  //         socket.disconnect();
-  //       };
-  //       disconnect();
-  //     }),
-  //   []
-  // );
-
-  // useEffect(() => {
-  //   const disconnect = async () => {
-  //     await socket.disconnect();
-  //   };
-  //   console.log("sockets",sockets,history)
-  //   if(sockets){
-  //     disconnect();
-  //   }else{
-  //     setSockets(true);
-  //   }
-  //   // console.log("history",history)
-  // }, [history.location.pathname]);
 
   //useEffect to check for user's current question
   useEffect(() => {
@@ -641,24 +513,6 @@ function DragDrop() {
         console.log(err);
       });
   }, []);
-
-  // useEffect(() => {
-  //   fetch(`https://futurepreneursbackend.herokuapp.com/`)
-  //     .then((response) => {
-  //       if (response.status === 400) {
-  //         history.replace("/Error");
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       if(data.isRoundOneOn){
-  //         history.replace("/Dashboard");
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
 
   const updateFinalPlaceHolder = (placeHolderID, itemList) => {
     if (placeHolderID === "one") {
@@ -722,14 +576,6 @@ function DragDrop() {
     socket.emit("update", deletedFinalList);
   };
 
-  // useEffect(() => {
-  //   finalList.map((item) => {
-  //     return { ...item, canDrop: { isDroppable: "yes", element: "" } };
-  //   });
-  //   // const set = ["one", "two", "three", "four", "five", "six", "seven"];
-  //   // set.forEach((element) => {});
-  // }, [currQuestionPointer]);
-
   const nextQuestionHandler = () => {
     socket.emit("nextQuestion", "nextques");
     setcurrQuestionPointer((prevPointer) => {
@@ -774,10 +620,6 @@ function DragDrop() {
           teamID: authCtx.teamID,
           responseEnvironment: {
             Zones: filteredFinalList.map((element) => {
-              console.log("ans", {
-                option: element.item.name,
-                index: element.id,
-              });
               return { option: element.item.name, index: element.id };
             }),
           },
@@ -817,8 +659,6 @@ function DragDrop() {
         setScore((prevScore) => {
           return data.currentPoints;
         });
-        // setMinutes(2);
-        // setSeconds(20);
       })
       .catch((err) => {
         console.log(err);
@@ -872,17 +712,17 @@ function DragDrop() {
   //iscorrect false in 1st attempt-->give msg/prompt you are incorrect and attempt++
   //3rd attempt false-->answer wrong and setcurrQues++
   //3rd attempt true-->answer correct and setcurrQues++
-  const [dontgoback, setDontgoback] = useState(true);
-  useEffect(() => {
-    // console.log(currQuestionPointer, "curr");
-    if (currQuestionPointer === 3) {
-      setDontgoback(false);
-    }
-  }, [currQuestionPointer]);
+
+  // const [dontgoback, setDontgoback] = useState(true);
+  // useEffect(() => {
+  //   // console.log(currQuestionPointer, "curr");
+  //   if (currQuestionPointer === 3) {
+  //     setDontgoback(false);
+  //   }
+  // }, [currQuestionPointer]);
 
   return (
-    <CardContext.Provider value={{}}>
-      {/* <Nav expiryTimestamp={time} /> */}
+    <>
       <Nav />
 
       {expiryTimeStamp && (
@@ -895,21 +735,6 @@ function DragDrop() {
           hasTimeChanged={hasTimeChanged}
         />
       )}
-
-      {/* <button onClick={handleClick}>Click</button> */}
-      {/* <Prompt message="Don't Navigate Away" when={dontgoback} /> */}
-      {/* <div>
-        {authCtx.id === localStorage.getItem("leaderID") && (
-          <MyTimer
-            setisTimerOVer={setisTimerOVer}
-            nextQuestionHandler={nextQuestionHandler}
-            // expiryTimestamp={Number(expiryTimeStamp) - Math.floor(Date.now()/1000)}
-            expiryTimestamp1={time}
-            submitAnswerHandler={submitAnswerHandler}
-          />
-        )}
-      </div> */}
-      {/* ATTEMPTS LEFT: {4 - attempts > 1 ? 4 - attempts : 1} */}
       <div className="game-options">
         <span className="attempts-left">ATTEMPTS LEFT: {newAttempt}</span>
         {authCtx.id === localStorage.getItem("leaderID") ? (
@@ -1070,7 +895,7 @@ function DragDrop() {
           </div>
         )}
       </div>
-    </CardContext.Provider>
+    </>
   );
 }
 

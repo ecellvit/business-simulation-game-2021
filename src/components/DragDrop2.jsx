@@ -1,50 +1,33 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Route, Switch, useLocation, useHistory } from "react-router-dom";
+import {useHistory } from "react-router-dom";
+
+// socket.io
 import { io } from "socket.io-client";
-import AgoraRTC from "agora-rtc-react";
-import AuthContext from "../store/auth-context";
-import { useSnackbar } from "notistack";
+
+// Components
+import BoardBox2 from "./BoardBox2"; 
+import { Nav } from "./nav";
 import SupermarketDrag from "./SupermarketDrag";
-import BoardBox2 from "./BoardBox2";
+import CountDown from "./Dashboard/CountDown";
+
+// Contexts
+import AuthContext from "../store/auth-context";
+
+// CSS
+import "./DragDrop2.css";
+
+// Images
+import supermarketBG2 from "../resources/images/bgImg2.png";
+
+// UI Utilities
+import { useSnackbar } from "notistack";
 import infoSound from "../resources/Audiofiles/info.mpeg";
+
+// Data
 import { Placeholders2 } from "../custom/data2";
 
-import "./DragDrop2.css";
-import { Nav } from "./nav";
-
-import supermarketBG2 from "../resources/images/bgImg2.png";
-import { ElevenMpSharp } from "@mui/icons-material";
-import CountDown from "./Dashboard/CountDown";
-export const CardContext = React.createContext({
-  finalList: [],
-});
-
-// const socket = io("http://127.0.0.1:2000/");
-let socket = io("https://futurepreneursbackend.herokuapp.com");
-
-// let rtc = {
-//   localAudioTrack: null,
-//   client: null,
-// };
-
-// async function startBasicCall() {
-//   rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-
-//   rtc.client.on("user-published", async (user, mediaType) => {
-//     await rtc.client.subscribe(user, mediaType);
-//     console.log("subscribe success");
-
-//     if (mediaType === "audio") {
-//       const remoteAudioTrack = user.audioTrack;
-//       // Play the remote audio track.
-//       remoteAudioTrack.play();
-//     }
-//     rtc.client.on("user-unpublished", async (user) => {
-//       await rtc.client.unsubscribe(user);
-//     });
-//   });
-// }
-// startBasicCall();
+//Connecting Socket
+var socket = io("https://futurepreneursbackend.herokuapp.com");
 
 function DragDrop() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -167,84 +150,6 @@ function DragDrop() {
 
   const authCtx = useContext(AuthContext);
   const [score, setScore] = useState(0);
-  // const time = new Date();
-  // time.setSeconds(time.getSeconds() + 600);
-  const [micMuted, setMicMuted] = useState(true);
-  const [isHandRaised, setisHandRaised] = useState(false);
-  const [isTimeLoading, setisTimeLoading] = useState(false);
-  const [items, setItems] = useState(["", "", "", ""]);
-  const [question, setQuestion] = useState({
-    id: "",
-    instruction: "",
-    options: [],
-  });
-
-  // const [supermarketUpdated, setsupermarketUpdated] = useState([
-  //   {
-  //     name: "",
-  //     id: 1,
-  //   },
-  //   {
-  //     name: "",
-  //     id: 2,
-  //   },
-  //   {
-  //     name: "",
-  //     id: 3,
-  //   },
-  //   {
-  //     name: "",
-  //     id: 4,
-  //   },
-  //   {
-  //     name: "",
-  //     id: 5,
-  //   },
-  //   {
-  //     name: "",
-  //     id: 6,
-  //   },
-  //   {
-  //     name: "",
-  //     id: 7,
-  //   },
-  //   {
-  //     name: "",
-  //     id: 8,
-  //   },
-  //   {
-  //     name: "",
-  //     id: 9,
-  //   },
-  //   {
-  //     name: "",
-  //     id: 10,
-  //   },
-  //   {
-  //     name: "",
-  //     id: 11,
-  //   },
-  //   {
-  //     name: "",
-  //     id: 12,
-  //   },
-  //   {
-  //     name: "",
-  //     id: 13,
-  //   },
-  //   {
-  //     name: "",
-  //     id: 14,
-  //   },
-  //   {
-  //     name: "",
-  //     id: 15,
-  //   },
-  // ]);
-
-  // const [attempts, setAttempts] = useState(1);
-
-  // const [currQuestionPointer, setcurrQuestionPointer] = useState(0);
 
   const [finalList, setFinalList] = useState([
     { id: "one", item: { id: "", name: "", thisItemCanBeDragged: true } },
@@ -264,8 +169,6 @@ function DragDrop() {
     { id: "fifteen", item: { id: "", name: "", thisItemCanBeDragged: true } },
   ]);
 
-  // const [filteredFinalList, setFilteredFinalList] = useState([]);
-
   const [roomUsers, setRoomUsers] = useState([
     { id: "", username: "", room: "", email: "", photoURL: "" },
   ]);
@@ -276,21 +179,6 @@ function DragDrop() {
     photoURL: authCtx.photoURL,
     teamID: authCtx.teamID,
   });
-
-  // "https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions"
-  // useEffect(() => {
-  //   fetch(
-  //     `https://futurepreneursbackend.herokuapp.com/api/voice/token?channel=${authCtx.teamID}&uid=${authCtx.uID}&role=publisher`
-  //   )
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setOptions((prevOptions) => ({
-  //         ...prevOptions,
-  //         channel: authCtx.teamID,
-  //         token: data.token,
-  //       }));
-  //     });
-  // }, []);
 
   useEffect(() => {
     fetch(
@@ -320,64 +208,6 @@ function DragDrop() {
       });
   }, []);
 
-  // const setItemcantDrag = (id) => {
-  //   const newSuperMarketUpdated = supermarketUpdated.map((item) => {
-  //     if (item.id === id) {
-  //       // console.log("1",item.thisItemCanBeDragged);
-  //       return { ...item, thisItemCanBeDragged: false };
-  //     }
-  //   });
-  //   setSupermarketReceived((prevSupermarketUpdated) => {
-  //     prevSupermarketUpdated[id - 1] = newSuperMarketUpdated[id - 1];
-  //     return prevSupermarketUpdated;
-  //   });
-  // };
-
-  // console.log(supermarketUpdated);
-  
-  // const setItemcanDrag = (id) => {
-  //   let redqID;
-  //   const deletedFinalListCanDrag = finalList.map((list) => {
-  //     if (list.id === id) {
-  //       redqID = list.item.id;
-  //     }
-  //     const newSuperMarketUpdated = supermarketUpdated.map((item) => {
-  //       if (item.id === redqID) {
-  //         return { ...item, thisItemCanBeDragged: true };
-  //       } else {
-  //         return item;
-  //       }
-  //     });
-  //     setSupermarketReceived(newSuperMarketUpdated);
-  //     return list;
-  //   });
-
-  //   setFinalList(deletedFinalListCanDrag);
-  // };
-
-  // useEffect(() => {
-  //   fetch(
-  //     `https://futurepreneursbackend.herokuapp.com/api/RoundOne/getQuestions?question=${
-  //       currQuestionPointer + 1
-  //     }&teamID=${authCtx.teamID}`
-  //   )
-  //     .then((res) => {
-  //       return res.json();
-  //     })
-  //     .then((data) => {
-  //       setItems((preItem) => {
-  //         return data.Options;
-  //       });
-  //       setQuestion((prevQuestion) => {
-  //         return {
-  //           id: data._id,
-  //           instruction: data.Instruction,
-  //           options: data.Options,
-  //         };
-  //       });
-  //     });
-  // }, [currQuestionPointer]);
-
   //useEffect for sockets
   useEffect(() => {
     if (socket.connected) {
@@ -385,7 +215,6 @@ function DragDrop() {
       socket = io("https://futurepreneursbackend.herokuapp.com");
     }
     socket.on("roomUsers", (data) => {
-      // console.log("roomUsers", data);
       setRoomUsers(data.users);
       const len = data.users.length;
       userJoined(data.users[len - 1]);
@@ -548,11 +377,8 @@ function DragDrop() {
     setFinalList(deletedFinalList);
     socket.emit("update", deletedFinalList);
   };
-  // {questionID:,teamID:,attempts:,responseEnvironment:{Zones:[{index:"",option:""}]}}
 
   useEffect(() => {
-    // console.log("teamIDDD", authCtx.teamID);
-    // setisTimeLoading(true);
     fetch(
       `https://futurepreneursbackend.herokuapp.com/api/RoundTwo/start?teamID=${authCtx.teamID}`
     )
@@ -563,12 +389,10 @@ function DragDrop() {
         return response.json();
       })
       .then(({ timeStamp }) => {
-        console.log(timeStamp);
         setTimeout(function () {
           setExpiryTimeStamp(timeStamp);
           setHasTimeChanged(true);
         }, 500);
-        // setisTimeLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -584,7 +408,6 @@ function DragDrop() {
           teamID: authCtx.teamID,
 
           Zones: finalList.map((element) => {
-            // console.log({ option: element.item.name, index: element.id });
             return { option: element.item.name, index: element.id };
           }),
         }),
@@ -603,17 +426,9 @@ function DragDrop() {
         history.replace("/Submission");
       })
       .catch((err) => {
-        // alert(err);
         history.replace("/Error");
       });
   };
-
-  // console.log("finalList", finalList);
-  // console.log("newfinalList", filteredFinalList);
-
-  // const emitUpdate = () => {
-  //   socket.emit("update", finalList);
-  // };
 
   //iscorrect true in any attempt-->attempt=1 and setcurrQues++
   //iscorrect false in 1st attempt-->give msg/prompt you are incorrect and attempt++
@@ -621,8 +436,7 @@ function DragDrop() {
   //3rd attempt true-->answer correct and setcurrQues++
 
   return (
-    <CardContext.Provider value={{}}>
-      {/* <Nav expiryTimestamp={time} /> */}
+    <>
       <Nav />
       {expiryTimeStamp && (
         <CountDown
@@ -634,58 +448,7 @@ function DragDrop() {
           hasTimeChanged={hasTimeChanged}
         />
       )}
-      {/* {isTimeLoading && <p>Loading...</p>} */}
-      {/* {isHandRaised ? (
-        <img
-          alt="handDown"
-          onClick={handDown}
-          className="hand"
-          src={handDownImg}
-        />
-      ) : (
-        <img alt="hand" onClick={handRaise} className="hand2" src={handImg} />
-      )}
-      {!isHandRaised ? (
-        <img alt="hand" onClick={handRaise} className="hand2" src={handImg} />
-      ) : (
-        <img
-          alt="handDown"
-          onClick={handDown}
-          className="hand"
-          src={handDownImg}
-        />
-      )} */}
       <div className="game-options">
-        {/* {micMuted && (
-          <button className="game-microphone2" onClick={joinCall}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              fill="currentColor"
-              class="bi bi-mic-mute-fill"
-              viewBox="0 0 16 16"
-            >
-              <path d="M13 8c0 .564-.094 1.107-.266 1.613l-.814-.814A4.02 4.02 0 0 0 12 8V7a.5.5 0 0 1 1 0v1zm-5 4c.818 0 1.578-.245 2.212-.667l.718.719a4.973 4.973 0 0 1-2.43.923V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 1 0v1a4 4 0 0 0 4 4zm3-9v4.879L5.158 2.037A3.001 3.001 0 0 1 11 3z" />
-              <path d="M9.486 10.607 5 6.12V8a3 3 0 0 0 4.486 2.607zm-7.84-9.253 12 12 .708-.708-12-12-.708.708z" />
-            </svg>
-          </button>
-        )}
-        {!micMuted && (
-          <button className="game-microphone2" onClick={leaveCall}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              fill="currentColor"
-              class="bi bi-mic"
-              viewBox="0 0 16 16"
-            >
-              <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
-              <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z" />
-            </svg>
-          </button>
-        )} */}
         {localStorage.getItem("leaderID") === authCtx.id ? (
           <button className="game-submit2" onClick={submitAnswerHandler}>
             SUBMIT
@@ -757,10 +520,7 @@ function DragDrop() {
           {board.map((placeholder) => {
             return (
               <BoardBox2
-                // setItemcantDrag={setItemcantDrag}
                 socket={socket}
-                // setItemcanDrag={setItemcanDrag}
-                // emitUpdate={emitUpdate}
                 supermarketUpdated={supermarketUpdated}
                 deleteFinalPlaceHolder={deleteFinalPlaceHolder}
                 roomData={roomData}
@@ -776,7 +536,6 @@ function DragDrop() {
         </div>
         <div className="supermarket2-main-container">
           <div className="question-container">
-            {/* <p className="question-instruction">{question.instruction}</p> */}
             <p className="question-instruction2">Rules</p>
             <p
               className="questions-rules2"
@@ -809,7 +568,7 @@ function DragDrop() {
           </div>
         </div>
       </div>
-    </CardContext.Provider>
+    </>
   );
 }
 

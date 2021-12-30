@@ -1,3 +1,4 @@
+// NOT USED COMPONENT
 import React from "react";
 
 function TeamJoin(props) {

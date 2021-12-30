@@ -1,9 +1,15 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
+//Components
+import { Nav } from "./nav";
+
+//CSS
+import "./SubmissionPage.css";
+
+//Images
 import fplogo from "../resources/images/fpLogo.svg";
 import ecellLogo from "../resources/images/ecellLogo.svg";
-import { Nav } from "./nav";
-import "./SubmissionPage.css";
-import { Link } from "react-router-dom";
 
 function ErrorPage() {
   return (

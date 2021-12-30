@@ -1,18 +1,23 @@
 import React, { useState, useEffect, useContext } from "react";
-import GoogleLogin from "react-google-login";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
-// import { GoogleLogout } from "react-google-login";
-import { Link } from "react-router-dom";
+// Components
+import { Nav } from "../nav";
+import GoogleLogin from "react-google-login";
+
+// Contexts
 import AuthContext from "../../store/auth-context";
-import illus from "../../resources/images/Group.svg";
-import useMeasure from "react-use-measure";
+
+// CSS
 import "./Login.css";
 
-import { Nav } from "../nav";
+// Images
+import illus from "../../resources/images/Group.svg";
 
 function Login() {
   const history = useHistory();
+  const authCtx = useContext(AuthContext);
+
   const [isLoggedInGoogle, setisLoggedInGoogle] = useState(false);
   const [showLoggedIn, setShowLoggedIn] = useState(true);
   const [showLoggedOut, setShowLoggedOut] = useState(false);
@@ -23,27 +28,7 @@ function Login() {
     uID: 0,
   });
 
-  const authCtx = useContext(AuthContext);
-
-  const onLoginSuccess = (response) => {
-    const uid = Math.floor(Math.random() * 202123);
-    setisLoggedInGoogle(true);
-    setUserData({
-      name: response.profileObj.name,
-      email: response.profileObj.email,
-      photoURL: response.profileObj.imageUrl,
-      uID: uid,
-    });
-    // console.log("Login Sucess");
-    localStorage.setItem("isGoogleLogin", "yes");
-    localStorage.setItem("name", response.profileObj.name);
-    localStorage.setItem("uID", uid);
-    localStorage.setItem("email", response.profileObj.email);
-    localStorage.setItem("photoURL", response.profileObj.imageUrl);
-    setShowLoggedIn(false);
-    // setShowLoggedOut(true);
-  };
-
+  //collecting user data from google to send it further to backend
   useEffect(() => {
     setUserData({
       name: localStorage.getItem("name"),
@@ -53,43 +38,52 @@ function Login() {
     });
   }, []);
 
+  //for changing login and let me in button visibility states
+  useEffect(() => {
+    if (authCtx.isLoggedIn === true) {
+      setShowLoggedOut(true);
+      setShowLoggedIn(false);
+    }
+  }, [authCtx.isLoggedIn]);
+
+  // functions
+  const onLoginSuccess = (response) => {
+    const uid = Math.floor(Math.random() * 202123);
+    setisLoggedInGoogle(true);
+    setUserData({
+      name: response.profileObj.name,
+      email: response.profileObj.email,
+      photoURL: response.profileObj.imageUrl,
+      uID: uid,
+    });
+    localStorage.setItem("isGoogleLogin", "yes");
+    localStorage.setItem("name", response.profileObj.name);
+    localStorage.setItem("uID", uid);
+    localStorage.setItem("email", response.profileObj.email);
+    localStorage.setItem("photoURL", response.profileObj.imageUrl);
+    setShowLoggedIn(false);
+  };
+
   const onLoginFailure = (response) => {
     setisLoggedInGoogle(false);
     console.log("Login Failure");
   };
 
-  // const onLogoutSuccess = (response) => {
-  //   setisLoggedInGoogle(false);
-  //   setShowLoggedIn(true);
-  //   setShowLoggedOut(false);
-  //   authCtx.logout();
-  // };
-
-  // const onLogoutFailure = (response) => {
-  //   setisLoggedInGoogle(true);
-  //   console.log(response);
-  //   console.log("Logout Failure");
-  // };
-
-  // https://futurepreneursbackend.herokuapp.com/api/public/createUser
   const sendUserData = function () {
     fetch("https://futurepreneursbackend.herokuapp.com/api/public/createUser", {
       method: "POST",
-      // mode: 'no-cors',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),
     })
       .then((response) => {
         if (response.status === 300) {
-          // console.log("erorrrr")
           history.replace("/Error");
         }
         return response.json();
       })
       .then((data) => {
-        // console.log("data",data)
-        if(data===300){
-          alert("Sorry, we can't find your registration")
+        if (data === 300) {
+          alert("Sorry, we can't find your registration");
           history.replace("/Error");
         }
         authCtx.login(
@@ -105,13 +99,6 @@ function Login() {
         history.replace("/Error");
       });
   };
-
-  useEffect(() => {
-    if (authCtx.isLoggedIn === true) {
-      setShowLoggedOut(true);
-      setShowLoggedIn(false);
-    }
-  }, [authCtx.isLoggedIn]);
 
   return (
     <div>
@@ -148,48 +135,8 @@ function Login() {
           </Link>
         ) : null}
       </div>
-
-      {/* {showLoggedOut ? (
-        <GoogleLogout
-          clientId={`${process.env.REACT_APP_GOOGLE_ID}`}
-          buttonText="Logout"
-          onLogoutSuccess={onLogoutSuccess}
-          onFailure={onLogoutFailure}
-        ></GoogleLogout>
-      ) : null} */}
     </div>
   );
 }
 
 export default Login;
-
-// const sendUserData = useCallback(async function () {
-//   const response = await fetch(
-//     "http://127.0.0.1:2000/api/public/createUser",
-//     {
-//       method: "POST",
-//       body: JSON.stringify(userData),
-//       headers: {
-//         "Content-Type": "application/json",
-//         'Accept': 'application/json'
-//       },
-//     }
-//   );
-//   const data = await response.json();
-//   console.log(data);
-// }, []);
-
-// const sendUserData = async function () {
-//   const response = await fetch(
-//     "http://127.0.0.1:2000/api/public/createUser",
-//     {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-
-//       },
-//       body: JSON.stringify(userData),
-//     }
-//   );
-//   const data = await response.json();
-// };

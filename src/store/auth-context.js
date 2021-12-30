@@ -60,6 +60,7 @@ export const AuthContextProvider = (props) => {
 
   const leaderHandler = (leaderID) => {
     setLeaderID(leaderID);
+    console.log("object",leaderID)
     localStorage.setItem("leaderID", leaderID);
   };
 
@@ -97,6 +98,7 @@ export const AuthContextProvider = (props) => {
     round1Completed: round1Completed,
     round2Completed: round2Completed,
     leaderHandler: leaderHandler,
+    leaderID:leaderID,
     callConnected: callConnected,
     callConnectHandler: callConnectHandler,
   };

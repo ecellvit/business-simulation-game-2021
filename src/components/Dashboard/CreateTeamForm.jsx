@@ -1,3 +1,4 @@
+// NOT USED COMPONENT
 import React, { useContext, useRef } from "react";
 import {useHistory } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
