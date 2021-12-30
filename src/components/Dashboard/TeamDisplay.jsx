@@ -1,19 +1,23 @@
 import React, { useState, useContext, useEffect } from "react";
-import AuthContext from "../../store/auth-context";
-import "./DashBoard.css";
 import { useHistory } from "react-router";
+
+//Contexts
+import AuthContext from "../../store/auth-context";
+
+//CSS
+import "./DashBoard.css";
+
+//Images
 import crown from "../../resources/images/crown.svg";
-import Thanks from "./Thanks";
 
 function Member(props) {
-  // console.log(props.name);
-  // console.log(props.teamData);
   return (
     <p className="tname">{`${TrimName(
       props.teamData.Members[props.name].User.name
     )}`}</p>
   );
 }
+
 function MemberPhoto(props) {
   return (
     <img
@@ -23,21 +27,23 @@ function MemberPhoto(props) {
     />
   );
 }
+
 function TrimName(name) {
-  // console.log(name);
   if (name.length > 17) {
     let name1 = name.slice(0, 17);
     while (name1.charAt(name1.length - 1) !== " " && name1.length !== 0) {
       name1 = name1.slice(0, -1);
-      // console.log(name1);
     }
     return name1;
   } else {
     return name;
   }
 }
+
 function TeamDisplay(props) {
   const history = useHistory();
+  const authCtx = useContext(AuthContext);
+
   const [teamData, setTeamData] = useState({
     TeamName: "",
     Leader: { User: { name: "", photoURL: "", _id: "" } },
@@ -45,13 +51,7 @@ function TeamDisplay(props) {
   const [showTeamDetails, setShowTeamDetails] = useState(false);
   const [numOfMembers, setNumOfMembers] = useState(0);
 
-  const authCtx = useContext(AuthContext);
-  // http://127.0.0.1:2000/api/public/getUserTeam?userID=${authCtx.id}
-  // https://futurepreneursbackend.herokuapp.com/api/public/getUserTeam?userID=${authCtx.id}
-
-  // ?userID=${
-  //   authCtx.id === undefined ? "61a3f2eeb151d2972b2ad1e7" : authCtx.id
-  // }
+  // fetching user's team data
   useEffect(() => {
     fetch(
       `https://futurepreneursbackend.herokuapp.com/api/public/getUserTeam`,
@@ -73,7 +73,6 @@ function TeamDisplay(props) {
         return response.json();
       })
       .then((data) => {
-        // console.log("teamData", data);
         setTeamData(data);
         props.roundOneStarted(
           data.RoundOneAttemptedQuestions.length > 0 &&
@@ -82,12 +81,9 @@ function TeamDisplay(props) {
         props.roundOneCompleted(
           data.RoundOneAttempted && !data.RoundTwoAttempted
         );
-        // console.log(data.RoundOneAttempted,data.RoundTwoAttempted)
         authCtx.roundHandler(data.RoundOneAttempted, data.RoundTwoAttempted);
-        // console.log(data.RoundOneAttempted);
         props.roundTwoCompleted(data.RoundTwoAttempted);
         setNumOfMembers(data.Members.length);
-        // console.log(data.Members.length);
         setShowTeamDetails(true);
         authCtx.setTeam(data._id);
         props.changeIsLoading();
@@ -95,9 +91,9 @@ function TeamDisplay(props) {
       .catch((err) => console.log(err));
   }, []);
 
+  // storing team leader's data
   useEffect(() => {
     authCtx.leaderHandler(teamData.Leader.User._id)
-    // localStorage.setItem("leaderID", teamData.Leader.User._id);
   }, [teamData]);
 
   return (
@@ -107,8 +103,6 @@ function TeamDisplay(props) {
           <p class="yteam">{teamData.TeamName}</p>
 
           <img class="t1v1" src={teamData.Leader.User.photoURL} alt="" />
-          {/* <img class="t1v2" src={vector1} alt="" />
-          <img class="t1v3" src={vector2} alt="" /> */}
           <img class="t1v4" src={crown} alt="" />
 
           <p class="tname">{TrimName(teamData.Leader.User.name)}</p>
@@ -132,18 +126,6 @@ function TeamDisplay(props) {
           ) : null}
         </div>
       )}
-
-      {/* {showTeamDetails && (
-        <div>
-          <h1>My Team Details</h1>
-          <p>Team Name: {teamData.TeamName}</p>
-          <p>Leader: {teamData.Leader.User.name}</p>
-          {numOfMembers > 0 ? <Member teamData={teamData} name={0} /> : null}
-          {numOfMembers > 1 ? <Member teamData={teamData} name={1} /> : null}
-          {numOfMembers > 2 ? <Member teamData={teamData} name={2} /> : null}
-          {numOfMembers > 3 ? <Member teamData={teamData} name={3} /> : null}
-        </div>
-      )} */}
     </div>
   );
 }

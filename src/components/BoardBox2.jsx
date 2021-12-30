@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useDrop } from "react-dnd";
+
+// Components
 import SupermarketDrag from "./SupermarketDrag";
+
+// UI Utilities
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import dropSound from "../resources/Audiofiles/drop.mpeg"
 
-const BoardBox1 = (props) => {
+const BoardBox2 = (props) => {
   const [board, setBoard] = useState([]);
   const [hasDropped, sethasDropped] = useState(false);
-
   const [supermarketReceived, setSupermarketReceived] = useState([
     {
       name: "Erasers",
@@ -173,7 +176,6 @@ const BoardBox1 = (props) => {
     sethasDropped(false);
     setBoard([]);
     props.deleteFinalPlaceHolder(props.id);
-    // props.setItemcanDrag(props.id)
   };
 
   return (
@@ -212,16 +214,6 @@ const BoardBox1 = (props) => {
           </p>
         );
       })}
-
-      {/* {board.map((boardItem) => {
-        return (
-          <SupermarketDrag
-            name={currItem.name}
-            id={currItem.id}
-            key={currItem.id}
-          />
-        );
-      })} */}
 
       {/* members side */}
       {props.id === "one" ? (
@@ -318,4 +310,4 @@ const BoardBox1 = (props) => {
   );
 };
 
-export default BoardBox1;
+export default BoardBox2;

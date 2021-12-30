@@ -1,196 +1,56 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
+
+// Components
+import { Nav } from "../nav";
+import TeamDisplay from "./TeamDisplay";
+
+// Contexts
 import AuthContext from "../../store/auth-context";
-// import CreateTeamForm from "./CreateTeamForm";
-import { Link } from "react-router-dom";
+
+// CSS
+import "./DashBoard.css";
+
+// Images
 import fplogo from "../../resources/images/fpLogo.svg";
 import ecellLogo from "../../resources/images/ecellLogo.svg";
-// import TeamList from "./TeamList";
-import TeamDisplay from "./TeamDisplay";
+
+// UI Utilities
 import { useSnackbar } from "notistack";
-
-
-import { Nav } from "../nav";
-
-// import { useTimer } from "react-timer-hook";
-import "./DashBoard.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import warningSound from "../../resources/Audiofiles/warning.mpeg";
 import CountDownDashboard from "./CountDownDashboard";
 
-// function MyTimer({ expiryTimestamp, nextQuestionHandler }) {
-//   const authCtx = useContext(AuthContext);
-//   const history = useHistory();
-//   const { hour, seconds, minutes, isRunning, start, pause, resume, restart } =
-//     useTimer({
-//       expiryTimestamp,
-//       onExpire: () => {
-//         fetch(
-//           `https://futurepreneursbackend.herokuapp.com/api/RoundOne/finishRoundOne`,
-//           {
-//             method: "POST",
-//             body: JSON.stringify({
-//               teamID: authCtx.teamID,
-//             }),
-//             headers: {
-//               "Content-Type": "application/json",
-//               "Access-Control-Allow-Origin": "*",
-//             },
-//           }
-//         )
-//           .then((response) => {
-//             if (response.status === 400) {
-//               history.replace("/Error");
-//             }
-//             return response.json();
-//           })
-//           .then((data) => {
-//             // console.log(data);
-//             if (data) {
-//               history.replace("/Submission");
-//             }
-//           })
-//           .catch((err) => {
-//             console.log(err);
-//           });
-//       },
-//     });
-//   return (
-//     <div style={{ textAlign: "center", position: "absolute", left: "600px" }}>
-//       <div style={{ fontSize: "30px" }} className="timer">
-//         <span>{hour}</span>:<span>{minutes}</span>:<span>{seconds}</span>
-//       </div>
-//     </div>
-//   );
-// }
-
 function DashBoard(props) {
-  const [hours, setHours] = useState(23);
-  const [minutes, setMinutes] = useState(59);
-  const [seconds, setSeconds] = useState(0);
-  const warningAudio = new Audio(warningSound);
-  const [expiryTimeStamp, setExpiryTimeStamp] = useState();
-  const [hasTimeChanged, setHasTimeChanged] = useState(false);
-  // const location = useLocation();
-  // const time = new Date();
-  // const [time, settime] = useState(new Date());
+  const history = useHistory();
+  const authCtx = useContext(AuthContext);
 
-  // useEffect(() => {
-  //   effect
-  //   return () => {
-  //     cleanup
-  //   }
-  // }, [input])
   const [Round2State, setRound2State] = useState(true);
   const [Round1State, setRound1State] = useState(true);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const history = useHistory();
   const [hasStarted1, sethasStarted1] = useState(false);
   const [hasCompleted1, sethasCompleted1] = useState(false);
   const [hasCompleted2, sethasCompleted2] = useState(false);
-  const [isLoading, setisLoading] = useState(false);
-  const authCtx = useContext(AuthContext);
   const [hasTeam, setHasTeam] = useState(true);
   const [showTeam, setShowTeam] = useState(false);
 
-  const roundHasntStarted = (data) => {
-    warningAudio.play();
-    enqueueSnackbar(`We haven't started round ${data} yet, please wait`, {
-      variant: "warning",
-      anchorOrigin: {
-        vertical: "bottom",
-        horizontal: "right",
-      },
-    });
-  };
-  // const [updateTeamList, setUpdateTeamList] = useState(1);
+  //Loading states
+  const [isLoading, setisLoading] = useState(false);
 
-  // const updateList = () => {
-  //   setUpdateTeamList(updateTeamList + 1);
-  // };
+  //time states
+  const [hours, setHours] = useState(23);
+  const [minutes, setMinutes] = useState(59);
+  const [seconds, setSeconds] = useState(0);
 
-  // `https://futurepreneursbackend.herokuapp.com/api/public/hasTeam?userID=${authCtx.id}`
-  // `http://127.0.0.1:2000/api/public/hasTeam?userID=${authCtx.id}`
+  const [expiryTimeStamp, setExpiryTimeStamp] = useState();
+  const [hasTimeChanged, setHasTimeChanged] = useState(false);
 
-  // useEffect(() => {
-  //   alert('Location changed');
-  // }, [location]);
-  const roundOneStarted = (hasStarted) => {
-    if (hasStarted) {
-      sethasStarted1(true);
-    }
-  };
-  const roundOneCompleted = (hasCompleted) => {
-    if (hasCompleted) {
-      sethasCompleted1(true);
-    }
-  };
+  //Snackbar effects
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  // const justRoundOneCompleted = (hasCompleted)=>{
-  //   console.log("in1", hasCompleted);
-  //   if (hasCompleted) {
-  //     props.round1CompletedHandler(true);
-  //   }
-  // }
+  //Sound effects
+  const warningAudio = new Audio(warningSound);
 
-  // const checkRoundStarted = () => {
-  //   fetch(`https://futurepreneursbackend.herokuapp.com/`)
-  //     .then((response) => {
-  //       if (response.status === 400) {
-  //         history.replace("/Error");
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   effect
-  //   return () => {
-  //     cleanup
-  //   }
-  // }, [input])
-
-  // useEffect(() => {
-  //   console.log(authCtx.teamID, "id");
-  //   if (authCtx.teamID) {
-  //     fetch(
-  //       `https://futurepreneursbackend.herokuapp.com/?teamID=${authCtx.teamID}`
-  //     )
-  //       .then((response) => {
-  //         if (response.status === 400) {
-  //           history.replace("/Error");
-  //         }
-  //         return response.json();
-  //       })
-  //       .then((data) => {
-  //         console.log("event data", data);
-  //         if (!data.event.isRoundOneOn) {
-  //           if (!data.hasCompletedRoundOne) {
-  //             roundHasntStarted(1);
-  //           }
-  //           setRound1State(false);
-  //         }
-  //         if (!data.event.isRoundTwoOn) {
-  //           if (data.hasCompletedRoundOne) {
-  //             roundHasntStarted(2);
-  //           }
-  //           setRound2State(false);
-  //         }
-  //         setExpiryTimeStamp(data.event.timeOfEvent);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-    
-  // }, []);
-
+  //calls for managing round access
   useEffect(() => {
     fetch(`https://futurepreneursbackend.herokuapp.com/`)
       .then((response) => {
@@ -215,18 +75,7 @@ function DashBoard(props) {
       });
   }, []);
 
-
-
-  const roundTwoCompleted = (hasCompleted) => {
-    if (hasCompleted) {
-      sethasCompleted2(true);
-    }
-  };
-
-  const changeIsLoading = (bool) => {
-    setisLoading(false);
-  };
-  // ?userID=${authCtx.id}
+  //call for checking if user is registered with us or not
   useEffect(() => {
     setisLoading(true);
     fetch(`https://futurepreneursbackend.herokuapp.com/api/public/hasTeam`, {
@@ -253,6 +102,40 @@ function DashBoard(props) {
         history.replace("/Error");
       });
   }, []);
+
+  //callback functions
+  const roundHasntStarted = (data) => {
+    warningAudio.play();
+    enqueueSnackbar(`We haven't started round ${data} yet, please wait`, {
+      variant: "warning",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "right",
+      },
+    });
+  };
+
+  const roundOneStarted = (hasStarted) => {
+    if (hasStarted) {
+      sethasStarted1(true);
+    }
+  };
+
+  const roundOneCompleted = (hasCompleted) => {
+    if (hasCompleted) {
+      sethasCompleted1(true);
+    }
+  };
+
+  const roundTwoCompleted = (hasCompleted) => {
+    if (hasCompleted) {
+      sethasCompleted2(true);
+    }
+  };
+
+  const changeIsLoading = (bool) => {
+    setisLoading(false);
+  };
 
   return (
     <div>
@@ -359,16 +242,6 @@ function DashBoard(props) {
                   </button>
                 </Link>
               ) : null}
-              {/* r1 true true false false
-              r2 false true false true */}
-              {/* <input
-                className="elp"
-                type="image"
-                name="eli"
-                src={ellipse}
-                alt="text"
-              ></input>
-              <img className="aro" src={arrow} alt=""></img> */}
             </div>
           ) : (
             <div className="tbox">
@@ -388,23 +261,6 @@ function DashBoard(props) {
             </div>
           )}
         </div>
-        {/* <li className="">UserName: {authCtx.name}</li>
-      <li>Email: {authCtx.emailid}</li> */}
-        {/* <TeamDisplay /> */}
-
-        {/* <button
-        onClick={checkTeamHandler}
-        style={{ margin: "3% 50%", fontSize: "30px" }}
-      >
-        hasTeam
-      </button> */}
-        {/* {!hasTeam && (
-        <div className="TeamListAndForm">
-          <TeamList />
-          <CreateTeamForm />
-        </div>
-      )} */}
-        {/* {hasTeam && showTeam && <TeamDisplay />} */}
       </div>
     </div>
   );

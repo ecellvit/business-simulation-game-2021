@@ -1,7 +1,11 @@
+// NOT USED COMPONENT
 import React, { useState, useEffect } from "react";
-import "./DashBoard.css";
 
+// Components
 import TeamJoin from "./TeamJoin";
+
+// Images
+import "./DashBoard.css";
 
 function Team(teamData) {
   return (
@@ -20,7 +24,6 @@ function Team(teamData) {
 function TeamList(props) {
   const [teamsData, setTeamsData] = useState([]);
 
-  // https://futurepreneursbackend.herokuapp.com/api/public/getAllTeams
   useEffect(() => {
     fetch("https://futurepreneursbackend.herokuapp.com/api/public/getAllTeams")
       .then((response) => response.json())
